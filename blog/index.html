@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Writing — Jakub Szczybura</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --color-bg: #fafaf8;
+      --color-text: #1a1a1a;
+      --color-muted: #6b6b6b;
+      --color-faint: #9a9a9a;
+      --color-border: rgba(0,0,0,0.1);
+      --color-tag-bg: #f0efe9;
+      --font-serif: 'Georgia', 'Times New Roman', serif;
+      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --color-bg: #141412;
+        --color-text: #e8e8e4;
+        --color-muted: #9a9a94;
+        --color-faint: #5a5a56;
+        --color-border: rgba(255,255,255,0.1);
+        --color-tag-bg: #1e1e1a;
+      }
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-bg);
+      color: var(--color-text);
+      min-height: 100vh;
+      padding: 4rem 1.5rem 6rem;
+    }
+
+    .container { max-width: 660px; margin: 0 auto; }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 5rem;
+    }
+
+    .nav-name {
+      font-family: var(--font-serif);
+      font-size: 17px;
+      color: var(--color-text);
+      text-decoration: none;
+    }
+
+    .nav-links { display: flex; gap: 1.5rem; list-style: none; }
+    .nav-links a {
+      font-size: 14px;
+      color: var(--color-muted);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .nav-links a:hover { color: var(--color-text); }
+    .nav-links a.active { color: var(--color-text); }
+
+    .page-label {
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-faint);
+      margin-bottom: 1.25rem;
+    }
+
+    h1 {
+      font-family: var(--font-serif);
+      font-size: 36px;
+      font-weight: normal;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+      margin-bottom: 1rem;
+    }
+
+    .page-desc {
+      font-size: 16px;
+      color: var(--color-muted);
+      line-height: 1.7;
+      margin-bottom: 3.5rem;
+      max-width: 500px;
+    }
+
+    /* Year group */
+    .year-group { margin-bottom: 3rem; }
+
+    .year-label {
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-faint);
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 0.5px solid var(--color-border);
+    }
+
+    .post-list { list-style: none; }
+
+    .post-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1.5rem;
+      padding: 1.25rem 0;
+      border-bottom: 0.5px solid var(--color-border);
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .post-item:last-child { border-bottom: none; }
+    .post-item:hover .post-title { color: var(--color-muted); }
+
+    .post-main { flex: 1; min-width: 0; }
+
+    .post-title {
+      font-family: var(--font-serif);
+      font-size: 19px;
+      line-height: 1.35;
+      margin-bottom: 5px;
+      transition: color 0.15s;
+    }
+
+    .post-excerpt {
+      font-size: 13px;
+      color: var(--color-faint);
+      line-height: 1.5;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .post-meta {
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .post-date {
+      font-size: 12px;
+      color: var(--color-faint);
+      white-space: nowrap;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .post-tag {
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--color-faint);
+      background: var(--color-tag-bg);
+      padding: 2px 7px;
+      border-radius: 3px;
+      white-space: nowrap;
+    }
+
+    footer {
+      margin-top: 5rem;
+      padding-top: 2rem;
+      border-top: 0.5px solid var(--color-border);
+      font-size: 13px;
+      color: var(--color-faint);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    footer a { color: var(--color-muted); text-decoration: none; }
+    footer a:hover { color: var(--color-text); }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <nav>
+    <a href="/" class="nav-name">Jakub Szczybura</a>
+    <ul class="nav-links">
+      <li><a href="/blog" class="active">Writing</a></li>
+      <li><a href="/tools">Tools</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-label">Writing</div>
+  <h1>On technology,<br>data, and leadership.</h1>
+  <p class="page-desc">Posts on data strategy, CTO/CDO thinking, and the gap between what systems show you and what's actually happening. Roughly cross-posted from LinkedIn — but longer, and with the technical detail put back in.</p>
+
+  <div class="year-group">
+    <div class="year-label">2025</div>
+    <ul class="post-list">
+      <li>
+        <a class="post-item" href="/blog/post-001-the-meeting-that-saved-51m.html">
+          <div class="post-main">
+            <div class="post-title">The meeting that saved $51M</div>
+            <div class="post-excerpt">We were asked to build a dashboard. The decision not to turned a reporting exercise into $51M of combined operational savings.</div>
+          </div>
+          <div class="post-meta">
+            <span class="post-date">May 2025</span>
+            <span class="post-tag">Data strategy</span>
+          </div>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <footer>
+    <span>© Jakub Szczybura</span>
+    <a href="/">← Home</a>
+  </footer>
+
+</div>
+</body>
+</html>
