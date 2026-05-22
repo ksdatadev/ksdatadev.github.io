@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The meeting that saved $51M — Jakub Szczybura</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --color-bg: #fafaf8;
+      --color-text: #1a1a1a;
+      --color-muted: #6b6b6b;
+      --color-faint: #9a9a9a;
+      --color-border: rgba(0,0,0,0.1);
+      --color-accent: #1a1a1a;
+      --color-tag-bg: #f0efe9;
+      --font-serif: 'Georgia', 'Times New Roman', serif;
+      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-mono: 'SF Mono', 'Fira Code', monospace;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --color-bg: #141412;
+        --color-text: #e8e8e4;
+        --color-muted: #9a9a94;
+        --color-faint: #5a5a56;
+        --color-border: rgba(255,255,255,0.1);
+        --color-tag-bg: #1e1e1a;
+      }
+    }
+
+    body {
+      font-family: var(--font-serif);
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.8;
+      font-size: 18px;
+      padding: 4rem 1.5rem 6rem;
+    }
+
+    .container {
+      max-width: 660px;
+      margin: 0 auto;
+    }
+
+    /* Nav */
+    nav {
+      font-family: var(--font-sans);
+      font-size: 13px;
+      color: var(--color-muted);
+      margin-bottom: 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    nav a {
+      color: var(--color-muted);
+      text-decoration: none;
+    }
+    nav a:hover { color: var(--color-text); }
+    .nav-home { font-weight: 500; color: var(--color-text) !important; }
+
+    /* Post header */
+    .post-meta {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      color: var(--color-faint);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+    }
+
+    h1 {
+      font-family: var(--font-serif);
+      font-size: 36px;
+      font-weight: normal;
+      line-height: 1.25;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.01em;
+    }
+
+    .lede {
+      font-size: 20px;
+      color: var(--color-muted);
+      line-height: 1.6;
+      margin-bottom: 3rem;
+      font-style: italic;
+      border-bottom: 0.5px solid var(--color-border);
+      padding-bottom: 2rem;
+    }
+
+    /* Section labels */
+    .section-label {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-faint);
+      margin-bottom: 0.75rem;
+      margin-top: 3rem;
+    }
+
+    h2 {
+      font-family: var(--font-serif);
+      font-size: 22px;
+      font-weight: normal;
+      margin-bottom: 1.25rem;
+      color: var(--color-text);
+    }
+
+    p { margin-bottom: 1.4rem; }
+
+    /* Pull quote */
+    blockquote {
+      border-left: 2px solid var(--color-text);
+      margin: 2.5rem 0;
+      padding: 0.25rem 0 0.25rem 1.5rem;
+      font-size: 20px;
+      font-style: italic;
+      color: var(--color-text);
+      line-height: 1.5;
+    }
+
+    /* Principle box */
+    .principle {
+      background: var(--color-tag-bg);
+      border-radius: 8px;
+      padding: 1.75rem 2rem;
+      margin-top: 3rem;
+    }
+    .principle .section-label { margin-top: 0; }
+    .principle p {
+      font-size: 17px;
+      line-height: 1.7;
+      margin-bottom: 0;
+      color: var(--color-text);
+    }
+    .principle strong {
+      font-style: italic;
+      font-weight: normal;
+    }
+
+    /* Tags */
+    .tags {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 0.5px solid var(--color-border);
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-family: var(--font-sans);
+    }
+    .tag {
+      font-size: 12px;
+      color: var(--color-muted);
+      background: var(--color-tag-bg);
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 5rem;
+      padding-top: 2rem;
+      border-top: 0.5px solid var(--color-border);
+      font-family: var(--font-sans);
+      font-size: 13px;
+      color: var(--color-faint);
+      display: flex;
+      justify-content: space-between;
+    }
+    footer a { color: var(--color-muted); text-decoration: none; }
+    footer a:hover { color: var(--color-text); }
+
+    /* Code / system names */
+    code {
+      font-family: var(--font-mono);
+      font-size: 15px;
+      background: var(--color-tag-bg);
+      padding: 2px 6px;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <nav>
+    <a href="/" class="nav-home">Jakub Szczybura</a>
+    <a href="/blog">← All posts</a>
+  </nav>
+
+  <div class="post-meta">May 2025 &nbsp;·&nbsp; 5 min read</div>
+
+  <h1>The meeting that saved $51M</h1>
+
+  <p class="lede">We were asked to build a dashboard. We almost did. The decision not to — made in a warehouse, in a conversation with no agenda — turned a reporting exercise into $51M of combined operational savings.</p>
+
+  <!-- THE BRIEF -->
+  <div class="section-label">The brief</div>
+  <h2>Track returns. Show the trends. Build the dashboard.</h2>
+
+  <p>The ask from the executive team at Dunelm was straightforward: build a returns dashboard. Real-time visibility into return volumes, cost trends, category breakdowns. The kind of thing a data team can scope, estimate, and deliver in a few sprints. We had the brief, we had the access, and we had a team ready to move.</p>
+
+  <p>Most organisations would have started building immediately. We didn't — not because we doubted the brief, but because I've learned to be deeply suspicious of briefs that arrive already shaped into a solution.</p>
+
+  <!-- THE FLOOR -->
+  <div class="section-label">The floor</div>
+  <h2>Before writing a line of code, we went to the warehouse.</h2>
+
+  <p>I sat down with the people actually processing the returns — the warehouse operatives whose hands were on the problem every day. Not to validate the brief. To understand what the brief might be missing.</p>
+
+  <p>Within minutes, one of them said something that reframed everything:</p>
+
+  <blockquote>"We don't know what's coming in, from whom, or which order it belongs to."</blockquote>
+
+  <p>Returns were arriving physically detached from the original transaction. No link to the customer. No link to the order. No link to the product journey. At the moment a return entered the building — the moment that mattered most for understanding it — the system was completely blind.</p>
+
+  <p>This wasn't a data visibility problem. The data didn't exist yet in any usable form. Building a dashboard on top of that would have been like building a speedometer for a car with no engine.</p>
+
+  <!-- THE REFRAME -->
+  <div class="section-label">The reframe</div>
+  <h2>This wasn't a reporting problem. It was a prevention problem.</h2>
+
+  <p>The executive brief assumed the data existed and needed surfacing. The warehouse told us the data needed to be created first — and that it needed to be created at the point of return, not retrospectively.</p>
+
+  <p>That's a fundamentally different problem. A dashboard answers: <em>what is happening?</em> What we actually needed to build answered: <em>why is it happening, and what can we do before it happens again?</em></p>
+
+  <p>The reframe cost us a few days of discovery. It saved months of building the wrong thing.</p>
+
+  <!-- THE BUILD -->
+  <div class="section-label">The build</div>
+  <h2>We built a returns management system, not a dashboard.</h2>
+
+  <p>The core technical challenge was transaction linkage. Every return needed to be automatically tied to its originating order in <code>SAP</code> — our ERP — at the point of receipt. This required an integration layer between the warehouse management system and SAP that didn't exist, triggering a reconciliation process that matched inbound returns to order history using a combination of product identifiers, customer records, and despatch data.</p>
+
+  <p>Once that linkage existed, two things became possible that weren't before. First, pattern recognition: you could see which products, which routes, which suppliers, which customer segments were generating returns — and why, at a granular level. Second, intervention: because you now had the full order context, you could act on the patterns rather than just observe them.</p>
+
+  <p>The dashboard came second. It was straightforward to build once the underlying data had integrity. Reporting is easy when the data model is correct. The hard work is always in the model.</p>
+
+  <!-- THE RESULT -->
+  <div class="section-label">The result</div>
+  <h2>$51M in combined operational savings.</h2>
+
+  <p>The figure represents combined operational savings across reduced return processing costs and — more significantly — returns prevented through targeted intervention once patterns became visible and actionable. It accumulated over time, not overnight, and it required the commercial and operations teams to act on what the system surfaced. The technology created the conditions; the business decisions created the value.</p>
+
+  <p>A dashboard showing the same return volumes, built on disconnected data, would have shown the scale of the problem clearly. It would not have enabled a single fix.</p>
+
+  <!-- THE PRINCIPLE -->
+  <div class="principle">
+    <div class="section-label">The principle</div>
+    <p>
+      Expensive data mistakes are rarely made by building the wrong thing.
+      They're made by <strong>building the right thing for the wrong problem</strong> —
+      because the problem definition came from people with authority over it,
+      not people with knowledge of it.<br><br>
+      Your data team can tell you what's happening.
+      The people doing the work can tell you why.
+      Your executives can tell you what matters.<br><br>
+      <strong>You need all three. Most projects only get one.</strong>
+    </p>
+  </div>
+
+  <div class="tags">
+    <span class="tag">Data strategy</span>
+    <span class="tag">CTO thinking</span>
+    <span class="tag">Problem framing</span>
+    <span class="tag">Retail tech</span>
+    <span class="tag">SAP</span>
+  </div>
+
+  <footer>
+    <span>© Jakub Szczybura</span>
+    <a href="/blog">All posts →</a>
+  </footer>
+
+</div>
+</body>
+</html>
