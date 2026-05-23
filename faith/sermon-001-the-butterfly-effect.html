@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Butterfly Effect — Jakub Szczybura</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --color-bg: #fafaf8;
+      --color-text: #1a1a1a;
+      --color-muted: #6b6b6b;
+      --color-faint: #9a9a9a;
+      --color-border: rgba(0,0,0,0.1);
+      --color-tag-bg: #f0efe9;
+      --color-accent-bg: #f5f0e8;
+      --color-accent-border: #c8a96e;
+      --font-serif: 'Georgia', 'Times New Roman', serif;
+      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-mono: 'SF Mono', 'Fira Code', monospace;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --color-bg: #141412;
+        --color-text: #e8e8e4;
+        --color-muted: #9a9a94;
+        --color-faint: #5a5a56;
+        --color-border: rgba(255,255,255,0.1);
+        --color-tag-bg: #1e1e1a;
+        --color-accent-bg: #1e1a12;
+        --color-accent-border: #8a6a2e;
+      }
+    }
+
+    body {
+      font-family: var(--font-serif);
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.85;
+      font-size: 18px;
+      padding: 0 0 6rem;
+    }
+
+    .container {
+      max-width: 660px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    /* Meta */
+    .post-meta {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      color: var(--color-faint);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+    }
+
+    h1 {
+      font-family: var(--font-serif);
+      font-size: 38px;
+      font-weight: normal;
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.01em;
+    }
+
+    .lede {
+      font-size: 20px;
+      color: var(--color-muted);
+      line-height: 1.65;
+      margin-bottom: 3rem;
+      font-style: italic;
+      border-bottom: 0.5px solid var(--color-border);
+      padding-bottom: 2rem;
+    }
+
+    /* Section labels */
+    .section-label {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--color-faint);
+      margin-bottom: 0.75rem;
+      margin-top: 3.5rem;
+    }
+
+    h2 {
+      font-family: var(--font-serif);
+      font-size: 24px;
+      font-weight: normal;
+      margin-bottom: 1.25rem;
+      color: var(--color-text);
+      line-height: 1.3;
+    }
+
+    h3 {
+      font-family: var(--font-sans);
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-top: 2.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    p { margin-bottom: 1.4rem; }
+    p:last-child { margin-bottom: 0; }
+
+    em { font-style: italic; }
+
+    /* Scripture block */
+    .scripture {
+      background: var(--color-accent-bg);
+      border-left: 3px solid var(--color-accent-border);
+      border-radius: 0 6px 6px 0;
+      margin: 2rem 0;
+      padding: 1.25rem 1.5rem;
+    }
+
+    .scripture-ref {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-accent-border);
+      margin-bottom: 0.6rem;
+    }
+
+    .scripture p {
+      font-size: 17px;
+      font-style: italic;
+      color: var(--color-text);
+      line-height: 1.75;
+      margin-bottom: 0.6rem;
+    }
+
+    /* Pull quote */
+    blockquote {
+      border-left: 2px solid var(--color-text);
+      margin: 2.5rem 0;
+      padding: 0.25rem 0 0.25rem 1.5rem;
+      font-size: 22px;
+      font-style: italic;
+      color: var(--color-text);
+      line-height: 1.45;
+    }
+
+    /* Observation boxes */
+    .observation {
+      border: 0.5px solid var(--color-border);
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      margin: 1.5rem 0;
+      background: var(--color-bg);
+    }
+
+    .observation-num {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-faint);
+      margin-bottom: 0.4rem;
+    }
+
+    .observation-title {
+      font-family: var(--font-serif);
+      font-size: 19px;
+      color: var(--color-text);
+      margin-bottom: 0.75rem;
+      font-style: italic;
+    }
+
+    .observation p {
+      font-size: 16px;
+      color: var(--color-muted);
+      line-height: 1.7;
+      margin-bottom: 0;
+    }
+
+    /* Timeline / chain */
+    .chain {
+      margin: 2rem 0;
+      padding-left: 0;
+      list-style: none;
+    }
+
+    .chain li {
+      position: relative;
+      padding: 0.6rem 0 0.6rem 2rem;
+      font-size: 16px;
+      color: var(--color-muted);
+      border-left: 1.5px solid var(--color-border);
+      margin-left: 0.5rem;
+    }
+
+    .chain li::before {
+      content: '';
+      position: absolute;
+      left: -5px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--color-faint);
+    }
+
+    .chain li:last-child { border-left-color: transparent; }
+
+    /* Highlight / key insight */
+    .insight {
+      background: var(--color-tag-bg);
+      border-radius: 8px;
+      padding: 1.5rem 1.75rem;
+      margin: 2.5rem 0;
+      font-size: 17px;
+      line-height: 1.75;
+      color: var(--color-text);
+    }
+
+    .insight strong {
+      font-weight: normal;
+      font-style: italic;
+    }
+
+    /* Lessons box */
+    .lessons {
+      background: var(--color-tag-bg);
+      border-radius: 10px;
+      padding: 1.75rem 2rem;
+      margin-top: 3rem;
+    }
+
+    .lessons .section-label { margin-top: 0; margin-bottom: 1.25rem; }
+
+    .lesson-item {
+      display: flex;
+      gap: 1rem;
+      padding: 0.9rem 0;
+      border-bottom: 0.5px solid var(--color-border);
+      align-items: flex-start;
+    }
+
+    .lesson-item:last-child { border-bottom: none; padding-bottom: 0; }
+
+    .lesson-num {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--color-faint);
+      min-width: 20px;
+      padding-top: 3px;
+    }
+
+    .lesson-text {
+      font-size: 17px;
+      color: var(--color-text);
+      line-height: 1.6;
+    }
+
+    .lesson-text em { font-style: italic; color: var(--color-muted); font-size: 15px; display: block; margin-top: 3px; }
+
+    /* Closing */
+    .closing {
+      margin-top: 3.5rem;
+      padding-top: 2rem;
+      border-top: 0.5px solid var(--color-border);
+      font-size: 19px;
+      font-style: italic;
+      color: var(--color-muted);
+      line-height: 1.7;
+    }
+
+    .closing strong {
+      font-style: normal;
+      font-weight: normal;
+      color: var(--color-text);
+    }
+
+    /* Tags */
+    .tags {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 0.5px solid var(--color-border);
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-family: var(--font-sans);
+    }
+
+    .tag {
+      font-size: 12px;
+      color: var(--color-muted);
+      background: var(--color-tag-bg);
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 5rem;
+      padding-top: 2rem;
+      border-top: 0.5px solid var(--color-border);
+      font-family: var(--font-sans);
+      font-size: 13px;
+      color: var(--color-faint);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    footer a { color: var(--color-muted); text-decoration: none; }
+    footer a:hover { color: var(--color-text); }
+
+    /* Divider */
+    .divider {
+      border: none;
+      border-top: 0.5px solid var(--color-border);
+      margin: 3rem 0;
+    }
+  </style>
+</head>
+<body>
+<script src="/nav.js"></script>
+<div class="container">
+
+  <div class="post-meta">Faith &amp; Reflection &nbsp;·&nbsp; Sermon &nbsp;·&nbsp; 2025</div>
+
+  <h1>The Butterfly Effect</h1>
+
+  <p class="lede">This one will not be popular. By the end of it I will be standing at the exit of the sanctuary, and you will reluctantly shake my hand thinking: <em>"this guy keeps bringing up annoying things — it may be true, but I'd be more comfortable not having to think about it."</em></p>
+
+  <p>That's because we are going to talk about something we do not like.</p>
+
+  <p>This sermon is about consequences. The consequences of sin.</p>
+
+  <p>But let me say something first. A good friend of mine who is a pastor once told me that preachers tend to preach to themselves — meaning the topics they choose to tackle are ones they struggle with, or want to explore and understand more deeply.</p>
+
+  <p>And so, since this is about sin, I can say — in the words of Daddy Pig from the popular children's cartoon — <em>I'm a bit of an expert in this thing.</em></p>
+
+  <hr class="divider">
+
+  <!-- ACT I -->
+  <div class="section-label">Act I — The End of the Story</div>
+  <h2>A king slips out of Jerusalem at dawn.</h2>
+
+  <p>David left barefoot. His head covered. The anointed king — slayer of Goliath, singer of psalms — crossed the Kidron Valley in silence with his household. Behind him lay the ark, the palace, the city of promise. Ahead lay uncertainty, betrayal, and blood. As he climbed the Mount of Olives, weeping, the weight of his own failures pressed harder than any enemy blade.</p>
+
+  <p>Absalom entered Jerusalem as a conqueror — but from the people's point of view, he entered as a saviour. He had spent two years patiently stealing the hearts of the nation, hearing grievances one by one at the city gate. Now they welcomed him as king. Counsellors defected. Tribes divided. Israel fractured along lines of loyalty, family, and fear.</p>
+
+  <p>What followed was a battle that showed a nation tearing itself apart. Brothers against brothers.</p>
+
+  <p>David's forces gathered east of the Jordan: seasoned warriors, loyalists, men hardened by years of exile and war. Absalom's army swelled with numbers, but not wisdom. The young prince was beautiful and charismatic, but untested. Against him stood generals who understood death.</p>
+
+  <p>The armies met in the Forest of Ephraim — a place where the land itself seemed hostile. Scripture records a haunting detail:</p>
+
+  <div class="scripture">
+    <div class="scripture-ref">2 Samuel 18:8</div>
+    <p>"The forest devoured more people that day than the sword."</p>
+  </div>
+
+  <p>Men fled and were swallowed by ravines. Others were ensnared by branches. Panic spread, commands were lost, formations collapsed. What should have been a clean battle dissolved into chaos.</p>
+
+  <p>In the midst of retreat, Absalom rode hard beneath the thick canopy. Then came the moment that sealed the tragedy. His head caught in the branches of a great oak. The hair that symbolised his pride — his glory — became the instrument of his ruin. The mule went on. Absalom hung between heaven and earth, helpless.</p>
+
+  <p>A soldier saw him and hesitated. David had given one clear command: <em>"Deal gently, for my sake, with the young man Absalom."</em> But Joab, commander of the army, understood what David could not bring himself to accept: this war would never end while Absalom lived. He thrust three spears into Absalom's heart.</p>
+
+  <p>The body was thrown into a pit and covered with stones — not a royal burial, but the grave of a rebel.</p>
+
+  <h3>Victory without joy</h3>
+
+  <p>The battlefield fell silent. David's army had won — but it felt like defeat. When the news reached the king, he did not celebrate. He broke.</p>
+
+  <blockquote>"O my son Absalom, my son, my son Absalom! Would I had died instead of you."</blockquote>
+
+  <p>The cry echoed through the camp. Soldiers returned ashamed, as though they had lost, not won. Israel had paid dearly:</p>
+
+  <ul class="chain">
+    <li>Tens of thousands dead</li>
+    <li>Tribes alienated</li>
+    <li>Trust shattered</li>
+    <li>A dynasty scarred</li>
+    <li>The king humiliated</li>
+  </ul>
+
+  <p>Now — let's park this for a moment, and go back some fifteen, maybe twenty years.</p>
+
+  <hr class="divider">
+
+  <!-- ACT II -->
+  <div class="section-label">Act II — Where It Began</div>
+  <h2>Two decades earlier. A series of observations.</h2>
+
+  <div class="observation">
+    <div class="observation-num">Observation 1</div>
+    <div class="observation-title">David stays behind.</div>
+    <div class="scripture" style="margin: 0.75rem 0;">
+      <div class="scripture-ref">2 Samuel 11:1</div>
+      <p>"At the time when kings go forth to battle, David sent Joab… but David stayed at Jerusalem."</p>
+    </div>
+    <p>There is a war. There is a battle. David is not where a king should be. The absence of duty becomes the opening for temptation.</p>
+  </div>
+
+  <div class="observation">
+    <div class="observation-num">Observation 2</div>
+    <div class="observation-title">David sees, and desires.</div>
+    <div class="scripture" style="margin: 0.75rem 0;">
+      <div class="scripture-ref">2 Samuel 11:2–3</div>
+      <p>"David arose from off his bed, and walked upon the roof… and from the roof he saw a woman washing herself; and the woman was very beautiful to look upon. And David sent and enquired after the woman."</p>
+    </div>
+    <p>David sees — that is not itself a sin. But he does not turn away. He asks questions, not to flee temptation, but to measure its cost. He knows she is married. At this point, his sin is no longer accidental. It is entirely deliberate.</p>
+  </div>
+
+  <div class="observation">
+    <div class="observation-num">Observation 3</div>
+    <div class="observation-title">Power replaces restraint.</div>
+    <div class="scripture" style="margin: 0.75rem 0;">
+      <div class="scripture-ref">2 Samuel 11:4</div>
+      <p>"David sent messengers, and took her; and she came in unto him, and he lay with her… and she returned unto her house."</p>
+    </div>
+    <p>David sends. David takes. The king sins, and the woman returns home — to bear consequences not of her making.</p>
+  </div>
+
+  <div class="observation">
+    <div class="observation-num">Observation 4</div>
+    <div class="observation-title">Sin bears fruit.</div>
+    <div class="scripture" style="margin: 0.75rem 0;">
+      <div class="scripture-ref">2 Samuel 11:5</div>
+      <p>"And the woman conceived, and sent and told David, saying, I am with child."</p>
+    </div>
+    <p>This single sentence collapses the illusion of secrecy. What was hidden is now about to be exposed. David must choose: confession, or cover-up.</p>
+  </div>
+
+  <div class="observation">
+    <div class="observation-num">Observation 5</div>
+    <div class="observation-title">David attempts deception.</div>
+    <div class="scripture" style="margin: 0.75rem 0;">
+      <div class="scripture-ref">2 Samuel 11:6–9</div>
+      <p>"David sent to Joab, saying, Send me Uriah the Hittite… And David said to Uriah, Go down to thy house, and wash thy feet… But Uriah slept at the door of the king's house… and went not down to his house."</p>
+    </div>
+    <p>David's plan: if Uriah goes home, the child can be explained. But Uriah the Hittite carries an extraordinary amount of honour. His righteousness stands exactly where David hoped it would bend.</p>
+  </div>
+
+  <div class="observation">
+    <div class="observation-num">Observation 6</div>
+    <div class="observation-title">Uriah's integrity condemns David.</div>
+    <div class="scripture" style="margin: 0.75rem 0;">
+      <div class="scripture-ref">2 Samuel 11:11</div>
+      <p>"The ark, and Israel, and Judah, abide in tents… shall I then go into mine house, to eat and to drink, and to lie with my wife?"</p>
+    </div>
+    <p>Uriah's words expose David without a single accusation. Isn't that precisely what David was doing? The ark, Israel, Judah — and Uriah — are at war, abiding in tents. But David stayed at home. The soldier is faithful. The king is not. David's guilt deepens still.</p>
+  </div>
+
+  <div class="observation">
+    <div class="observation-num">Observation 7</div>
+    <div class="observation-title">David chooses murder.</div>
+    <div class="scripture" style="margin: 0.75rem 0;">
+      <div class="scripture-ref">2 Samuel 11:14–15</div>
+      <p>"David wrote a letter to Joab, and sent it by the hand of Uriah. And he wrote… Set ye Uriah in the forefront of the hottest battle… that he may be smitten, and die."</p>
+    </div>
+    <p>He turns from adultery to murder. And he makes Uriah carry his own death warrant.</p>
+  </div>
+
+  <div class="observation">
+    <div class="observation-num">Observation 8</div>
+    <div class="observation-title">Uriah is killed. David settles into silence.</div>
+    <div class="scripture" style="margin: 0.75rem 0;">
+      <div class="scripture-ref">2 Samuel 11:26–27</div>
+      <p>"When the wife of Uriah heard that Uriah her husband was dead, she mourned for her husband. And when the mourning was past, David sent and fetched her… and she became his wife, and bare him a son."</p>
+    </div>
+    <p>The plan succeeds. Marriage. A child. The world may appear satisfied. But is God satisfied?</p>
+  </div>
+
+  <div class="observation">
+    <div class="observation-num">Observation 9</div>
+    <div class="observation-title">God does not settle into silence.</div>
+    <div class="scripture" style="margin: 0.75rem 0;">
+      <div class="scripture-ref">2 Samuel 11:27b</div>
+      <p>"But the thing that David had done displeased the LORD."</p>
+    </div>
+    <p>God sees. God remembers. And through Nathan, David is told the parable of the rich man who took the poor man's only lamb — and David's own anger condemns him before he understands the mirror he is looking into.</p>
+  </div>
+
+  <div class="scripture">
+    <div class="scripture-ref">2 Samuel 12:1–7</div>
+    <p>"There were two men in one city, one rich and the other poor. The rich man had exceedingly many flocks and herds. But the poor man had nothing, except one little ewe lamb… it was like a daughter to him. And a traveler came to the rich man, who refused to take from his own flock… but he took the poor man's lamb."</p>
+    <p style="margin-top: 0.75rem;">So David's anger was greatly aroused, and he said: <em>"As the Lord lives, the man who has done this shall surely die!"</em></p>
+    <p style="margin-top: 0.75rem;">Then Nathan said to David: <strong>"Thou art the man."</strong></p>
+  </div>
+
+  <p>Now comes Psalm 51 — David's repentance:</p>
+
+  <div class="scripture">
+    <div class="scripture-ref">Psalm 51:1–3</div>
+    <p>Have mercy on me, O God,<br>
+    according to your unfailing love;<br>
+    according to your great compassion<br>
+    blot out my transgressions.<br>
+    Wash away all my iniquity<br>
+    and cleanse me from my sin.<br><br>
+    For I know my transgressions,<br>
+    and my sin is always before me.</p>
+  </div>
+
+  <p>Yes, he repented. His sin was forgiven. But have the consequences been cancelled?</p>
+
+  <p><em>"My sin is always before me."</em> Not sometimes. Not occasionally. <em>Always.</em></p>
+
+  <p>And recall: David himself said the man in the parable should pay fourfold. One Uriah — four sons, as it turns out.</p>
+
+  <hr class="divider">
+
+  <!-- ACT III -->
+  <div class="section-label">Act III — The Chain Reaction</div>
+  <h2>Ten years later. A daughter. A half-brother. A silence that cost thousands of lives.</h2>
+
+  <p>Tamar is the daughter of David and the sister of Absalom. Her half-brother Amnon, David's firstborn, becomes obsessed with her. Feigning illness, he manipulates David into sending Tamar to care for him. Once alone, Amnon forces himself on her, despite her protests.</p>
+
+  <div class="scripture">
+    <div class="scripture-ref">2 Samuel 13:12–15</div>
+    <p>"Nay, my brother, do not force me; for no such thing ought to be done in Israel… Howbeit he would not hearken unto her voice: but, being stronger than she, forced her, and lay with her. Then Amnon hated her exceedingly; so that the hatred wherewith he hated her was greater than the love wherewith he had loved her."</p>
+  </div>
+
+  <p>After the assault, Amnon casts Tamar out. Tamar tears her royal robe — the sign of her virginity and her status — puts ashes on her head, and lives desolate in Absalom's house. David hears of it. And he is angry. But he does nothing.</p>
+
+  <div class="insight">
+    Why did David not punish Amnon? <strong>Because David could not.</strong> He knew he had violated Bathsheba. He knew he had arranged Uriah's death. He knew he had avoided justice for those sins. Now, when his son commits sexual violence, David is morally paralysed — unable to punish a son for a sin he himself committed and went unpunished for.
+  </div>
+
+  <div class="scripture">
+    <div class="scripture-ref">Deuteronomy 22:25–27</div>
+    <p>"If a man find a betrothed damsel in the field, and the man force her… the man only that lay with her shall die… for as when a man riseth against his neighbour, and slayeth him, even so is this matter."</p>
+  </div>
+
+  <p>Scripture explicitly names rape as violence, comparable to murder, punishable by death. Under the Mosaic Law, Amnon's act was a capital crime. As king and judge, David was responsible to uphold justice — even within his own household. Instead, he did nothing, communicating that status can shield guilt.</p>
+
+  <p>Recall Nathan's prophecy: <em>"The sword shall never depart from your house"</em> (2 Sam 12:10). We are watching it unfold.</p>
+
+  <p>When the state fails to execute justice, justice tends to be executed by a private hand. By failing to act, David leaves a vacuum — and Absalom steps into the role David abandoned. Two roles, in fact:</p>
+
+  <ul class="chain">
+    <li>Protector of Tamar</li>
+    <li>Executor of justice</li>
+  </ul>
+
+  <p>Private vengeance replaces public justice.</p>
+
+  <h3>Absalom's vendetta</h3>
+
+  <p>Absalom does not confront Amnon openly. Scripture says he spoke to him <em>"neither good nor bad"</em> — calculated, patient restraint. For two full years.</p>
+
+  <p>Then Absalom invites all the king's sons to a sheep-shearing feast — traditionally a time of celebration and heavy drinking. When Amnon is drunk, Absalom gives the order.</p>
+
+  <div class="scripture">
+    <div class="scripture-ref">2 Samuel 13:28–29</div>
+    <p>"Mark ye now when Amnon's heart is merry with wine, and when I say unto you, Smite Amnon; then kill him, fear not… And the servants of Absalom did unto Amnon as Absalom had commanded."</p>
+  </div>
+
+  <p>The act is premeditated and public. Absalom flees to Geshur for three years. David mourns Amnon but longs for Absalom — and yet, again, fails to act decisively. Joab eventually engineers Absalom's return. David allows him back to Jerusalem, but refuses to see him for two more years. This half-reconciliation does not heal the wound. It deepens the resentment.</p>
+
+  <h3>The grooming of a nation</h3>
+
+  <p>Cut off from the king, Absalom builds public favour. He stands at the city gate, listens to grievances, and tells people the truth:</p>
+
+  <div class="scripture">
+    <div class="scripture-ref">2 Samuel 15:4</div>
+    <p>"Behold, your claims are good, and right; but there is no man deputed of the king to hear you."</p>
+  </div>
+
+  <p>What he says is entirely accurate. This whole situation is only possible because it is precisely what David failed to do — on numerous occasions, over many years.</p>
+
+  <p>Absalom declares himself king at Hebron. David flees. And we are back where we started — the image with which we opened:</p>
+
+  <div class="scripture">
+    <div class="scripture-ref">2 Samuel 15:30</div>
+    <p>"David went up by the ascent of mount Olivet, weeping as he went up, barefoot, and with his head covered: and all the people that was with him covered every man his head, and they went up, weeping as they went up."</p>
+  </div>
+
+  <hr class="divider">
+
+  <!-- THE BUTTERFLY EFFECT -->
+  <div class="section-label">The Title Explained</div>
+  <h2>The butterfly effect.</h2>
+
+  <p>The butterfly effect is a concept from chaos theory. It was coined by the American mathematician and meteorologist Edward Norton Lorenz. The idea is this:</p>
+
+  <div class="insight">
+    A butterfly flaps its wings in Brazil. That tiny movement slightly changes the air around it. Over time, that small change influences weather patterns far away — potentially helping trigger a tornado in Texas. Something as tiny as a butterfly's wing can eventually lead to massive consequences elsewhere.
+  </div>
+
+  <p>A small act of not looking away — first turns to adultery, followed by murder. Then, a decade later, David's guilt leads to the king's inaction. That inaction leads to justice being executed outside the law, by the king's own son. Which then leads to civil war, thousands of deaths, and everything we have already recounted — twice.</p>
+
+  <blockquote>The butterfly effect of sin.</blockquote>
+
+  <hr class="divider">
+
+  <!-- LESSONS -->
+  <div class="lessons">
+    <div class="section-label">Four Lessons</div>
+
+    <div class="lesson-item">
+      <span class="lesson-num">I</span>
+      <span class="lesson-text">Unaddressed injustice breeds violence.
+        <em>When the powerful fail to act, someone else will — and rarely more cleanly.</em>
+      </span>
+    </div>
+
+    <div class="lesson-item">
+      <span class="lesson-num">II</span>
+      <span class="lesson-text">Leadership without accountability leads to rebellion.
+        <em>Absalom's populism only worked because David's failures were real. You cannot exploit a vacuum that doesn't exist.</em>
+      </span>
+    </div>
+
+    <div class="lesson-item">
+      <span class="lesson-num">III</span>
+      <span class="lesson-text">The smallest sin can lead to enormous consequences.
+        <em>Not looking away. One decision. Thousands of lives.</em>
+      </span>
+    </div>
+
+    <div class="lesson-item">
+      <span class="lesson-num">IV</span>
+      <span class="lesson-text">Sin repented, and forgiven, still carries consequences.
+        <em>This may be the hardest of the four. David remained God's chosen king — but thousands of people paid the ultimate price.</em>
+      </span>
+    </div>
+  </div>
+
+  <div class="closing">
+    <p>The kingdom survives, but so many things are shattered. And equally — so many things are shattered, but the kingdom survives.</p>
+    <p style="margin-top: 1.25rem;">The story warns us that sin has consequences. But the gospel assures us that <strong>consequences are not the end of the story.</strong></p>
+  </div>
+
+  <div class="tags">
+    <span class="tag">Sermon</span>
+    <span class="tag">David</span>
+    <span class="tag">Consequences</span>
+    <span class="tag">2 Samuel</span>
+    <span class="tag">Old Testament</span>
+  </div>
+
+  <footer>
+    <span>© Jakub Szczybura</span>
+    <a href="/faith">← Faith &amp; Reflection</a>
+  </footer>
+
+</div>
+</body>
+</html>
