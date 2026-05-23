@@ -37,7 +37,6 @@
     .post-meta { text-align: right; flex-shrink: 0; }
     .post-date { font-size: 12px; color: var(--color-faint); white-space: nowrap; display: block; margin-bottom: 4px; }
     .post-tag { font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--color-faint); background: var(--color-tag-bg); padding: 2px 7px; border-radius: 3px; white-space: nowrap; }
-    .coming-soon { padding: 1.25rem 0; color: var(--color-faint); font-size: 15px; font-family: var(--font-serif); font-style: italic; }
     footer { margin-top: 5rem; padding-top: 2rem; border-top: 0.5px solid var(--color-border); font-size: 13px; color: var(--color-faint); display: flex; justify-content: space-between; }
     footer a { color: var(--color-muted); text-decoration: none; }
     footer a:hover { color: var(--color-text); }
@@ -46,7 +45,6 @@
 <body>
 <script src="/nav.js"></script>
 <div class="container">
-
   <div class="page-label">Faith & Reflection</div>
   <h1>On living well, and thinking clearly about what matters.</h1>
   <p class="page-desc">Once a quarter I preach at my local church. Occasionally I write up the ideas here for anyone who finds them useful. Sometimes I draw on business and leadership experience to make the message concrete. Sometimes it is simply an attempt to understand what the Bible says about how to live.</p>
@@ -55,14 +53,24 @@
     <h2>Sermons &amp; Essays</h2>
   </div>
   <ul class="post-list">
-    <li class="coming-soon">First sermon coming soon.</li>
+    <li>
+      <a class="post-item" href="/faith/sermon-001-the-butterfly-effect.html">
+        <div class="post-main">
+          <div class="post-title">The Butterfly Effect</div>
+          <div class="post-excerpt">On the consequences of sin — and how one small act of not looking away cost thousands of lives.</div>
+        </div>
+        <div class="post-meta">
+          <span class="post-date">2025</span>
+          <span class="post-tag">Sermon</span>
+        </div>
+      </a>
+    </li>
   </ul>
 
   <footer>
     <span>© Jakub Szczybura</span>
     <a href="/">← Home</a>
   </footer>
-
 </div>
 </body>
 </html>
