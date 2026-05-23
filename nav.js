@@ -2,6 +2,7 @@
   const links = [
     { href: '/blog', label: 'Writing' },
     { href: '/tools', label: 'Tools' },
+    { href: '/faith', label: 'Faith & Reflection' },
   ];
 
   const path = window.location.pathname;
@@ -31,8 +32,7 @@
       max-width: 660px;
       margin-left: auto;
       margin-right: auto;
-      padding: 0 1.5rem;
-      padding-top: 4rem;
+      padding: 4rem 1.5rem 0;
     }
     .nav-name {
       font-family: 'Georgia', 'Times New Roman', serif;
@@ -57,11 +57,10 @@
 
   document.head.appendChild(style);
 
-  const body = document.body;
   const container = document.querySelector('.container');
   if (container) {
     container.insertBefore(nav, container.firstChild);
   } else {
-    body.insertBefore(nav, body.firstChild);
+    document.body.insertBefore(nav, document.body.firstChild);
   }
 })();
