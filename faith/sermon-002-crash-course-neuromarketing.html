@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A Crash Course in Neuromarketing — Jakub Szczybura</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --color-bg: #fafaf8;
+      --color-text: #1a1a1a;
+      --color-muted: #6b6b6b;
+      --color-faint: #9a9a9a;
+      --color-border: rgba(0,0,0,0.1);
+      --color-tag-bg: #f0efe9;
+      --color-accent-bg: #f5f0e8;
+      --color-accent-border: #c8a96e;
+      --font-serif: 'Georgia', 'Times New Roman', serif;
+      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-mono: 'SF Mono', 'Fira Code', monospace;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --color-bg: #141412;
+        --color-text: #e8e8e4;
+        --color-muted: #9a9a94;
+        --color-faint: #5a5a56;
+        --color-border: rgba(255,255,255,0.1);
+        --color-tag-bg: #1e1e1a;
+        --color-accent-bg: #1e1a12;
+        --color-accent-border: #8a6a2e;
+      }
+    }
+
+    body {
+      font-family: var(--font-serif);
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.85;
+      font-size: 18px;
+      padding: 0 0 6rem;
+    }
+
+    .container { max-width: 660px; margin: 0 auto; padding: 0 1.5rem; }
+
+    .post-meta {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      color: var(--color-faint);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+    }
+
+    h1 {
+      font-family: var(--font-serif);
+      font-size: 38px;
+      font-weight: normal;
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.01em;
+    }
+
+    .lede {
+      font-size: 20px;
+      color: var(--color-muted);
+      line-height: 1.65;
+      margin-bottom: 3rem;
+      font-style: italic;
+      border-bottom: 0.5px solid var(--color-border);
+      padding-bottom: 2rem;
+    }
+
+    .section-label {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--color-faint);
+      margin-bottom: 0.75rem;
+      margin-top: 3.5rem;
+    }
+
+    h2 {
+      font-family: var(--font-serif);
+      font-size: 26px;
+      font-weight: normal;
+      margin-bottom: 1.25rem;
+      color: var(--color-text);
+      line-height: 1.3;
+    }
+
+    h3 {
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-top: 2.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    p { margin-bottom: 1.4rem; }
+    p:last-child { margin-bottom: 0; }
+
+    .scripture {
+      background: var(--color-accent-bg);
+      border-left: 3px solid var(--color-accent-border);
+      border-radius: 0 6px 6px 0;
+      margin: 2rem 0;
+      padding: 1.25rem 1.5rem;
+    }
+
+    .scripture-ref {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-accent-border);
+      margin-bottom: 0.6rem;
+    }
+
+    .scripture p {
+      font-size: 17px;
+      font-style: italic;
+      color: var(--color-text);
+      line-height: 1.75;
+      margin-bottom: 0.5rem;
+    }
+
+    blockquote {
+      border-left: 2px solid var(--color-text);
+      margin: 2.5rem 0;
+      padding: 0.25rem 0 0.25rem 1.5rem;
+      font-size: 21px;
+      font-style: italic;
+      color: var(--color-text);
+      line-height: 1.45;
+    }
+
+    .insight {
+      background: var(--color-tag-bg);
+      border-radius: 8px;
+      padding: 1.5rem 1.75rem;
+      margin: 2.5rem 0;
+      font-size: 17px;
+      line-height: 1.75;
+      color: var(--color-text);
+    }
+
+    hr.divider {
+      border: none;
+      border-top: 0.5px solid var(--color-border);
+      margin: 3.5rem 0;
+    }
+
+    /* Technique header */
+    .technique-header {
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      margin-top: 3.5rem;
+    }
+
+    .technique-num {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-faint);
+      flex-shrink: 0;
+    }
+
+    .technique-title {
+      font-family: var(--font-serif);
+      font-size: 26px;
+      font-weight: normal;
+      color: var(--color-text);
+      line-height: 1.2;
+    }
+
+    /* Illustration */
+    .illustration {
+      margin: 1.75rem 0 2rem;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 0.5px solid var(--color-border);
+      background: #f7f4ef;
+    }
+
+    .illustration img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .illustration figcaption {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      color: var(--color-faint);
+      text-align: center;
+      padding: 8px 16px 12px;
+      letter-spacing: 0.05em;
+    }
+
+    /* Summary table */
+    .summary-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 2rem 0;
+      font-family: var(--font-sans);
+      font-size: 15px;
+    }
+
+    .summary-table th {
+      text-align: left;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-faint);
+      padding: 0.5rem 0.75rem;
+      border-bottom: 0.5px solid var(--color-border);
+    }
+
+    .summary-table td {
+      padding: 0.75rem;
+      border-bottom: 0.5px solid var(--color-border);
+      vertical-align: top;
+      line-height: 1.5;
+    }
+
+    .summary-table tr:last-child td { border-bottom: none; }
+
+    .summary-table td:first-child {
+      font-weight: 500;
+      color: var(--color-text);
+      white-space: nowrap;
+    }
+
+    .summary-table td:last-child { color: var(--color-muted); }
+
+    .tags {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 0.5px solid var(--color-border);
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-family: var(--font-sans);
+    }
+
+    .tag {
+      font-size: 12px;
+      color: var(--color-muted);
+      background: var(--color-tag-bg);
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+
+    footer {
+      margin-top: 5rem;
+      padding-top: 2rem;
+      border-top: 0.5px solid var(--color-border);
+      font-family: var(--font-sans);
+      font-size: 13px;
+      color: var(--color-faint);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    footer a { color: var(--color-muted); text-decoration: none; }
+    footer a:hover { color: var(--color-text); }
+  </style>
+</head>
+<body>
+<script src="/nav.js"></script>
+<div class="container">
+
+  <div class="post-meta">Faith &amp; Reflection &nbsp;·&nbsp; Sermon &nbsp;·&nbsp; Easter 2025</div>
+
+  <h1>A Crash Course in Neuromarketing</h1>
+
+  <p class="lede">How the same principles that sell you fries and gym memberships were used by Jesus — and are being used against us. A quick and intensive study of seven techniques that shape how we think, decide, and believe.</p>
+
+  <p>It's Easter weekend, so most of the Christian world is talking about the cross and the resurrection. We'll learn about those from everywhere else. Today we learn something completely different.</p>
+
+  <p>A crash course is a quick and intensive learning programme that covers a subject in a short amount of time — often just the basics, or the most important parts. It's designed to help you learn fast when you're short on time or need to get up to speed quickly.</p>
+
+  <p>Well — Jesus is coming soon. So let's start learning.</p>
+
+  <hr class="divider">
+
+  <div class="section-label">The Text</div>
+  <h2>The woman at the well.</h2>
+
+  <div class="scripture">
+    <div class="scripture-ref">John 4:7–14</div>
+    <p>"A woman of Samaria came to draw water. Jesus said to her, 'Give Me a drink.' Then the woman of Samaria said to Him, 'How is it that You, being a Jew, ask a drink from me, a Samaritan woman?' For Jews have no dealings with Samaritans.</p>
+    <p>Jesus answered and said to her, 'If you knew the gift of God, and who it is who says to you, "Give Me a drink," you would have asked Him, and He would have given you living water.'</p>
+    <p>'Whoever drinks of this water will thirst again, but whoever drinks of the water that I shall give him will never thirst. But the water that I shall give him will become in him a fountain of water springing up into everlasting life.'"</p>
+  </div>
+
+  <p>This encounter between Jesus and the Samaritan woman is a masterclass in winning souls without alienating people. Jesus engaged with grace. He connected with her personally, asked about her life, and guided her toward truth with gentleness and wisdom. Instead of condemning her for her past, He gently revealed His knowledge of it — leading her to recognise that He is a prophet.</p>
+
+  <p>Brothers and sisters — today we're going to explore an important question: <em>how can we share the gospel in a way that draws people in, rather than pushes them away?</em></p>
+
+  <div class="scripture">
+    <div class="scripture-ref">Matthew 10:16</div>
+    <p>"Behold, I send you out as sheep in the midst of wolves. Therefore be wise as serpents and harmless as doves."</p>
+  </div>
+
+  <p>One of the most effective ways to do this is by understanding how people think and what truly moves their hearts. And interestingly, some of the same principles used in neuromarketing — the science of how the brain responds to messages — can help us share our faith more effectively.</p>
+
+  <p>Consider two approaches:</p>
+
+  <div class="insight">
+    A street preacher yelling, <em>"Repent or go to hell!"</em> — this might provoke fear, but it also creates resistance.<br><br>
+    Jesus speaking to the Samaritan woman at the well — He connected with her personally, asked about her life, and guided her toward truth with gentleness and wisdom.
+  </div>
+
+  <div class="scripture">
+    <div class="scripture-ref">Ephesians 4:15</div>
+    <p>"But, speaking the truth in love, may grow up in all things into Him who is the head — Christ."</p>
+  </div>
+
+  <p>We will explore seven techniques: the framing effect, the paradox of choice, the rule of three, the contrast effect, the power of free, the endowment effect, and anchoring bias.</p>
+
+  <hr class="divider">
+
+  <!-- TECHNIQUE 1 -->
+  <div class="technique-header">
+    <span class="technique-num">1 of 7</span>
+    <span class="technique-title">The Framing Effect</span>
+  </div>
+
+  <p>The framing effect refers to how the way information is presented influences people's decisions. The same fact, packaged differently, produces entirely different responses.</p>
+
+  <figure class="illustration">
+    <img src="/faith/images/neuromarketing-framing-effect.jpg" alt="Two identical McDonald's fries containers: left labelled 1% fat fries, right labelled 99% fat-free fries" />
+    <figcaption>Same product. Different frame. Entirely different feeling.</figcaption>
+  </figure>
+
+  <p>The Samaritan woman at the well is a perfect illustration. Rather than opening with condemnation of her past — five husbands, a man she's not married to — Jesus frames the conversation around living water, offering her something better than anything she had known. He frames the message in a way that made her <em>desire</em> salvation.</p>
+
+  <h3>Applying it today</h3>
+  <p>When sharing the gospel, instead of <em>"You need to repent or face judgement,"</em> consider:</p>
+  <div class="insight" style="font-size:16px;">
+    <strong>Frame it around transformation:</strong> "Jesus offers a new start — a life of peace and purpose."<br><br>
+    <strong>Frame it around fulfilment:</strong> "Everyone is searching for meaning. Jesus is the answer to that."<br><br>
+    <strong>Frame it around love:</strong> "God loves you deeply and has already made a way for you."
+  </div>
+
+  <hr class="divider">
+
+  <!-- TECHNIQUE 2 -->
+  <div class="technique-header">
+    <span class="technique-num">2 of 7</span>
+    <span class="technique-title">The Paradox of Choice</span>
+  </div>
+
+  <p>Too many choices overwhelm people and lead to indecision. I know this one intimately from my data analysis work. In the internet world, you can do what is called A/B testing. Imagine you run a gym with a sign-up page — two hundred people visit every day. To one hundred of them you show ten options: pay-as-you-go, Monday–Friday only, weekends only, coaching packages, and so on. To the other hundred you show three: gold, silver, and bronze.</p>
+
+  <p>Studies show — and my own A/B tests confirmed — that you will get nearly double the sign-ups with fewer choices.</p>
+
+  <figure class="illustration">
+    <img src="/faith/images/neuromarketing-paradox-of-choice.jpg" alt="Two laptop screens: left shows 15 membership options, right shows 3 clean options — Basic, Pro, Extra" />
+    <figcaption>15 options vs 3. Nearly double the conversions with the simpler screen.</figcaption>
+  </figure>
+
+  <p>The paradox of choice applies just as powerfully to soul-winning. When sharing faith or inviting someone to church, talking too much and offering too many paths, programmes, or theological concepts can lead to confusion and hesitation. Imagine bombarding a new visitor with five small groups, three service times, four types of Bible studies, youth nights, prayer breakfasts, and mission trips. It's overwhelming.</p>
+
+  <p>Instead: give them two things — <em>a clear invitation and an obvious next step.</em> "Join us this Sabbath at 10am." For those who are more curious, you can introduce more options later. Start simple. Build trust. Let clarity create momentum.</p>
+
+  <hr class="divider">
+
+  <!-- TECHNIQUE 3 -->
+  <div class="technique-header">
+    <span class="technique-num">3 of 7</span>
+    <span class="technique-title">The Rule of Three</span>
+  </div>
+
+  <p>The number three is everywhere. The Trinity — Father, Son, and Holy Spirit — encapsulates completeness and balance. How many times was Jesus tempted in the desert? Three. How many times did Peter deny Jesus?</p>
+
+  <p>The rule of three is rooted in both psychology and storytelling. People tend to remember things better when they come in threes — it feels complete, balanced, and easy to digest.</p>
+
+  <figure class="illustration">
+    <img src="/faith/images/neuromarketing-rule-of-three.jpg" alt="Two vs three coffee cup sizes. With three sizes, people rarely pick the cheapest." />
+    <figcaption>Two options limits choice. Three options creates differentiation — and people gravitate to the middle.</figcaption>
+  </figure>
+
+  <p>When sharing the gospel: <em>"God loves you, sin separates us, but Jesus restores the way."</em> When describing your church: <em>"We focus on three things: knowing God personally, growing in community, and living with purpose."</em> Instead of a dozen doctrinal points, the rule of three distils the message to something simple, powerful, and memorable.</p>
+
+  <p style="color: var(--color-muted); font-style: italic; font-size: 16px;">The irony of preaching the rule of three as part of seven techniques is not lost on me. My only redeeming hope is that this is a crash course, and we're being brief on each point.</p>
+
+  <hr class="divider">
+
+  <!-- TECHNIQUE 4 -->
+  <div class="technique-header">
+    <span class="technique-num">4 of 7</span>
+    <span class="technique-title">The Contrast Effect</span>
+  </div>
+
+  <p>The contrast effect refers to the tendency to perceive two things presented together as more different than they actually are. In soul-winning, this means highlighting the difference between a life lived without Christ and a life transformed by Him — making the gift of grace more vivid by showing what it is replacing.</p>
+
+  <figure class="illustration">
+    <img src="/faith/images/neuromarketing-contrast-effect.jpg" alt="A $1,000 watch alone vs the same watch next to an $8,000 watch — the $1,000 suddenly looks like a bargain" />
+    <figcaption>The $1,000 watch feels expensive alone. Next to an $8,000 watch, it feels like great value.</figcaption>
+  </figure>
+
+  <p>The story of the Prodigal Son illustrates this on multiple levels. The younger son demands his inheritance early, loses it all, and ends up feeding pigs. The contrast between his former life of indulgence and his later misery sharpens the impact of what he returns to:</p>
+
+  <div class="scripture">
+    <div class="scripture-ref">Luke 15:21–24</div>
+    <p>"Father, I have sinned against heaven and in your sight, and am no longer worthy to be called your son."</p>
+    <p>"But the father said to his servants, 'Bring out the best robe and put it on him, and put a ring on his hand and sandals on his feet. And bring the fatted calf here and kill it, and let us eat and be merry; for this my son was dead and is alive again; he was lost and is found.'"</p>
+  </div>
+
+  <p>The father's extravagant welcome only lands with full force because we have seen what the son walked through to get there. It is the contrast that amplifies the grace.</p>
+
+  <hr class="divider">
+
+  <!-- TECHNIQUE 5 -->
+  <div class="technique-header">
+    <span class="technique-num">5 of 7</span>
+    <span class="technique-title">The Power of Free</span>
+  </div>
+
+  <p>People are irrationally drawn to anything that is free — even when a low-cost option might offer better value. The word <em>free</em> triggers an emotional response that reduces hesitation and increases engagement. In evangelism, offering something without cost can remove barriers and open doors to deeper conversations.</p>
+
+  <figure class="illustration">
+    <img src="/faith/images/neuromarketing-power-of-free.jpg" alt="Two sandwich boards: left says $5 off your first order, right says FREE GIFT" />
+    <figcaption>Equivalent value. Completely different emotional response. "Free" bypasses rational evaluation.</figcaption>
+  </figure>
+
+  <div class="scripture">
+    <div class="scripture-ref">Isaiah 55:1</div>
+    <p>"Ho! Everyone who thirsts, come to the waters; and you who have no money, come, buy and eat. Yes, come, buy wine and milk — without money and without price."</p>
+  </div>
+
+  <p>This powerful use of <em>free</em> taps into deep longing — not only offering spiritual nourishment, but making it clear that no payment is required. When sharing faith, offering a free Bible, a meal, or a prayer with no strings attached reflects the same spirit. We attract interest by removing any perceived cost — and conveying God's grace as a pure gift.</p>
+
+  <p>Notice how this point would be entirely lost if salvation weren't by grace.</p>
+
+  <hr class="divider">
+
+  <!-- TECHNIQUE 6 -->
+  <div class="technique-header">
+    <span class="technique-num">6 of 7</span>
+    <span class="technique-title">The Endowment Effect</span>
+  </div>
+
+  <p>The endowment effect refers to people valuing something more once they feel ownership of it. In ministry, involving people early — helping them experience even a small part of God's kingdom — creates emotional investment. They begin to feel like it's theirs, and are less likely to walk away.</p>
+
+  <figure class="illustration">
+    <img src="/faith/images/neuromarketing-endowment-effect.jpg" alt="Two TV screens showing Netflix: left says $9.99 per month, right says 30 day free trial" />
+    <figcaption>Pay upfront creates a barrier. A free trial creates ownership — and ownership creates loyalty.</figcaption>
+  </figure>
+
+  <div class="scripture">
+    <div class="scripture-ref">Luke 10:17</div>
+    <p>"Then the seventy returned with joy, saying, 'Lord, even the demons are subject to us in Your name.'"</p>
+  </div>
+
+  <p>In Luke 10, Jesus sends out seventy disciples to minister before they've seen the full picture of who He is. He gives them authority and purpose early — and when they return, they're filled with joy. Their involvement gave them a personal stake in the mission. Inviting seekers to serve in small ways — helping with setup, sharing a testimony, leading a prayer — gives them a stake in the faith before they've fully committed to it. And that stake increases their desire to stay.</p>
+
+  <hr class="divider">
+
+  <!-- TECHNIQUE 7 -->
+  <div class="technique-header">
+    <span class="technique-num">7 of 7</span>
+    <span class="technique-title">Anchoring Bias</span>
+  </div>
+
+  <p>Anchoring bias happens when people rely heavily on the first piece of information they receive. That first impression anchors their perception — often permanently. In evangelism, the first experience someone has with a believer, a church, or scripture can significantly influence their openness to everything that follows.</p>
+
+  <figure class="illustration">
+    <img src="/faith/images/neuromarketing-anchoring-bias.jpg" alt="Two coats: left shows sale price $99 with no context, right shows original $200 crossed out, now $99" />
+    <figcaption>$99 with no context feels arbitrary. $99 after seeing $200 crossed out feels like winning.</figcaption>
+  </figure>
+
+  <div class="scripture">
+    <div class="scripture-ref">John 1:45–49</div>
+    <p>"Philip found Nathanael and said to him, 'We have found Him of whom Moses in the law, and also the prophets, wrote — Jesus of Nazareth, the son of Joseph.' And Nathanael said to him, 'Can anything good come out of Nazareth?' Philip said to him, 'Come and see.'"</p>
+    <p>"Jesus saw Nathanael coming toward Him, and said of him, 'Behold, an Israelite indeed, in whom is no deceit!' Nathanael said to Him, 'How do You know me?' Jesus answered, 'Before Philip called you, when you were under the fig tree, I saw you.' Nathanael answered, 'Rabbi, You are the Son of God! You are the King of Israel!'"</p>
+  </div>
+
+  <p>Nathanael came with a negative anchor — <em>"Can anything good come from Nazareth?"</em> — and Jesus overcame it not by arguing, but by demonstrating something personal, precise, and utterly unexpected. That encounter rewired Nathanael's view entirely.</p>
+
+  <p>Soul winners can follow this model. When someone arrives with a negative anchor against faith, the most powerful response is not debate — it is the exact opposite of their expectation. And by doing so, you're combining anchoring bias with the contrast effect at the same time. Two techniques in one.</p>
+
+  <hr class="divider">
+
+  <div class="section-label">The Darker Question</div>
+  <h2>Does the enemy use these techniques?</h2>
+
+  <blockquote>"Light thinks it travels faster than anything but it is wrong. No matter how fast light travels, it finds the darkness has always got there first, and is waiting for it."<br><span style="font-size:15px; font-style:normal; color: var(--color-muted);">— Terry Pratchett</span></blockquote>
+
+  <p>Unfortunately, that is exactly where we are. And the world is full of — nonliteral — darkness.</p>
+
+  <p>The enemy uses these techniques on the most fundamental level: shaping our entire perception. Telling us what we want and desire, and how we define what is normal. Everything around us tells us that we are gods, that we can do anything if we believe in ourselves, that we must question everything — and that only three things matter, by the rule of three: <em>me, myself, and I.</em></p>
+
+  <p>Consumerism uses psychological tricks to convince people they are self-sufficient gods needing nothing beyond themselves. The framing effect rebrands indulgence as empowerment — buying luxury isn't excess, it's <em>self-care.</em> The rule of three amplifies this: <em>"You deserve it. You've earned it. You need it."</em></p>
+
+  <p>The world inflates our sense of worth by giving us ways to invest ourselves in a product before we even buy it — assembling it, customising it. By the laws of the endowment effect, we end up overvaluing these things. And then, in a culture of possessions, by extension, we overvalue ourselves.</p>
+
+  <p>Together, these forces echo the serpent's original whisper:</p>
+
+  <div class="scripture">
+    <div class="scripture-ref">Genesis 3:5</div>
+    <p>"For God knows that in the day you eat of it your eyes will be opened, and you will be like God."</p>
+  </div>
+
+  <p>And the overt part is only the beginning. Consider what popular culture, films, and education have been quietly teaching our children for decades. The world's message to young people — <em>"question everything," "you're your own authority," "your parents can't stop you"</em> — is broadcast through schools, entertainment, and the broader culture. Framed in the language of empowerment.</p>
+
+  <p>This is not a random cultural shift. The alienation of children from their parents has deep ideological roots. The Hitler Youth movement glorified the state above the family, teaching children to distrust their parents and pledge loyalty to the Führer — anchoring that as the norm. Marxist and communist systems saw the family as an obstacle to control. In the West, the Frankfurt School introduced the idea that liberation begins with breaking from traditional structures, particularly the family. Progressive educational reforms reframed these philosophies in the language of freedom and self-discovery, producing a powerful anchoring effect: generations taught to see their parents not as guides, but as oppressors.</p>
+
+  <div class="scripture">
+    <div class="scripture-ref">Isaiah 14:12–15</div>
+    <p>"How you are fallen from heaven, O Lucifer, son of the morning! For you have said in your heart: 'I will ascend into heaven, I will exalt my throne above the stars of God… I will be like the Most High.'"</p>
+    <p>"Yet you shall be brought down to Sheol, to the lowest depths of the Pit."</p>
+  </div>
+
+  <p>This is what the world is both overtly and quietly selling. The message sounds extraordinary, especially to a young, forming mind. <em>I will be like the most high! I will be rich, I will be desired, I will be envied.</em> What they don't tell you — and we don't notice — are the quiet hints in the text: <em>"you who weakened the nations."</em> It is weakening us. And the conclusion follows in the very next verse.</p>
+
+  <hr class="divider">
+
+  <div class="section-label">Back to the Beginning</div>
+  <h2>What happened next at the well.</h2>
+
+  <div class="scripture">
+    <div class="scripture-ref">John 4:28–30, 42</div>
+    <p>"The woman then left her waterpot, went her way into the city, and said to the men, 'Come, see a Man who told me all things that I ever did. Could this be the Christ?' Then they went out of the city and came to Him."</p>
+    <p>"Now we believe, not because of what you said, for we ourselves have heard Him and we know that this is indeed the Christ, the Savior of the world."</p>
+  </div>
+
+  <p>Jesus broke cultural and social barriers — Jews and Samaritans didn't associate, but He spoke to her with respect. He did not start with condemnation. He met her where she was, using water as an illustration to lead her toward deeper spiritual truths. And she wasn't a religious scholar. Just a woman transformed by an encounter with Christ — who then became the first evangelist of her village.</p>
+
+  <p>This story shows that effective soul-winning is not about arguments or pressure. It is about connecting with people's needs, speaking truth in love, and letting the Holy Spirit do the work of transformation.</p>
+
+  <p>Our faith is something good. It is the only thing that can bring true peace, fulfilment, and happiness. The world sells self-centredness as a route to fulfilment — and I have heard of not a single person who got even close. There is no fulfilment in ourselves, whatever the philosophers teach. It is outside of us. It is with God, and it is from God. When we are not connected to our maker, we cannot be fulfilled. As simple as that.</p>
+
+  <p>We represent God. We have the mandate and the power to scare people off, or to bring people in.</p>
+
+  <div class="section-label" style="margin-top: 3rem;">The Seven Techniques</div>
+  <table class="summary-table">
+    <thead>
+      <tr>
+        <th>Technique</th>
+        <th>The principle</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Framing Effect</td><td>Wording changes how people make decisions</td></tr>
+      <tr><td>Paradox of Choice</td><td>Too many options overwhelms and leads to inaction</td></tr>
+      <tr><td>Rule of Three</td><td>Three feels complete, balanced, and memorable</td></tr>
+      <tr><td>Contrast Effect</td><td>Comparison changes how we perceive value</td></tr>
+      <tr><td>Power of Free</td><td>"Free" reduces hesitation and increases engagement</td></tr>
+      <tr><td>Endowment Effect</td><td>We overvalue what we feel we already own</td></tr>
+      <tr><td>Anchoring Bias</td><td>First information shapes all subsequent judgment</td></tr>
+    </tbody>
+  </table>
+
+  <div class="insight">
+    Neuroscientific methods to entice — and manipulate — are everywhere. They work on us not only when we're being sold a burger, but on the fundamental level of how we perceive our world, our relationships, and ourselves. It's time we too understand these concepts, and apply them for good.
+  </div>
+
+  <div class="tags">
+    <span class="tag">Sermon</span>
+    <span class="tag">Neuromarketing</span>
+    <span class="tag">Evangelism</span>
+    <span class="tag">John 4</span>
+    <span class="tag">Easter</span>
+  </div>
+
+  <footer>
+    <span>© Jakub Szczybura</span>
+    <a href="/faith">← Faith &amp; Reflection</a>
+  </footer>
+
+</div>
+</body>
+</html>
