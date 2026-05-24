@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>What a startup can learn from Adam Smith — Jakub Szczybura</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --color-bg: #fafaf8;
+      --color-text: #1a1a1a;
+      --color-muted: #6b6b6b;
+      --color-faint: #9a9a9a;
+      --color-border: rgba(0,0,0,0.1);
+      --color-tag-bg: #f0efe9;
+      --font-serif: 'Georgia', 'Times New Roman', serif;
+      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-mono: 'SF Mono', 'Fira Code', monospace;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --color-bg: #141412;
+        --color-text: #e8e8e4;
+        --color-muted: #9a9a94;
+        --color-faint: #5a5a56;
+        --color-border: rgba(255,255,255,0.1);
+        --color-tag-bg: #1e1e1a;
+      }
+    }
+
+    body {
+      font-family: var(--font-serif);
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.8;
+      font-size: 18px;
+      padding: 0 0 6rem;
+    }
+
+    .container { max-width: 660px; margin: 0 auto; padding: 0 1.5rem; }
+
+    .post-meta {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      color: var(--color-faint);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+    }
+
+    h1 {
+      font-family: var(--font-serif);
+      font-size: 36px;
+      font-weight: normal;
+      line-height: 1.25;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.01em;
+    }
+
+    .lede {
+      font-size: 20px;
+      color: var(--color-muted);
+      line-height: 1.6;
+      margin-bottom: 3rem;
+      font-style: italic;
+      border-bottom: 0.5px solid var(--color-border);
+      padding-bottom: 2rem;
+    }
+
+    .section-label {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-faint);
+      margin-bottom: 0.75rem;
+      margin-top: 3rem;
+    }
+
+    h2 {
+      font-family: var(--font-serif);
+      font-size: 22px;
+      font-weight: normal;
+      margin-bottom: 1.25rem;
+      color: var(--color-text);
+    }
+
+    p { margin-bottom: 1.4rem; }
+    p:last-child { margin-bottom: 0; }
+
+    blockquote {
+      border-left: 2px solid var(--color-text);
+      margin: 2.5rem 0;
+      padding: 0.25rem 0 0.25rem 1.5rem;
+      font-size: 20px;
+      font-style: italic;
+      color: var(--color-text);
+      line-height: 1.5;
+    }
+
+    .insight {
+      background: var(--color-tag-bg);
+      border-radius: 8px;
+      padding: 1.5rem 1.75rem;
+      margin: 2.5rem 0;
+      font-size: 17px;
+      line-height: 1.75;
+      color: var(--color-text);
+    }
+
+    hr.divider {
+      border: none;
+      border-top: 0.5px solid var(--color-border);
+      margin: 3rem 0;
+    }
+
+    .principle {
+      background: var(--color-tag-bg);
+      border-radius: 8px;
+      padding: 1.75rem 2rem;
+      margin-top: 3rem;
+    }
+    .principle .section-label { margin-top: 0; }
+    .principle p {
+      font-size: 17px;
+      line-height: 1.7;
+      margin-bottom: 1rem;
+      color: var(--color-text);
+    }
+    .principle p:last-child { margin-bottom: 0; }
+    .principle strong { font-style: italic; font-weight: normal; }
+
+    .tags {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 0.5px solid var(--color-border);
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-family: var(--font-sans);
+    }
+
+    .tag {
+      font-size: 12px;
+      color: var(--color-muted);
+      background: var(--color-tag-bg);
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+
+    footer {
+      margin-top: 5rem;
+      padding-top: 2rem;
+      border-top: 0.5px solid var(--color-border);
+      font-family: var(--font-sans);
+      font-size: 13px;
+      color: var(--color-faint);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    footer a { color: var(--color-muted); text-decoration: none; }
+    footer a:hover { color: var(--color-text); }
+  </style>
+</head>
+<body>
+<script src="/nav.js"></script>
+<div class="container">
+
+  <div class="post-meta">2025 &nbsp;·&nbsp; 6 min read</div>
+
+  <h1>What a startup can learn from Adam Smith</h1>
+
+  <p class="lede">In 1776, Adam Smith described a pin factory and changed how we think about productive organisation. Most startups have heard of division of labour. Almost none have understood what it actually demands of a founder.</p>
+
+  <div class="section-label">The theory</div>
+  <h2>Smith wasn't just describing efficiency.</h2>
+
+  <p>In <em>The Wealth of Nations</em>, Smith observed that a single worker making pins from start to finish might produce twenty pins a day. Ten workers, each specialising in one step of the process — drawing wire, straightening it, cutting, pointing, grinding — could produce forty-eight thousand. Not ten times more. Two thousand four hundred times more.</p>
+
+  <p>The standard reading of this is about efficiency: specialisation reduces switching costs, builds muscle memory, removes friction. That reading is correct but incomplete.</p>
+
+  <p>The deeper insight is about the nature of knowledge itself. A specialist doesn't just do their task faster — they develop a quality of understanding that a generalist never reaches. The person who does nothing but point pins all day starts to notice things about the wire, the angle, the pressure, that no one who occasionally points pins could ever notice. Specialisation doesn't just divide labour. It generates expertise that cannot exist any other way.</p>
+
+  <p>This is what makes interference costly in ways that don't show up immediately. When a generalist overrides a specialist, the damage isn't just the bad decision. It's the signal sent about whose knowledge counts — and the gradual erosion of the conditions under which deep expertise can form at all.</p>
+
+  <hr class="divider">
+
+  <div class="section-label">The violation</div>
+  <h2>Startups know this in theory. Most violate it in practice.</h2>
+
+  <p>The violation rarely arrives as incompetence. It arrives as involvement. As care. As a founder who built something from nothing and cannot — entirely reasonably — switch off the instinct to shape every decision that matters.</p>
+
+  <p>The pattern is consistent. A technical team is hired. A brief is given. The founder is satisfied. Two weeks pass. The founder starts asking questions that aren't questions — they're redirections. Architecture choices get relitigated in Slack. Implementation paths get second-guessed in standups. The engineers, who were hired for their judgment, learn that their judgment is conditional on the founder's approval. They stop exercising it fully. Why would they?</p>
+
+  <p>The fastest way to slow a startup down is a founder who cannot stop at the brief.</p>
+
+  <p>The technical team doesn't need to be told how. They need to know why, what success looks like, and when it needs to ship. Everything else is interference dressed up as involvement.</p>
+
+  <hr class="divider">
+
+  <div class="section-label">The floor</div>
+  <h2>A founder who didn't want to be common.</h2>
+
+  <p>I was working as Chief AI Architect on a system alongside a strong data scientist. The architecture we designed was rigorous: embeddings for semantic representation, cosine similarity for relevance scoring, clustering to surface structure in the data. These are not fashionable choices — they are correct choices. Well-understood, well-suited to the problem, and well-implemented.</p>
+
+  <p>The founder was happy for two months. Then someone in his network mentioned, in passing, that embeddings are widely used these days. Common. Mainstream.</p>
+
+  <p>The project was halted. The architecture was redefined. The new constraint: the system could not use embeddings, cosine similarity, or clustering. The components that had been selected precisely because they were the best tools for the job were ruled out — not because they failed, not because they were expensive, not because something better existed — but because they were no longer rare.</p>
+
+  <blockquote>"Common" is not an engineering criterion.</blockquote>
+
+  <p>This is a distinct and underappreciated category of founder interference. It isn't micromanagement born of anxiety, or a founder who thinks they know better than the engineers. It's something more subtle: the conflation of technical decisions with brand identity. The belief that how a system is built is part of what the company <em>is</em> — and therefore must reflect the founder's sense of distinctiveness, regardless of whether it serves the actual problem.</p>
+
+  <p>The cost was significant. Months of progress, discarded. A data scientist whose technical judgment had been explicitly overridden on aesthetic grounds. An architecture that now had to achieve the same outcomes through components selected for novelty rather than fitness. The system became harder to build, harder to explain, and harder to maintain — for no engineering reason whatsoever.</p>
+
+  <hr class="divider">
+
+  <div class="section-label">The reframe</div>
+  <h2>What founders should and shouldn't own.</h2>
+
+  <p>Division of labour only works if the boundaries of each role are respected. Smith's pin factory doesn't produce forty-eight thousand pins a day if the man grinding occasionally wanders over to do some pointing, or if the factory owner redesigns the pointing station because he finds the current method unremarkable.</p>
+
+  <p>In a startup, the founder owns the problem definition, the success criteria, and the urgency. Those are non-negotiable — and a founder who doesn't own them fully is abdicating real responsibility. But the implementation path, the architectural choices, the technical components: these belong to the people hired to make them. Not because founders lack intelligence, but because the knowledge required to make those decisions well can only be developed by people who do nothing else.</p>
+
+  <div class="insight">
+    There is a specific tell for when a founder has crossed the line. It's not the question — questions are fine, questions are good. It's when the question arrives already containing its answer. <em>"Have you considered not using embeddings?"</em> is not a question. It's a decision wearing a question mark.
+  </div>
+
+  <p>The technical team will always accommodate this. They are paid to, and they want to keep their jobs. But each accommodation teaches them that their expertise is decorative — consulted for its appearance, overridden at will. The best engineers leave first, because they have options and because they find this intolerable. The ones who remain are the ones who have learned to stop caring.</p>
+
+  <p>I work with startups on technology, processes, and people. In reverse order of difficulty. The technology is almost never the problem. The architecture is almost never wrong. What is wrong, with surprising consistency, is the distribution of decision rights — and the cost of that misalignment compounds quietly until it becomes visible all at once.</p>
+
+  <div class="principle">
+    <div class="section-label">The principle</div>
+    <p>Smith's pin factory is a description of what happens when people are trusted to develop expertise within a bounded role. It is also, implicitly, a warning about what happens when they aren't.</p>
+    <p>A founder who sets the problem clearly and then steps back is not abdicating control. <strong>They are creating the conditions under which the people they hired can become genuinely excellent at what they were hired to do.</strong></p>
+    <p>That is the only environment in which a startup builds something that couldn't have been built anywhere else.</p>
+  </div>
+
+  <div class="tags">
+    <span class="tag">Startups</span>
+    <span class="tag">Leadership</span>
+    <span class="tag">CTO thinking</span>
+    <span class="tag">Decision-making</span>
+    <span class="tag">AI strategy</span>
+  </div>
+
+  <footer>
+    <span>© Jakub Szczybura</span>
+    <a href="/blog">All posts →</a>
+  </footer>
+
+</div>
+</body>
+</html>
