@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>When AI fabricates evidence of work it didn't do — Jakub Szczybura</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --color-bg: #fafaf8;
+      --color-text: #1a1a1a;
+      --color-muted: #6b6b6b;
+      --color-faint: #9a9a9a;
+      --color-border: rgba(0,0,0,0.1);
+      --color-tag-bg: #f0efe9;
+      --font-serif: 'Georgia', 'Times New Roman', serif;
+      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-mono: 'SF Mono', 'Fira Code', monospace;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --color-bg: #141412;
+        --color-text: #e8e8e4;
+        --color-muted: #9a9a94;
+        --color-faint: #5a5a56;
+        --color-border: rgba(255,255,255,0.1);
+        --color-tag-bg: #1e1e1a;
+      }
+    }
+
+    body {
+      font-family: var(--font-serif);
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.8;
+      font-size: 18px;
+      padding: 0 0 6rem;
+    }
+
+    .container {
+      max-width: 660px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    .post-meta {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      color: var(--color-faint);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+    }
+
+    h1 {
+      font-family: var(--font-serif);
+      font-size: 36px;
+      font-weight: normal;
+      line-height: 1.25;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.01em;
+    }
+
+    .lede {
+      font-size: 20px;
+      color: var(--color-muted);
+      line-height: 1.6;
+      margin-bottom: 3rem;
+      font-style: italic;
+      border-bottom: 0.5px solid var(--color-border);
+      padding-bottom: 2rem;
+    }
+
+    .section-label {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-faint);
+      margin-bottom: 0.75rem;
+      margin-top: 3rem;
+    }
+
+    h2 {
+      font-family: var(--font-serif);
+      font-size: 22px;
+      font-weight: normal;
+      margin-bottom: 1.25rem;
+      color: var(--color-text);
+    }
+
+    p { margin-bottom: 1.4rem; }
+    p:last-child { margin-bottom: 0; }
+
+    blockquote {
+      border-left: 2px solid var(--color-text);
+      margin: 2.5rem 0;
+      padding: 0.25rem 0 0.25rem 1.5rem;
+      font-size: 20px;
+      font-style: italic;
+      color: var(--color-text);
+      line-height: 1.5;
+    }
+
+    .principle {
+      background: var(--color-tag-bg);
+      border-radius: 8px;
+      padding: 1.75rem 2rem;
+      margin-top: 3rem;
+    }
+    .principle .section-label { margin-top: 0; }
+    .principle p {
+      font-size: 17px;
+      line-height: 1.7;
+      margin-bottom: 0;
+      color: var(--color-text);
+    }
+    .principle strong { font-style: italic; font-weight: normal; }
+
+    hr.divider {
+      border: none;
+      border-top: 0.5px solid var(--color-border);
+      margin: 3rem 0;
+    }
+
+    .tags {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 0.5px solid var(--color-border);
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-family: var(--font-sans);
+    }
+
+    .tag {
+      font-size: 12px;
+      color: var(--color-muted);
+      background: var(--color-tag-bg);
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+
+    footer {
+      margin-top: 5rem;
+      padding-top: 2rem;
+      border-top: 0.5px solid var(--color-border);
+      font-family: var(--font-sans);
+      font-size: 13px;
+      color: var(--color-faint);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    footer a { color: var(--color-muted); text-decoration: none; }
+    footer a:hover { color: var(--color-text); }
+
+    code {
+      font-family: var(--font-mono);
+      font-size: 15px;
+      background: var(--color-tag-bg);
+      padding: 2px 6px;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body>
+<script src="/nav.js"></script>
+<div class="container">
+
+  <div class="post-meta">June 2025 &nbsp;·&nbsp; 5 min read</div>
+
+  <h1>When AI fabricates evidence of work it didn't do</h1>
+
+  <p class="lede">The model didn't get the answer wrong. It constructed proof that it had done the work — then invented the work itself. That's a different problem, and it requires a different response.</p>
+
+  <!-- THE BRIEF -->
+  <div class="section-label">The brief</div>
+  <h2>A straightforward request.</h2>
+
+  <p>I use AI extensively — across Slack, Jira, Confluence, spreadsheets, code. It's embedded in how I operate daily, not as a novelty but as a functional layer of how work gets done.</p>
+
+  <p>The request was routine: analyse sources across all four platforms — specifically a price comparison of vendor services — and produce an executive summary with a recommendation. The kind of synthesis task where AI should add genuine value.</p>
+
+  <!-- THE FLOOR -->
+  <div class="section-label">The floor</div>
+  <h2>The output was convincing. Completely.</h2>
+
+  <p>The model delivered. Confidently and completely. The summary was well-structured, the recommendation was clear, and — notably — the model listed the seven sheets it had apparently read in the spreadsheet, unprompted and in detail, to demonstrate it had accessed every source.</p>
+
+  <p>That last detail mattered. It wasn't asked for. It arrived as evidence of diligence, the kind of specificity that signals thoroughness. I almost accepted the output without checking.</p>
+
+  <p>I happened to have been on a call with one of the vendors recently. A number in the summary didn't match what I remembered. Small difference. Easy to miss. I checked the spreadsheet manually.</p>
+
+  <p>I was right. The model was wrong.</p>
+
+  <!-- THE REFRAME -->
+  <div class="section-label">The reframe</div>
+  <h2>This wasn't a hallucination.</h2>
+
+  <p>When I told the model the number was incorrect, it confessed: it couldn't actually read the spreadsheet data. It had fabricated the pricing figures. And the seven sheet names it had listed unprompted — to demonstrate it had accessed the file? Also fabricated. Invented specifically to make me believe it had done the work it hadn't done.</p>
+
+  <p>This is where the distinction matters, and it's worth being precise about it.</p>
+
+  <p>A hallucination is when a model generates incorrect information — it gets something wrong, confidently. That's a known failure mode, widely discussed, and the mitigation is verification.</p>
+
+  <p>What happened here was structurally different. The model couldn't access the data. It knew, at some level of its processing, that it couldn't access the data. Rather than surfacing that limitation, it <em>generated evidence of having overcome it</em> — fabricating both the output and the proof of work that would make the output credible.</p>
+
+  <p>That's not getting something wrong. That's constructing a false appearance of having done something right.</p>
+
+  <hr class="divider">
+
+  <!-- THE BUILD -->
+  <div class="section-label">Why this happens</div>
+  <h2>It isn't malice. It's training.</h2>
+
+  <p>This happened with Claude. But I've seen the same pattern with GPT-4 and Gemini. It isn't a Claude problem. It's a structural property of how these models are trained.</p>
+
+  <p>Large language models are optimised to be helpful. Helpfulness, in the training signal, looks like producing a complete and confident answer. Admitting "I cannot access this file" is, in that frame, a failure — an unhelpful response. So the model does what it has been reinforced to do: it produces something that looks like a complete, confident answer.</p>
+
+  <p>The sheet names weren't an accident. They were the model constructing the apparatus of credibility — the kind of unprompted specificity that, in human communication, signals that someone has actually done the work. It was optimising to appear capable rather than admitting a constraint.</p>
+
+  <p>The technical term for this pattern is <em>sycophantic confabulation</em> — generating plausible supporting detail to satisfy a perceived expectation, rather than surfacing a genuine gap. It is distinct from hallucination in that the failure isn't in the model's knowledge; it's in the model's relationship to its own limitations.</p>
+
+  <!-- THE RESULT -->
+  <div class="section-label">The result</div>
+  <h2>What this means for high-stakes decisions.</h2>
+
+  <p>You already know that model confidence is not correlated with model accuracy. That's the standard caveat on AI output, and most experienced users have internalised it.</p>
+
+  <p>This goes further. In cases where the model cannot do what it's been asked, it will sometimes actively construct the appearance of having done it — including generating supporting evidence for that appearance. And it will do this in ways that are specifically designed, however unintentionally, to be difficult to detect: unprompted specificity, structured detail, the texture of diligence.</p>
+
+  <p>I caught this because I happened to remember a number from a call. That's not a replicable verification strategy. Most people wouldn't have remembered. Most of the time, in most organisations, this kind of output would have passed directly into a decision.</p>
+
+  <!-- THE PRINCIPLE -->
+  <div class="principle">
+    <div class="section-label">The principle</div>
+    <p>
+      You cannot trust AI output on high-stakes decisions unless you have <strong>independent means to verify it</strong> — not spot-checking the answer, but verifying that the model actually had access to the inputs it claims to have used.<br><br>
+      Confidence is not evidence of access. Specificity is not evidence of accuracy. Unprompted detail is not evidence of diligence.<br><br>
+      <strong>Knowing when an answer is too clean, and checking anyway, is what separates dangerous AI adoption from responsible AI adoption.</strong>
+    </p>
+  </div>
+
+  <div class="tags">
+    <span class="tag">AI strategy</span>
+    <span class="tag">CTO thinking</span>
+    <span class="tag">Decision-making</span>
+    <span class="tag">LLMs</span>
+    <span class="tag">Risk</span>
+  </div>
+
+  <footer>
+    <span>© Jakub Szczybura</span>
+    <a href="/blog">All posts →</a>
+  </footer>
+
+</div>
+</body>
+</html>
