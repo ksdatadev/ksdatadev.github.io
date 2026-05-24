@@ -59,6 +59,19 @@
     header { margin-bottom: 2rem; }
     header h1 { font-size: 22px; font-weight: 500; margin-bottom: 6px; }
     header p { font-size: 14px; color: var(--color-text-secondary); line-height: 1.6; }
+    .intro {
+      font-size: 15px;
+      line-height: 1.75;
+      color: var(--color-text-secondary);
+      background: var(--color-bg-secondary);
+      border-radius: var(--radius-md);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 2rem;
+      border-left: 2px solid var(--color-purple);
+    }
+    .intro p { margin-bottom: 0.75rem; }
+    .intro p:last-child { margin-bottom: 0; }
+    .intro strong { color: var(--color-text-primary); font-weight: 600; }
 
     .tabs { display: flex; gap: 8px; margin-bottom: 1.5rem; flex-wrap: wrap; }
     .tab {
@@ -166,6 +179,13 @@
     <h1>Probability of success explorer</h1>
     <p>Comparing independent (geometric) trials vs Bayesian learning across repeated attempts. Adjust parameters to see how the models diverge.</p>
   </header>
+
+  <div class="intro">
+    <p>Someone once told me: <em>"If the chance of success is 1%, you just need to try 100 times and you're guaranteed to succeed."</em> It sounds right. It isn't.</p>
+    <p>If each attempt is independent — that is, the outcome of one try doesn't affect the next — the probability of success doesn't add up linearly. What actually accumulates is the probability of <em>not failing every single time</em>. The correct question is: after <em>n</em> tries, what are the chances you've succeeded at least once?</p>
+    <p>The answer is <strong>1 − (1 − p)ⁿ</strong>. For p = 1%, you need <strong>458 tries</strong> to reach a 99% chance of success — not 100. And you can never reach 100%, no matter how many attempts you make. Each additional try chips away at the remaining probability of failure, but never eliminates it entirely.</p>
+    <p>That's the independent model. Things get more interesting if the attempts aren't truly independent — if each failure teaches you something and raises your probability on the next try. That's the Bayesian model. Use the tool below to explore both.</p>
+  </div>
 
   <div class="tabs">
     <button class="tab active" onclick="switchTab('independent')">Independent trials</button>
