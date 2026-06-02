@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Benchmark Is Not the Context — Jakub Szczybura</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --color-bg: #fafaf8;
+      --color-text: #1a1a1a;
+      --color-muted: #6b6b6b;
+      --color-faint: #9a9a9a;
+      --color-border: rgba(0,0,0,0.1);
+      --color-tag-bg: #f0efe9;
+      --color-accent-bg: #f5f0e8;
+      --color-accent-border: #c8a96e;
+      --font-serif: 'Georgia', 'Times New Roman', serif;
+      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-mono: 'SF Mono', 'Fira Code', monospace;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --color-bg: #141412;
+        --color-text: #e8e8e4;
+        --color-muted: #9a9a94;
+        --color-faint: #5a5a56;
+        --color-border: rgba(255,255,255,0.1);
+        --color-tag-bg: #1e1e1a;
+        --color-accent-bg: #1e1a12;
+        --color-accent-border: #8a6a2e;
+      }
+    }
+
+    body {
+      font-family: var(--font-serif);
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.8;
+      font-size: 18px;
+      padding: 0 0 6rem;
+    }
+
+    .container { max-width: 660px; margin: 0 auto; padding: 0 1.5rem; }
+
+    .post-meta {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      color: var(--color-faint);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+    }
+
+    h1 {
+      font-family: var(--font-serif);
+      font-size: 36px;
+      font-weight: normal;
+      line-height: 1.25;
+      margin-bottom: 1rem;
+      letter-spacing: -0.01em;
+    }
+
+    .subtitle {
+      font-family: var(--font-sans);
+      font-size: 15px;
+      color: var(--color-muted);
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+    }
+
+    .lede {
+      font-size: 20px;
+      color: var(--color-muted);
+      line-height: 1.6;
+      margin-bottom: 3rem;
+      font-style: italic;
+      border-bottom: 0.5px solid var(--color-border);
+      padding-bottom: 2rem;
+    }
+
+    .section-label {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-faint);
+      margin-bottom: 0.75rem;
+      margin-top: 3rem;
+    }
+
+    h2 {
+      font-family: var(--font-serif);
+      font-size: 22px;
+      font-weight: normal;
+      margin-bottom: 1.25rem;
+      color: var(--color-text);
+      line-height: 1.3;
+    }
+
+    h3 {
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-top: 2.25rem;
+      margin-bottom: 0.75rem;
+    }
+
+    p { margin-bottom: 1.4rem; }
+    p:last-child { margin-bottom: 0; }
+
+    em { font-style: italic; }
+    strong { font-weight: 600; }
+
+    blockquote {
+      border-left: 2px solid var(--color-text);
+      margin: 2.5rem 0;
+      padding: 0.25rem 0 0.25rem 1.5rem;
+      font-size: 20px;
+      font-style: italic;
+      color: var(--color-text);
+      line-height: 1.5;
+    }
+
+    /* Demand box — distinct actionable callout */
+    .demand {
+      background: var(--color-accent-bg);
+      border-left: 3px solid var(--color-accent-border);
+      border-radius: 0 6px 6px 0;
+      margin: 1.75rem 0;
+      padding: 1.1rem 1.4rem;
+    }
+
+    .demand-label {
+      font-family: var(--font-sans);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-accent-border);
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    .demand p {
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--color-text);
+      margin-bottom: 0;
+    }
+
+    hr.divider {
+      border: none;
+      border-top: 0.5px solid var(--color-border);
+      margin: 3rem 0;
+    }
+
+    .principle {
+      background: var(--color-tag-bg);
+      border-radius: 8px;
+      padding: 1.75rem 2rem;
+      margin-top: 3rem;
+    }
+    .principle .section-label { margin-top: 0; }
+    .principle p {
+      font-size: 17px;
+      line-height: 1.7;
+      margin-bottom: 1rem;
+      color: var(--color-text);
+    }
+    .principle p:last-child { margin-bottom: 0; }
+    .principle strong { font-style: italic; font-weight: normal; }
+
+    .tags {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 0.5px solid var(--color-border);
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-family: var(--font-sans);
+    }
+
+    .tag {
+      font-size: 12px;
+      color: var(--color-muted);
+      background: var(--color-tag-bg);
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+
+    footer {
+      margin-top: 5rem;
+      padding-top: 2rem;
+      border-top: 0.5px solid var(--color-border);
+      font-family: var(--font-sans);
+      font-size: 13px;
+      color: var(--color-faint);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    footer a { color: var(--color-muted); text-decoration: none; }
+    footer a:hover { color: var(--color-text); }
+  </style>
+</head>
+<body>
+<script src="/nav.js"></script>
+<div class="container">
+
+  <div class="post-meta">2026 &nbsp;·&nbsp; 7 min read</div>
+
+  <h1>The Benchmark Is Not the Context</h1>
+  <p class="subtitle">Why AI systems that pass testing fail in production — and what to demand before you deploy.</p>
+
+  <p class="lede">Most AI deployment failures aren't dramatic. The system doesn't crash. The output looks confident and coherent. A number in a slide deck said 99% accuracy. Someone signed off. And it's still wrong — in ways that are hard to catch and expensive to correct.</p>
+
+  <p>This is the failure mode that doesn't make headlines. It shows up quietly, in production, after go-live, when the people the system was meant to free up are correcting its outputs by hand anyway.</p>
+
+  <p>It's not a technology problem. It's a gap between what the system appears to be doing and what it's actually doing in your environment, under your conditions, with your data. Closing that gap is the real work of AI transformation. And it starts before you deploy.</p>
+
+  <hr class="divider">
+
+  <div class="section-label">Why RAG fails in production</div>
+  <h2>The retrieval works. The answer is still wrong.</h2>
+
+  <p>Most enterprise AI systems today are built on RAG — Retrieval Augmented Generation. The idea is straightforward: give the model access to your documents, your data, your institutional knowledge, and it will generate answers grounded in what you actually know rather than what it learned during training.</p>
+
+  <p>In principle, this solves the hallucination problem. In practice, it introduces three failure modes that most teams don't anticipate until they're already in production.</p>
+
+  <h3>A. The model retrieves correctly — but blends what it found with what it already knows</h3>
+
+  <p>The retrieval works. The right document is found and passed to the model. But generation doesn't stay inside it. The model mixes retrieved facts with its parametric knowledge — the beliefs baked in during training — in ways that are invisible to the user. The output reads as confident and sourced. Parts of it are. Parts aren't. Your users can't tell the difference, and neither can your QA process unless it's specifically designed to catch this.</p>
+
+  <p>This failure mode is particularly dangerous because the system <em>looks</em> like it's grounded. The retrieval step completed successfully. Something was found. That creates a false sense of reliability that's harder to challenge than an obvious hallucination.</p>
+
+  <div class="demand">
+    <span class="demand-label">What to demand</span>
+    <p>Require explicit attribution. Prompt the model to cite which retrieved chunk supports each claim — if it can't cite it, it shouldn't say it. Build evaluation pipelines that check generation against retrieved context directly, not just against human judgment of the final output.</p>
+  </div>
+
+  <h3>B. The retrieved content is relevant — but at the wrong granularity</h3>
+
+  <p>The retrieval returns the right document. But the answer lives in a specific table on page 4, and the chunk that was retrieved is the executive summary on page 1. The model fills the gap with inference. The inference is plausible. It's also wrong.</p>
+
+  <p>This is a chunking and indexing problem as much as a model problem. How you break documents into retrievable pieces determines what the model can actually access. Most teams treat this as solved once retrieval accuracy looks good on a benchmark. It rarely is, because benchmarks test whether the right document comes back — not whether the right <em>passage</em> comes back.</p>
+
+  <div class="demand">
+    <span class="demand-label">What to demand</span>
+    <p>Test retrieval at the granularity your questions actually require. Ask your team to show you failure cases where the right document was retrieved but the right answer wasn't found. Invest in chunking strategy early. It is unglamorous work with outsized impact on output quality.</p>
+  </div>
+
+  <h3>C. In agent loops, the original retrieved context gets diluted — or lost entirely</h3>
+
+  <p>This is the most underappreciated failure mode in agentic AI systems, and the one that scales worst as deployments get more ambitious. An agent retrieves context at step one. By step three or four of the reasoning loop, that context has been summarised, passed through intermediate steps, and effectively forgotten. The model is now reasoning from its own prior outputs rather than from the original source. The drift is gradual and invisible. There is no error message. The output still looks coherent.</p>
+
+  <p>The instinct here is often to limit agent scope — fewer steps, narrower tasks. That helps, but it treats the symptom. The more precise fixes are:</p>
+
+  <div class="demand">
+    <span class="demand-label">What to demand</span>
+    <p><strong>Re-retrieval at key reasoning steps</strong>, not just at the start of the loop. Anchor back to source material before each consequential decision.<br><br>
+    <strong>Explicit grounding instructions</strong> that prompt the model to reference retrieved chunks at each step, making the dependency visible and checkable.<br><br>
+    <strong>Shorter chains with verification gates</strong> between steps — human or automated — rather than long autonomous loops that accumulate error silently and surface it only at the end.<br><br>
+    Limiting scope is a consequence of good agent design, not the prescription itself. Design for grounding. Scope will follow.</p>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section-label">Orchestration</div>
+  <h2>Where all of the above compounds.</h2>
+
+  <p>Orchestration — how you coordinate multiple agents, tools, and retrieval systems into a coherent workflow — is where each of the failure modes above amplifies. Each handoff between components is a point where context can be lost, instructions can drift, and errors can propagate without triggering any obvious failure signal. A mistake in step two doesn't announce itself. It shapes step five, and you discover it when the downstream output is wrong and the audit trail is opaque.</p>
+
+  <p>Most teams treat orchestration as a technical plumbing problem: which framework, which infrastructure, which deployment pattern. It isn't. It's a decision architecture problem. The questions that matter aren't engineering questions. They're questions a business leader should be asking before the build starts:</p>
+
+  <div class="demand">
+    <span class="demand-label">Questions to answer before deployment</span>
+    <p>At which points does a human need to verify before the system proceeds?<br><br>
+    How does the system signal low confidence rather than generating confidently anyway?<br><br>
+    What is the rollback path when a multi-step agent produces a bad output downstream?<br><br>
+    Who absorbs the error when it gets it wrong?<br><br>
+    If your team can't answer those questions before deployment, you're not ready to deploy.</p>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section-label">The one question</div>
+  <h2>Not "what's the accuracy rate."</h2>
+
+  <p>That number is almost always measured under conditions that don't reflect your production environment — a clean dataset, controlled conditions, a curated benchmark. It tells you what the system can do at its best. It tells you almost nothing about what it does at the edges, under load, with your data, in your environment under real operating conditions.</p>
+
+  <blockquote>Ask instead: "Show me how it fails."</blockquote>
+
+  <p>The answer to that question tells you more about production readiness than any benchmark. If the team can't answer it — or hasn't looked — that is itself the answer.</p>
+
+  <p>Test the edges yourself. Find the conditions under which it breaks. Decide whether the failure mode is acceptable before you scale, not after. The boring and repetitive tasks are the hardest to automate reliably. And the 1% gap — the failure cases, the edge conditions — is precisely where your customers, your patients, your staff notice.</p>
+
+  <div class="principle">
+    <div class="section-label">The principle</div>
+    <p>The benchmark tells you what the system can do under ideal conditions. Production is not ideal conditions.</p>
+    <p><strong>Closing the gap between benchmark performance and production reliability is not a technical afterthought. It is the work.</strong> And it starts with the question every team should be able to answer before go-live: show me how it fails.</p>
+  </div>
+
+  <div class="tags">
+    <span class="tag">AI strategy</span>
+    <span class="tag">RAG</span>
+    <span class="tag">CTO thinking</span>
+    <span class="tag">Deployment</span>
+    <span class="tag">Governance</span>
+  </div>
+
+  <footer>
+    <span>© Jakub Szczybura</span>
+    <a href="/blog">All posts →</a>
+  </footer>
+
+</div>
+</body>
+</html>
