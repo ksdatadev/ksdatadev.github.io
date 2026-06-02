@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Embedding Trap in Signed-Affinity Recommendation Systems — Jakub Szczybura</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --color-bg: #fafaf8;
+      --color-text: #1a1a1a;
+      --color-muted: #6b6b6b;
+      --color-faint: #9a9a9a;
+      --color-border: rgba(0,0,0,0.1);
+      --color-tag-bg: #f0efe9;
+      --color-accent-bg: #f5f0e8;
+      --color-accent-border: #c8a96e;
+      --font-serif: 'Georgia', 'Times New Roman', serif;
+      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-mono: 'SF Mono', 'Fira Code', monospace;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --color-bg: #141412;
+        --color-text: #e8e8e4;
+        --color-muted: #9a9a94;
+        --color-faint: #5a5a56;
+        --color-border: rgba(255,255,255,0.1);
+        --color-tag-bg: #1e1e1a;
+        --color-accent-bg: #1e1a12;
+        --color-accent-border: #8a6a2e;
+      }
+    }
+
+    body {
+      font-family: var(--font-serif);
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.8;
+      font-size: 18px;
+      padding: 0 0 6rem;
+    }
+
+    .container { max-width: 660px; margin: 0 auto; padding: 0 1.5rem; }
+
+    .post-meta {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      color: var(--color-faint);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+    }
+
+    h1 {
+      font-family: var(--font-serif);
+      font-size: 36px;
+      font-weight: normal;
+      line-height: 1.25;
+      margin-bottom: 1rem;
+      letter-spacing: -0.01em;
+    }
+
+    .subtitle {
+      font-family: var(--font-sans);
+      font-size: 15px;
+      color: var(--color-muted);
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+    }
+
+    .lede {
+      font-size: 20px;
+      color: var(--color-muted);
+      line-height: 1.6;
+      margin-bottom: 3rem;
+      font-style: italic;
+      border-bottom: 0.5px solid var(--color-border);
+      padding-bottom: 2rem;
+    }
+
+    /* Tool callout */
+    .tool-callout {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      background: var(--color-tag-bg);
+      border-radius: 8px;
+      padding: 1.1rem 1.4rem;
+      margin: 2.5rem 0;
+      text-decoration: none;
+      border: 0.5px solid var(--color-border);
+      transition: border-color 0.15s;
+    }
+
+    .tool-callout:hover { border-color: var(--color-accent-border); }
+
+    .tool-callout-text { font-family: var(--font-sans); }
+    .tool-callout-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-accent-border);
+      margin-bottom: 3px;
+    }
+    .tool-callout-title {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--color-text);
+    }
+    .tool-callout-desc {
+      font-size: 13px;
+      color: var(--color-muted);
+      margin-top: 2px;
+    }
+    .tool-callout-arrow {
+      font-size: 18px;
+      color: var(--color-faint);
+      flex-shrink: 0;
+    }
+
+    .section-label {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-faint);
+      margin-bottom: 0.75rem;
+      margin-top: 3rem;
+    }
+
+    h2 {
+      font-family: var(--font-serif);
+      font-size: 22px;
+      font-weight: normal;
+      margin-bottom: 1.25rem;
+      color: var(--color-text);
+      line-height: 1.3;
+    }
+
+    h3 {
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-top: 2.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    p { margin-bottom: 1.4rem; }
+    p:last-child { margin-bottom: 0; }
+    em { font-style: italic; }
+
+    pre {
+      background: var(--color-tag-bg);
+      border-radius: 8px;
+      padding: 1.1rem 1.4rem;
+      margin: 1.5rem 0;
+      overflow-x: auto;
+      font-size: 14px;
+      line-height: 1.65;
+      border: 0.5px solid var(--color-border);
+    }
+
+    code {
+      font-family: var(--font-mono);
+      font-size: 14px;
+    }
+
+    p code {
+      background: var(--color-tag-bg);
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 15px;
+    }
+
+    blockquote {
+      border-left: 2px solid var(--color-text);
+      margin: 2.5rem 0;
+      padding: 0.25rem 0 0.25rem 1.5rem;
+      font-size: 20px;
+      font-style: italic;
+      color: var(--color-text);
+      line-height: 1.5;
+    }
+
+    .insight {
+      background: var(--color-accent-bg);
+      border-left: 3px solid var(--color-accent-border);
+      border-radius: 0 6px 6px 0;
+      margin: 2rem 0;
+      padding: 1.1rem 1.4rem;
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--color-text);
+    }
+
+    hr.divider {
+      border: none;
+      border-top: 0.5px solid var(--color-border);
+      margin: 3rem 0;
+    }
+
+    .principle {
+      background: var(--color-tag-bg);
+      border-radius: 8px;
+      padding: 1.75rem 2rem;
+      margin-top: 3rem;
+    }
+    .principle .section-label { margin-top: 0; }
+    .principle p { font-size: 17px; line-height: 1.7; margin-bottom: 1rem; color: var(--color-text); }
+    .principle p:last-child { margin-bottom: 0; }
+    .principle strong { font-style: italic; font-weight: normal; }
+
+    .step-list { list-style: none; counter-reset: steps; margin: 1.25rem 0; }
+    .step-list li {
+      counter-increment: steps;
+      padding: 0.6rem 0 0.6rem 2.5rem;
+      position: relative;
+      font-size: 16px;
+      color: var(--color-muted);
+      border-bottom: 0.5px solid var(--color-border);
+    }
+    .step-list li:last-child { border-bottom: none; }
+    .step-list li::before {
+      content: counter(steps);
+      position: absolute;
+      left: 0;
+      top: 0.65rem;
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--color-faint);
+      background: var(--color-tag-bg);
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      line-height: 20px;
+    }
+
+    .tags {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 0.5px solid var(--color-border);
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-family: var(--font-sans);
+    }
+
+    .tag {
+      font-size: 12px;
+      color: var(--color-muted);
+      background: var(--color-tag-bg);
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+
+    footer {
+      margin-top: 5rem;
+      padding-top: 2rem;
+      border-top: 0.5px solid var(--color-border);
+      font-family: var(--font-sans);
+      font-size: 13px;
+      color: var(--color-faint);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    footer a { color: var(--color-muted); text-decoration: none; }
+    footer a:hover { color: var(--color-text); }
+  </style>
+</head>
+<body>
+<script src="/nav.js"></script>
+<div class="container">
+
+  <div class="post-meta">2026 &nbsp;·&nbsp; 10 min read &nbsp;·&nbsp; Technical</div>
+
+  <h1>The Embedding Trap in Signed-Affinity Recommendation Systems</h1>
+  <p class="subtitle">When you serialise a user's dislikes into text and embed the result, the sign disappears. Here's why that matters and how to fix it.</p>
+
+  <p class="lede">The naive approach looks correct in early testing. A wine lover matches wine bars. A hiker matches hiking tours. Then you look at two users with opposite relationships to anxiety — one who avoids it, one who seeks it — and the model recommends them identical products. The sign was in the text. It needed to be on the vector.</p>
+
+  <a class="tool-callout" href="/tools/signed-affinity-explorer.html">
+    <div class="tool-callout-text">
+      <div class="tool-callout-label">Interactive tool</div>
+      <div class="tool-callout-title">Signed Affinity Recommendation Explorer</div>
+      <div class="tool-callout-desc">Compare naive text embedding vs weighted signed vector matching across preset scenarios — adjust sliders to see where the models diverge.</div>
+    </div>
+    <span class="tool-callout-arrow">→</span>
+  </a>
+
+  <div class="section-label">The setup</div>
+  <h2>A user profile with signed scores.</h2>
+
+  <p>Imagine a recommendation system where each user has a profile of tagged attributes, each scored on a continuous scale from −1 to +1:</p>
+
+  <pre><code>{
+  "wine":        0.8,
+  "live music":  0.6,
+  "crowds":     -0.7,
+  "anxiety":    -0.9,
+  "adventure":   0.5,
+  "calm spaces": 0.7
+}</code></pre>
+
+  <p>A score of +1 means a strong positive affinity — the user genuinely loves this feature. A score of −1 means strong aversion. Zero is neutral. You might have 200 or more such tags per user, covering personality traits, interests, sensitivities, and lifestyle preferences. The task is to find which product profiles best match a given user profile.</p>
+
+  <hr class="divider">
+
+  <div class="section-label">The failure</div>
+  <h2>The naive approach and why it fails.</h2>
+
+  <p>The naive approach is to serialise the profile into a string and embed it:</p>
+
+  <pre><code>profile_text = " ".join([
+    f"{feature}: {score}"
+    for feature, score in user_profile.items()
+])
+# → "wine: 0.8 live music: 0.6 crowds: -0.7 anxiety: -0.9 ..."
+
+profile_vec = embed(profile_text)</code></pre>
+
+  <p>Then at query time, embed each candidate product the same way and rank by cosine similarity. This appears to work. In testing, wine bars rank higher than quiet libraries for a wine-lover profile. But consider these two users:</p>
+
+  <pre><code>User A:  { "anxiety": -0.9, "adventure": +0.8 }
+User B:  { "anxiety": +0.9, "adventure": +0.7 }</code></pre>
+
+  <p>User A is an adventurous person who struggles with anxiety — they want stimulating, low-stress experiences. User B actively seeks intense, anxiety-inducing thrills — perhaps extreme sports or horror events. These two users should be matched to very different products. But when you embed their profiles as text, both vectors land firmly in "anxiety-space" and "adventure-space." Cosine similarity between them is high. The system recommends User A the same products as User B.</p>
+
+  <div class="insight">
+    <strong>Why this happens geometrically:</strong> text embedding models encode semantic presence, not signed magnitude. When the model processes "anxiety: −0.9", it recognises the concept <em>anxiety</em> and weights that region of the embedding space accordingly. The token "−0.9" is just two characters among hundreds — it barely shifts the resulting vector. The negative sign exists in the string, but it has almost no influence on where the vector lands.<br><br>
+    The sign is living in the text. It needs to live on the vector.
+  </div>
+
+  <hr class="divider">
+
+  <div class="section-label">The fix</div>
+  <h2>Building toward the correct solution.</h2>
+
+  <p>Think of each feature as a direction in embedding space. "Anxiety" points toward a particular region. "Adventure" points toward another. When a user has a positive score for a feature, their profile should be pulled <em>toward</em> that direction — proportionally to the score's magnitude. When they have a negative score, their profile should be pushed <em>away</em> from it.</p>
+
+  <pre><code>profile_vec = np.zeros(embedding_dim)
+
+for feature, score in user_profile.items():
+    feat_vec = embed(feature)        # direction of this concept in space
+    profile_vec += feat_vec * score  # positive: pull toward; negative: push away</code></pre>
+
+  <p>When <code>score = −0.9</code>, you're adding a vector that points <em>opposite</em> to anxiety-space at 90% strength. The resulting profile vector genuinely encodes aversion, not just association.</p>
+
+  <h3>Step 1 — Split positive and negative channels</h3>
+
+  <p>The simplest correct approach separates features by sign, embeds each group independently, and concatenates:</p>
+
+  <pre><code>pos_text = " ".join([f for f, s in profile.items() if s > 0])
+neg_text = " ".join([f for f, s in profile.items() if s < 0])
+
+pos_vec = embed(pos_text)
+neg_vec = embed(neg_text)
+profile_vec = np.concatenate([pos_vec, neg_vec])  # shape (2d,)</code></pre>
+
+  <p>Cosine similarity on this concatenated vector rewards matching in both halves independently. A wine-averse user won't match a wine-lover just because they share the concept "wine." The limitation: the magnitude of each score is still lost. A score of −0.1 and −0.9 are treated identically.</p>
+
+  <h3>Step 2 — Signed prefix tokens</h3>
+
+  <p>To restore gradations, encode the score as natural language before embedding:</p>
+
+  <pre><code>def score_to_prefix(score):
+    if score >  0.7: return "strongly enjoys"
+    if score >  0.2: return "mildly enjoys"
+    if score > -0.2: return "is neutral about"
+    if score > -0.7: return "mildly dislikes"
+    return "strongly dislikes"
+
+sentences = [
+    f"{score_to_prefix(s)} {feature}"
+    for feature, s in profile.items()
+]
+# → ["strongly dislikes anxiety", "mildly enjoys adventure", ...]
+
+vecs = [embed(s) for s in sentences]
+profile_vec = np.mean(vecs, axis=0)</code></pre>
+
+  <p>This is "embedding-native" — valence is now a semantic property of the sentence, not a numeric token. The embedding model understands "strongly dislikes anxiety" as meaningfully different from "strongly enjoys anxiety." The limitation: mean pooling discards magnitude differences between features.</p>
+
+  <h3>Step 3 — Weighted semantic sum (the right solution)</h3>
+
+  <pre><code># One-time setup: embed all features and cache
+feature_index = {f: embed(f) for f in all_features}
+
+def build_profile_vec(feature_scores: dict) -> np.ndarray:
+    vec = np.zeros(embedding_dim)
+    for feature, score in feature_scores.items():
+        vec += feature_index[feature] * np.tanh(score * 2)
+    norm = np.linalg.norm(vec)
+    return vec / norm if norm > 1e-8 else vec</code></pre>
+
+  <div class="insight">
+    <strong>Why <code>tanh</code> instead of the raw score?</strong> Raw scores in [−1, +1] work, but <code>tanh(score * 2)</code> compresses extreme values slightly — a score of 0.99 contributes only marginally more than 0.9. This prevents one high-confidence feature from dominating the entire profile vector when you have 200+ features summing together.<br><br>
+    <strong>Why normalise at the end?</strong> Profiles with more non-zero features produce larger magnitude vectors. Normalising ensures cosine similarity reflects the <em>shape</em> of the profile — which directions it points toward and away from — rather than how many features were filled in.<br><br>
+    <strong>Why cache feature embeddings?</strong> Embedding 200+ features per profile per request is expensive and unnecessary. The concept vectors for "wine" or "anxiety" don't change between users. Embed them once at startup. After that, profile construction is pure arithmetic.
+  </div>
+
+  <hr class="divider">
+
+  <div class="section-label">The synonym problem</div>
+  <h2>Near-synonyms constructively interfere.</h2>
+
+  <p>With 200+ tags, semantic overlap is inevitable. A system might include both "wine" and "white wine," or both "anxiety" and "worry." In the weighted sum, near-synonym features are nearly parallel vectors in embedding space — and parallel vectors constructively interfere:</p>
+
+  <pre><code>embed("wine")       ≈ [0.31, 0.72, 0.09, ...]
+embed("white wine") ≈ [0.29, 0.70, 0.11, ...]  # nearly parallel
+
+profile_vec += wine_vec       * 0.8
+profile_vec += white_wine_vec * 0.7
+# Net: ~1.5× amplification of wine-space</code></pre>
+
+  <p>A user with both "wine: +0.8" and "white wine: +0.7" will have wine-space amplified to roughly 1.5× compared to a user with only "wine: +0.9" — even though the underlying preference intensity is similar. The implicit weighting of feature regions becomes a function of tag granularity rather than user intent. The fix is to decorrelate the feature vectors before building the index.</p>
+
+  <h3>PCA whitening</h3>
+
+  <pre><code>import numpy as np
+from sklearn.decomposition import PCA
+
+feature_names = list(all_features)
+F = np.array([embed(f) for f in feature_names])   # shape (N, d)
+
+# Fit PCA with whitening on the feature matrix
+pca = PCA(n_components=256, whiten=True)
+F_white = pca.fit_transform(F)                     # shape (N, 256)
+
+# Rebuild the feature index in whitened space
+feature_index = {f: F_white[i] for i, f in enumerate(feature_names)}</code></pre>
+
+  <p><code>whiten=True</code> is the key parameter. Standard PCA rotates the space to align with principal components. Whitening additionally scales each component so that all dimensions have equal variance. "Wine" and "white wine" — which previously both loaded heavily onto the same principal component — now have their contributions spread across orthogonal directions. They can no longer stack constructively.</p>
+
+  <p>To find the right number of components, plot cumulative explained variance on your actual feature set:</p>
+
+  <pre><code>pca_full = PCA().fit(F)
+cumvar = np.cumsum(pca_full.explained_variance_ratio_)
+# Find where cumvar crosses 0.95 — that's your target n_components</code></pre>
+
+  <p>With 200–500 features in 1536-dimensional embedding space, you'll typically find 90% of variance in the first 80–150 components. Keeping 256 covers nearly all meaningful variation while discarding redundant dimensions.</p>
+
+  <h3>Query-time consistency — the gotcha</h3>
+
+  <p>Queries must pass through the same transformation as profiles. If a query is expressed as a set of feature scores, it must be projected into the same whitened space. If a query contains a feature not in the original index, project it in:</p>
+
+  <pre><code>novel_vec = pca.transform(embed(new_feature).reshape(1, -1))[0]</code></pre>
+
+  <div class="insight">
+    Never inject a raw embedding vector into a whitened space directly. The geometry is incompatible and similarity scores will be silently wrong — there is no error message, and the output will still look plausible.
+  </div>
+
+  <hr class="divider">
+
+  <div class="principle">
+    <div class="section-label">The full production pattern</div>
+    <p>The failure of the naive approach comes down to a single structural error: the sign of the affinity score lives inside the serialised string, where it has almost no geometric influence. The fix follows naturally from that diagnosis.</p>
+    <ol class="step-list" style="margin-top:1rem;">
+      <li>Embed all features once and cache them.</li>
+      <li>Apply PCA whitening to the feature matrix to decorrelate near-synonyms.</li>
+      <li>Build profile vectors as a signed, tanh-compressed weighted sum in whitened space.</li>
+      <li>Normalise the result so similarity reflects profile shape, not tag count.</li>
+      <li>Apply the identical transformation to queries — including projecting novel features via <code>pca.transform</code>.</li>
+    </ol>
+    <p style="margin-top:1.25rem;"><strong>The result is a profile vector where direction encodes affinity structure: pointing toward what the user loves, away from what they avoid, with magnitude proportional to intensity.</strong> Cosine similarity on these vectors does exactly what you intend.</p>
+  </div>
+
+  <a class="tool-callout" href="/tools/signed-affinity-explorer.html" style="margin-top:2.5rem;">
+    <div class="tool-callout-text">
+      <div class="tool-callout-label">See it in action</div>
+      <div class="tool-callout-title">Signed Affinity Recommendation Explorer</div>
+      <div class="tool-callout-desc">Adjust user profiles and watch the naive and weighted models diverge in real time.</div>
+    </div>
+    <span class="tool-callout-arrow">→</span>
+  </a>
+
+  <div class="tags">
+    <span class="tag">Embeddings</span>
+    <span class="tag">Recommendations</span>
+    <span class="tag">RAG</span>
+    <span class="tag">ML engineering</span>
+    <span class="tag">Python</span>
+  </div>
+
+  <footer>
+    <span>© Jakub Szczybura</span>
+    <a href="/blog">All posts →</a>
+  </footer>
+
+</div>
+</body>
+</html>
