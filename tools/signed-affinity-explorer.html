@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Signed Affinity Recommendation Explorer — Jakub Szczybura</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --color-bg: #fafaf8;
+      --color-bg-secondary: #f0efe9;
+      --color-bg-tertiary: #e8e6e0;
+      --color-text: #1a1a1a;
+      --color-muted: #6b6b6b;
+      --color-faint: #9a9a9a;
+      --color-border: rgba(0,0,0,0.1);
+      --color-border-strong: rgba(0,0,0,0.18);
+      --color-tag-bg: #f0efe9;
+      --color-accent-border: #c8a96e;
+      --color-purple: #7F77DD;
+      --color-teal: #1D9E75;
+      --color-red: #DC2626;
+      --font-serif: 'Georgia', 'Times New Roman', serif;
+      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-mono: 'SF Mono', 'Fira Code', monospace;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --color-bg: #141412;
+        --color-bg-secondary: #1e1e1a;
+        --color-bg-tertiary: #252520;
+        --color-text: #e8e8e4;
+        --color-muted: #9a9a94;
+        --color-faint: #5a5a56;
+        --color-border: rgba(255,255,255,0.1);
+        --color-border-strong: rgba(255,255,255,0.2);
+        --color-tag-bg: #1e1e1a;
+      }
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-bg);
+      color: var(--color-text);
+      padding: 0 0 5rem;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .container { max-width: 760px; margin: 0 auto; padding: 0 1.5rem; }
+
+    /* Back / article link */
+    .article-callout {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      background: var(--color-tag-bg);
+      border-radius: var(--radius-md);
+      padding: 0.9rem 1.2rem;
+      margin: 2rem 0 2.5rem;
+      text-decoration: none;
+      border: 0.5px solid var(--color-border);
+      transition: border-color 0.15s;
+    }
+    .article-callout:hover { border-color: var(--color-accent-border); }
+    .article-callout-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-accent-border);
+      margin-bottom: 2px;
+    }
+    .article-callout-title {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-text);
+    }
+    .article-callout-arrow { font-size: 16px; color: var(--color-faint); flex-shrink: 0; }
+
+    /* Header */
+    .tool-header { margin-bottom: 2rem; }
+    .tool-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-faint);
+      margin-bottom: 0.5rem;
+    }
+    .tool-header h1 {
+      font-family: var(--font-serif);
+      font-size: 26px;
+      font-weight: normal;
+      line-height: 1.25;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.01em;
+    }
+    .tool-header p {
+      font-size: 14px;
+      color: var(--color-muted);
+      line-height: 1.6;
+      max-width: 580px;
+    }
+
+    /* Section labels */
+    .section-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--color-faint);
+      margin-bottom: 0.75rem;
+    }
+
+    /* Scenarios */
+    .scenario-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 2rem;
+    }
+
+    .scenario-btn {
+      font-size: 12px;
+      padding: 5px 12px;
+      border-radius: var(--radius-md);
+      border: 0.5px solid var(--color-border-strong);
+      background: var(--color-bg);
+      color: var(--color-muted);
+      cursor: pointer;
+      font-family: var(--font-sans);
+      transition: background 0.12s;
+    }
+    .scenario-btn:hover { background: var(--color-bg-secondary); }
+    .scenario-btn.active {
+      background: var(--color-purple);
+      color: #fff;
+      border-color: transparent;
+    }
+
+    /* Tag grid */
+    .tag-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 8px;
+      margin-bottom: 2rem;
+    }
+
+    .tag-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      background: var(--color-bg-secondary);
+      border-radius: var(--radius-md);
+      border: 0.5px solid var(--color-border);
+    }
+
+    .tag-name {
+      font-size: 13px;
+      color: var(--color-text);
+      flex: 1;
+      min-width: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .tag-slider { flex: 1.2; }
+    .tag-slider input[type=range] {
+      width: 100%;
+      height: 4px;
+      cursor: pointer;
+      accent-color: var(--color-purple);
+    }
+
+    .tag-score {
+      font-size: 12px;
+      font-weight: 600;
+      min-width: 34px;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      font-family: var(--font-mono);
+    }
+
+    /* Product grid */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 8px;
+      margin-bottom: 2rem;
+    }
+
+    .product-card {
+      padding: 10px 12px;
+      border-radius: var(--radius-lg);
+      border: 0.5px solid var(--color-border);
+      background: var(--color-bg);
+    }
+
+    .product-title {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--color-text);
+      margin-bottom: 4px;
+    }
+
+    .product-tags {
+      font-size: 11px;
+      color: var(--color-faint);
+      line-height: 1.5;
+    }
+
+    /* Results */
+    .result-panel {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 1.5rem;
+    }
+
+    @media (max-width: 520px) { .result-panel { grid-template-columns: 1fr; } }
+
+    .result-card {
+      padding: 14px 16px;
+      border-radius: var(--radius-lg);
+      border: 0.5px solid var(--color-border);
+      background: var(--color-bg);
+    }
+
+    .result-card-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .model-badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
+      letter-spacing: 0.04em;
+    }
+
+    .badge-naive {
+      background: rgba(127,119,221,0.12);
+      color: var(--color-purple);
+    }
+
+    .badge-weighted {
+      background: rgba(29,158,117,0.12);
+      color: var(--color-teal);
+    }
+
+    .result-card-title {
+      font-size: 12px;
+      color: var(--color-muted);
+    }
+
+    .result-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .result-row:last-child { margin-bottom: 0; }
+
+    .result-name {
+      font-size: 13px;
+      color: var(--color-text);
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .bar-wrap {
+      width: 80px;
+      height: 7px;
+      background: var(--color-bg-secondary);
+      border-radius: 4px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+
+    .bar-naive { background: var(--color-purple); }
+    .bar-weighted { background: var(--color-teal); }
+
+    .score-val {
+      font-size: 12px;
+      font-variant-numeric: tabular-nums;
+      min-width: 38px;
+      text-align: right;
+      color: var(--color-faint);
+      font-family: var(--font-mono);
+    }
+
+    /* Explainer */
+    .explainer {
+      font-size: 14px;
+      color: var(--color-muted);
+      line-height: 1.75;
+      padding: 12px 14px;
+      background: var(--color-bg-secondary);
+      border-radius: var(--radius-md);
+      border-left: 2px solid var(--color-border-strong);
+      margin-bottom: 2rem;
+    }
+
+    hr.divider {
+      border: none;
+      border-top: 0.5px solid var(--color-border);
+      margin: 2rem 0;
+    }
+
+    footer {
+      margin-top: 4rem;
+      padding-top: 1.5rem;
+      border-top: 0.5px solid var(--color-border);
+      font-size: 13px;
+      color: var(--color-faint);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    footer a { color: var(--color-muted); text-decoration: none; }
+    footer a:hover { color: var(--color-text); }
+  </style>
+</head>
+<body>
+<script src="/nav.js"></script>
+<div class="container">
+
+  <a class="article-callout" href="/blog/post-006-the-embedding-trap.html">
+    <div>
+      <div class="article-callout-label">Companion article</div>
+      <div class="article-callout-title">The Embedding Trap in Signed-Affinity Recommendation Systems</div>
+    </div>
+    <span class="article-callout-arrow">→</span>
+  </a>
+
+  <div class="tool-header">
+    <div class="tool-label">Interactive tool</div>
+    <h1>Signed Affinity Recommendation Explorer</h1>
+    <p>Compare naive text-embedding cosine similarity against signed weighted-sum matching. Adjust the user profile sliders to see where the two models diverge — and why the sign of an affinity score must live on the vector, not in the text.</p>
+  </div>
+
+  <div class="section-label">Preset scenarios</div>
+  <div class="scenario-row" id="scenarios"></div>
+
+  <hr class="divider">
+
+  <div class="section-label">User affinity profile</div>
+  <div class="tag-grid" id="tag-grid"></div>
+
+  <hr class="divider">
+
+  <div class="section-label">Product catalogue</div>
+  <div class="product-grid" id="product-grid"></div>
+
+  <hr class="divider">
+
+  <div class="section-label">Model comparison</div>
+  <div class="result-panel">
+    <div class="result-card">
+      <div class="result-card-header">
+        <span class="model-badge badge-naive">Naive</span>
+        <span class="result-card-title">text embedding + cosine</span>
+      </div>
+      <div id="naive-results"></div>
+    </div>
+    <div class="result-card">
+      <div class="result-card-header">
+        <span class="model-badge badge-weighted">Weighted</span>
+        <span class="result-card-title">signed vector sum + cosine</span>
+      </div>
+      <div id="weighted-results"></div>
+    </div>
+  </div>
+
+  <div class="explainer" id="explainer-text"></div>
+
+  <footer>
+    <span>© Jakub Szczybura</span>
+    <a href="/tools">← All tools</a>
+  </footer>
+
+</div>
+
+<script>
+const TAGS = [
+  {id:'wine',      label:'Wine lover'},
+  {id:'outdoors',  label:'Outdoors / hiking'},
+  {id:'crowds',    label:'Crowds & nightlife'},
+  {id:'anxiety',   label:'Anxiety sensitivity'},
+  {id:'adventure', label:'Thrill / adventure'},
+  {id:'calm',      label:'Prefers calm spaces'},
+  {id:'pets',      label:'Pet lover'},
+  {id:'dogs',      label:'Dog lover'},
+];
+
+const VECS = {
+  wine:      [ 0.80,  0.05,  0.10,  0.00,  0.05,  0.05,  0.10, -0.10],
+  outdoors:  [ 0.10,  0.85,  0.00, -0.15,  0.30,  0.20,  0.10,  0.10],
+  crowds:    [ 0.25,  0.00,  0.90,  0.40, -0.05, -0.40,  0.00,  0.00],
+  anxiety:   [-0.05,  0.00,  0.35,  0.90, -0.10, -0.50,  0.00,  0.00],
+  adventure: [ 0.05,  0.35, -0.05, -0.15,  0.90,  0.00,  0.05,  0.10],
+  calm:      [ 0.10,  0.20, -0.40, -0.50, -0.05,  0.90,  0.10,  0.05],
+  pets:      [ 0.10,  0.10,  0.00,  0.00,  0.05,  0.15,  0.88,  0.65],
+  dogs:      [ 0.05,  0.15,  0.00,  0.00,  0.10,  0.10,  0.65,  0.90],
+};
+
+const PRODUCTS = [
+  {id:'wine_bar',  name:'Quiet wine bar',        scores:{wine:0.9, crowds:-0.7, calm:0.8, anxiety:-0.6}},
+  {id:'festival',  name:'Outdoor music festival', scores:{outdoors:0.7, crowds:0.9, adventure:0.6, anxiety:0.7}},
+  {id:'hike',      name:'Mountain hiking tour',   scores:{outdoors:0.9, adventure:0.7, calm:0.5, anxiety:-0.3}},
+  {id:'dog_cafe',  name:'Dog café',               scores:{pets:0.9, dogs:0.9, calm:0.6, crowds:-0.4}},
+  {id:'club',      name:'Nightclub experience',   scores:{crowds:0.9, adventure:0.5, anxiety:0.8, calm:-0.9}},
+];
+
+const SCENARIOS = [
+  {
+    label:'Anxious adventurer',
+    desc:'Loves adventure and outdoors but is sensitive to anxiety-inducing environments. Should match hiking, not the festival.',
+    profile:{wine:0.1, outdoors:0.7, crowds:-0.8, anxiety:-0.9, adventure:0.8, calm:0.6, pets:0.2, dogs:0.2},
+  },
+  {
+    label:'Wine & quiet',
+    desc:'Strong wine affinity, strong dislike of crowds and noise. Should match the wine bar, not the nightclub.',
+    profile:{wine:0.9, outdoors:0.1, crowds:-0.9, anxiety:-0.5, adventure:-0.1, calm:0.8, pets:0.1, dogs:0.0},
+  },
+  {
+    label:'Dog lover',
+    desc:'Loves pets and dogs specifically, prefers calm. The naive model over-weights dog-adjacent features — constructive interference from near-synonyms.',
+    profile:{wine:0.0, outdoors:0.3, crowds:-0.3, anxiety:-0.2, adventure:0.2, calm:0.7, pets:0.8, dogs:0.9},
+  },
+  {
+    label:'Thrill seeker',
+    desc:'Actively seeks crowds, noise and anxiety — the opposite of the anxious adventurer. Should match festival or nightclub.',
+    profile:{wine:0.1, outdoors:0.1, crowds:0.8, anxiety:0.9, adventure:0.9, calm:-0.7, pets:0.0, dogs:0.0},
+  },
+];
+
+let profile = {...SCENARIOS[0].profile};
+let activeScenario = 0;
+
+function norm(v){ const m=Math.sqrt(v.reduce((s,x)=>s+x*x,0)); return m<1e-9?v:v.map(x=>x/m); }
+function dot(a,b){ return a.reduce((s,x,i)=>s+x*b[i],0); }
+
+function naiveVec(scores){
+  const res=new Array(8).fill(0);
+  for(const[tag,score]of Object.entries(scores)){
+    if(!VECS[tag])continue;
+    VECS[tag].forEach((v,i)=>res[i]+=v*Math.abs(score));
+  }
+  return norm(res);
+}
+
+function weightedVec(scores){
+  const res=new Array(8).fill(0);
+  for(const[tag,score]of Object.entries(scores)){
+    if(!VECS[tag])continue;
+    VECS[tag].forEach((v,i)=>res[i]+=v*Math.tanh(score*2));
+  }
+  return norm(res);
+}
+
+function cosSim(profileScores, productScores, method){
+  return dot(method(profileScores), method(productScores));
+}
+
+function renderTagGrid(){
+  const g=document.getElementById('tag-grid');
+  g.innerHTML='';
+  TAGS.forEach(t=>{
+    const val=profile[t.id]||0;
+    const color=val>0.1?'#1D9E75':val<-0.1?'#DC2626':'var(--color-faint)';
+    const row=document.createElement('div');
+    row.className='tag-row';
+    row.innerHTML=`
+      <span class="tag-name">${t.label}</span>
+      <div class="tag-slider">
+        <input type="range" min="-1" max="1" step="0.1" value="${val.toFixed(1)}" data-tag="${t.id}">
+      </div>
+      <span class="tag-score" style="color:${color}" id="score-${t.id}">${val>=0?'+':''}${val.toFixed(1)}</span>`;
+    g.appendChild(row);
+    row.querySelector('input').addEventListener('input',function(){
+      profile[this.dataset.tag]=parseFloat(this.value);
+      const v=parseFloat(this.value);
+      const el=document.getElementById('score-'+this.dataset.tag);
+      el.style.color=v>0.1?'#1D9E75':v<-0.1?'#DC2626':'var(--color-faint)';
+      el.textContent=(v>=0?'+':'')+v.toFixed(1);
+      activeScenario=-1;
+      highlightScenarios();
+      renderResults();
+    });
+  });
+}
+
+function renderProducts(){
+  const g=document.getElementById('product-grid');
+  g.innerHTML='';
+  PRODUCTS.forEach(p=>{
+    const card=document.createElement('div');
+    card.className='product-card';
+    const tags=Object.entries(p.scores)
+      .map(([t,s])=>`${TAGS.find(x=>x.id===t)?.label||t} (${s>=0?'+':''}${s.toFixed(1)})`)
+      .join(' · ');
+    card.innerHTML=`<p class="product-title">${p.name}</p><p class="product-tags">${tags}</p>`;
+    g.appendChild(card);
+  });
+}
+
+function renderResults(){
+  const naiveS=PRODUCTS.map(p=>({p,s:cosSim(profile,p.scores,naiveVec)})).sort((a,b)=>b.s-a.s);
+  const weightedS=PRODUCTS.map(p=>({p,s:cosSim(profile,p.scores,weightedVec)})).sort((a,b)=>b.s-a.s);
+  const maxN=Math.max(...naiveS.map(x=>x.s));
+  const maxW=Math.max(...weightedS.map(x=>x.s));
+
+  function renderList(id,sorted,max,barClass){
+    const c=document.getElementById(id);
+    c.innerHTML='';
+    sorted.forEach(({p,s},i)=>{
+      const pct=max>0?Math.max(0,(s/max)*100):0;
+      const row=document.createElement('div');
+      row.className='result-row';
+      row.innerHTML=`
+        <span class="result-name" style="font-weight:${i===0?600:400}">${i===0?'▲ ':''} ${p.name}</span>
+        <div class="bar-wrap"><div class="bar-fill ${barClass}" style="width:${pct.toFixed(1)}%"></div></div>
+        <span class="score-val">${s.toFixed(3)}</span>`;
+      c.appendChild(row);
+    });
+  }
+
+  renderList('naive-results',naiveS,maxN,'bar-naive');
+  renderList('weighted-results',weightedS,maxW,'bar-weighted');
+
+  const nW=naiveS[0].p.name, wW=weightedS[0].p.name;
+  const scenario=SCENARIOS[activeScenario];
+  let exp='';
+  if(scenario&&activeScenario>=0) exp=`<strong>${scenario.label}:</strong> ${scenario.desc}<br><br>`;
+
+  if(nW===wW){
+    exp+=`Both models agree: <strong>${wW}</strong> is the top match. Try a scenario where someone has a strong negative score — that's where the models diverge.`;
+  } else {
+    exp+=`<strong>The models disagree.</strong> Naive picks <em>${nW}</em>; weighted picks <em>${wW}</em>.<br><br>The naive approach ignores the sign of affinity scores, treating aversion as equivalent to attraction. The weighted model applies scores as signed scalar multipliers on concept vectors — negative scores push the profile <em>away</em> from related products rather than toward them.`;
+  }
+  document.getElementById('explainer-text').innerHTML=exp;
+}
+
+function renderScenarios(){
+  const g=document.getElementById('scenarios');
+  g.innerHTML='';
+  SCENARIOS.forEach((s,i)=>{
+    const btn=document.createElement('button');
+    btn.className='scenario-btn'+(i===activeScenario?' active':'');
+    btn.textContent=s.label;
+    btn.onclick=()=>{
+      activeScenario=i;
+      profile={...s.profile};
+      highlightScenarios();
+      renderTagGrid();
+      renderResults();
+    };
+    g.appendChild(btn);
+  });
+}
+
+function highlightScenarios(){
+  document.querySelectorAll('.scenario-btn').forEach((btn,i)=>{
+    btn.classList.toggle('active',i===activeScenario);
+  });
+}
+
+renderScenarios();
+renderTagGrid();
+renderProducts();
+renderResults();
+</script>
+</body>
+</html>
