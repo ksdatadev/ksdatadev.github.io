@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Commandment with a Promise — Jakub Szczybura</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --color-bg: #fafaf8;
+      --color-text: #1a1a1a;
+      --color-muted: #6b6b6b;
+      --color-faint: #9a9a9a;
+      --color-border: rgba(0,0,0,0.1);
+      --color-tag-bg: #f0efe9;
+      --color-accent-bg: #f5f0e8;
+      --color-accent-border: #c8a96e;
+      --font-serif: 'Georgia', 'Times New Roman', serif;
+      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-mono: 'SF Mono', 'Fira Code', monospace;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --color-bg: #141412;
+        --color-text: #e8e8e4;
+        --color-muted: #9a9a94;
+        --color-faint: #5a5a56;
+        --color-border: rgba(255,255,255,0.1);
+        --color-tag-bg: #1e1e1a;
+        --color-accent-bg: #1e1a12;
+        --color-accent-border: #8a6a2e;
+      }
+    }
+
+    body {
+      font-family: var(--font-serif);
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.85;
+      font-size: 18px;
+      padding: 0 0 6rem;
+    }
+
+    .container { max-width: 660px; margin: 0 auto; padding: 0 1.5rem; }
+
+    .post-meta {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      color: var(--color-faint);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+    }
+
+    h1 {
+      font-family: var(--font-serif);
+      font-size: 38px;
+      font-weight: normal;
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.01em;
+    }
+
+    .lede {
+      font-size: 20px;
+      color: var(--color-muted);
+      line-height: 1.6;
+      margin-bottom: 3rem;
+      font-style: italic;
+      border-bottom: 0.5px solid var(--color-border);
+      padding-bottom: 2rem;
+    }
+
+    .section-label {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--color-faint);
+      margin-bottom: 0.75rem;
+      margin-top: 3.5rem;
+    }
+
+    h2 {
+      font-family: var(--font-serif);
+      font-size: 24px;
+      font-weight: normal;
+      margin-bottom: 1.25rem;
+      color: var(--color-text);
+      line-height: 1.3;
+    }
+
+    p { margin-bottom: 1.4rem; }
+    p:last-child { margin-bottom: 0; }
+    em { font-style: italic; }
+
+    /* Scripture block */
+    .scripture {
+      background: var(--color-accent-bg);
+      border-left: 3px solid var(--color-accent-border);
+      border-radius: 0 6px 6px 0;
+      margin: 2rem 0;
+      padding: 1.25rem 1.5rem;
+    }
+
+    .scripture-ref {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-accent-border);
+      margin-bottom: 0.6rem;
+    }
+
+    .scripture p {
+      font-size: 17px;
+      font-style: italic;
+      color: var(--color-text);
+      line-height: 1.75;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Pull quote */
+    blockquote {
+      border-left: 2px solid var(--color-text);
+      margin: 2.5rem 0;
+      padding: 0.25rem 0 0.25rem 1.5rem;
+      font-size: 21px;
+      font-style: italic;
+      color: var(--color-text);
+      line-height: 1.45;
+    }
+
+    /* Cross-link callout */
+    .cross-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      background: var(--color-tag-bg);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin: 2rem 0;
+      text-decoration: none;
+      border: 0.5px solid var(--color-border);
+      transition: border-color 0.15s;
+    }
+
+    .cross-link:hover { border-color: var(--color-accent-border); }
+
+    .cross-link-text { font-family: var(--font-sans); }
+    .cross-link-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-accent-border);
+      margin-bottom: 3px;
+    }
+    .cross-link-title {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--color-text);
+    }
+    .cross-link-desc {
+      font-size: 13px;
+      color: var(--color-muted);
+      margin-top: 2px;
+    }
+    .cross-link-arrow {
+      font-size: 18px;
+      color: var(--color-faint);
+      flex-shrink: 0;
+    }
+
+    /* Principle / closing box */
+    .principle {
+      background: var(--color-tag-bg);
+      border-radius: 8px;
+      padding: 1.75rem 2rem;
+      margin-top: 3rem;
+    }
+    .principle .section-label { margin-top: 0; }
+    .principle p {
+      font-size: 17px;
+      line-height: 1.75;
+      margin-bottom: 1rem;
+      color: var(--color-text);
+    }
+    .principle p:last-child { margin-bottom: 0; }
+    .principle strong { font-style: italic; font-weight: normal; }
+
+    hr.divider {
+      border: none;
+      border-top: 0.5px solid var(--color-border);
+      margin: 3.5rem 0;
+    }
+
+    .tags {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 0.5px solid var(--color-border);
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-family: var(--font-sans);
+    }
+
+    .tag {
+      font-size: 12px;
+      color: var(--color-muted);
+      background: var(--color-tag-bg);
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+
+    footer {
+      margin-top: 5rem;
+      padding-top: 2rem;
+      border-top: 0.5px solid var(--color-border);
+      font-family: var(--font-sans);
+      font-size: 13px;
+      color: var(--color-faint);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    footer a { color: var(--color-muted); text-decoration: none; }
+    footer a:hover { color: var(--color-text); }
+  </style>
+</head>
+<body>
+<script src="/nav.js"></script>
+<div class="container">
+
+  <div class="post-meta">Faith &amp; Reflection &nbsp;·&nbsp; Sermon &nbsp;·&nbsp; July 2026</div>
+
+  <h1>The Commandment with a Promise</h1>
+
+  <p class="lede">Of all ten commandments, only one carries an explicit promise. God did not place it at random. He placed it first among the laws that govern how we treat one another — and in doing so, described the architecture of everything that follows.</p>
+
+  <!-- I -->
+  <div class="section-label">I — The place where community begins</div>
+  <h2>Turn with me to Exodus 20, verse 12.</h2>
+
+  <div class="scripture">
+    <div class="scripture-ref">Exodus 20:12</div>
+    <p>"Honour thy father and thy mother: that thy days may be long upon the land which the Lord thy God giveth thee."</p>
+  </div>
+
+  <p>Ten commandments. Four of them govern our relationship with God — no other gods, no graven images, no taking His name in vain, remember the Sabbath. And then there are six that govern our relationship with one another — do not kill, do not commit adultery, do not steal, do not bear false witness, do not covet.</p>
+
+  <p>Now I want you to notice something. When God turns from Himself to us — when He moves from the first table of the law to the second — He does not begin with murder. He does not begin with theft. He does not begin with adultery, though all of these are grave. He begins here: <em>honour your father and your mother.</em></p>
+
+  <p>That is not an accident. God does not arrange His law carelessly. He is telling us something about the architecture of a whole society. He is telling us where it all begins. And it does not begin in the courthouse, or the marketplace, or even the battlefield. It begins in the home. It begins in the first relationship any human being ever knows — the relationship between a child and the ones who gave that child life.</p>
+
+  <p>Get the home wrong, and you will get the nation wrong. Teach a generation to despise the ones who raised them, and you will not have to wait long before that generation despises everything else. But teach a child to honour — to look at the people who came before them and see weight, see worth, see substance — and you have laid the foundation stone of every other virtue.</p>
+
+  <p>So today I want us to sit with this commandment. I want us to understand what it actually asks of us. I want us to feel the strange and beautiful promise that God attached to it — the only promise of its kind in all ten. And I want us to look honestly at what happens to a soul, and to a society, that refuses it. I will bring you two stories along the way — one of a man who honoured his father in the middle of a burning city, and one of two daughters who flattered their father and then destroyed him.</p>
+
+  <hr class="divider">
+
+  <!-- II -->
+  <div class="section-label">II — What "honour" actually means</div>
+  <h2>The Hebrew word is <em>kabad</em>. It means weight.</h2>
+
+  <p>Heaviness. To be heavy. To carry substance. To honour your father and mother, then, is to treat them as weighty — as people of real consequence and worth. The opposite of <em>kabad</em> is to make light of someone: to treat them as feathers, as trivial, as something you can brush aside.</p>
+
+  <p>Hold onto that, because it reframes everything. We tend to think of honour as a feeling — a warm sentiment we either have or don't have toward our parents. But the Bible is not asking about your feelings. It is asking about your <em>posture</em>. It is asking whether you treat the people who came before you as heavy or as light.</p>
+
+  <p>And notice — God did not say <em>obey</em> your father and mother. He could have. There is a place for obedience; when we are young and under our parents' roof, obedience is part of honour. The apostle Paul makes that explicit. But God reached past obedience to a deeper word, because obedience expires and honour does not. The day comes when you are no longer a child. The day comes when your father can no longer instruct you, when your mother can no longer correct you, when the roles begin to reverse and you are the one helping them down the stairs. Obedience has run its course by then. But honour has not. You can be fifty years old, sixty, seventy, and still be commanded to honour the woman who carried you and the man who raised you.</p>
+
+  <p>Honour is not a season. It is a settled disposition of the soul. And it does not stop at our own parents, either. This commandment is the first lesson in a much larger grammar — the grammar of respect for those who are older, those who are wiser, those who have walked roads we have not yet walked. The way you treat your own father teaches you how to treat the grey-haired saint in the back pew. The home is the schoolroom: what you learn there, you carry everywhere.</p>
+
+  <hr class="divider">
+
+  <!-- III -->
+  <div class="section-label">III — They have lived what you cannot imagine</div>
+  <h2>We live in a culture intoxicated with what is new.</h2>
+
+  <p>New is better, young is better. The latest idea is always assumed to be smarter than the oldest wisdom. We have built whole industries on the premise that the past has nothing to teach us, and we have raised a generation fluent in technology and illiterate in reverence. We scroll past our elders. We smile politely, and then we go back to our screens.</p>
+
+  <p>But I want you to think — really think — about the person who might be sitting near you right now. Your mother. Your father. A grandparent. That old deacon in the corner who moves a little slower than he used to. They have carried weight you have not yet been asked to carry.</p>
+
+  <p>They have buried people they loved. Some of them have buried children — and got up the next morning and made breakfast anyway. They have prayed through wars and rumours of wars. They have held marriages together with their bare hands when everything was coming apart. They have known the particular terror of an empty bank account and a family depending on them, and they have come back from it. They have doubted God in the small hours of the night — really doubted Him — and found their way back to faith before dawn.</p>
+
+  <p>You cannot learn that in a classroom. You cannot download it. It lives in the lines of a face and in the slowness of a voice that has said hard things and survived them. And when we make light of such a person — when we talk over them, when we roll our eyes at their counsel, when we treat their wisdom as something obsolete — we are not being bold. We are not being modern. We are being foolish, in the precise biblical sense of that word.</p>
+
+  <div class="scripture">
+    <div class="scripture-ref">Proverbs 13:20</div>
+    <p>"He that walketh with wise men shall be wise: but a companion of fools shall be destroyed."</p>
+  </div>
+
+  <p>There is something transferable in nearness to experience. But you have to choose to be near it. You have to sit down beside it. You have to be quiet long enough to receive it.</p>
+
+  <hr class="divider">
+
+  <!-- IV -->
+  <div class="section-label">IV — The man who carried his father</div>
+  <h2>The night Troy fell.</h2>
+
+  <p>The Roman poet Virgil wrote an epic called the Aeneid, and its protagonist is a hero named Aeneas — a prince of the city of Troy. The most famous scene in the entire poem is the night Troy falls. The Greeks, after ten years of siege, pretend to sail away and leave behind an enormous wooden horse as an offering. The Trojans drag it inside their own walls. In the dead of night, Greek soldiers pour out of its belly, throw open the gates, and the city that had stood for a thousand years goes up in flames.</p>
+
+  <p>Aeneas wakes to a city on fire. His first instinct — the instinct of a young warrior — is to die fighting. To rush into the streets and sell his life dearly among the burning houses. It is a noble instinct, and it is the wrong one. He is visited by a warning: <em>your duty tonight is not to die gloriously. Your duty is to save what comes after you and what came before you.</em></p>
+
+  <p>So Aeneas runs home. And there he finds his father, Anchises — an old man, lame, who can no longer walk on his own. Anchises refuses to leave. He says, in effect: I am old. I am a burden. I have lived my life. Leave me here in the ruins to die, and save yourselves. Do not let an old man slow you down.</p>
+
+  <p>How many of our elders feel exactly that, even if they never say it aloud? <em>I am in the way now. I am a burden. The world has moved past me.</em> Anchises felt it, in a burning city, three thousand years ago.</p>
+
+  <p>And what does Aeneas do? He refuses to leave his father behind. With the flames climbing and the Greeks in the streets, Aeneas bends down, lifts his aged, lame father up onto his own shoulders, and carries him. With one hand he steadies the old man on his back; with the other he takes his little son by the hand; and so the three generations move through the fire together — the father carried, the son led, the household gods cradled in the old man's arms because the warrior's hands are too bloodied from battle to touch holy things.</p>
+
+  <blockquote>I cannot think of a clearer picture of <em>kabad</em>. Aeneas literally takes the weight of his father onto his own back and carries it through the fire.</blockquote>
+
+  <p>Now hear how it ends, because the commandment promises that honour is rewarded, and Virgil's story bears that out. Aeneas escapes the city. He gathers the survivors, builds ships, and after long wandering, his descendants found a new city on the shores of Italy — and that city is Rome. The hero who refused to abandon his father becomes the father of a people that would endure for a thousand years. The man who carried the past on his back was given a future without end. <em>That his days might be long upon the land.</em></p>
+
+  <p>Later in the poem, after Anchises has died, Aeneas goes down to see his father once more. And there the old man does something extraordinary — he shows his son the future. He parades before Aeneas the whole unborn glory of Rome: the heroes not yet born, the empire not yet built, the destiny his son cannot yet imagine. The father, who had felt like a useless burden in the burning city, turns out to be the one holding the long view. The one who can see what the young man cannot.</p>
+
+  <p>I note this as story, not theology — Virgil was a pagan, and his underworld is fiction, not Scripture. But the image is true: our elders hold a vantage point we are too young to see. When we make light of them, we throw away not just a person, but a window onto things we cannot yet imagine.</p>
+
+  <hr class="divider">
+
+  <!-- V -->
+  <div class="section-label">V — The commandment with a promise</div>
+  <h2>The first commandment with a promise attached.</h2>
+
+  <div class="scripture">
+    <div class="scripture-ref">Ephesians 6:2–3</div>
+    <p>"Honour thy father and mother; (which is the first commandment with promise;) That it may be well with thee, and thou mayest live long on the earth."</p>
+  </div>
+
+  <p>Of all ten commandments, this is the only one to which God attached an explicit reward. "Thou shalt not steal" carries no promise. "Thou shalt not kill" carries no promise of blessing for keeping it. But honour your father and mother, God says, and your days shall be long upon the land.</p>
+
+  <p>Why this one? Why here?</p>
+
+  <p>Some read it as a promise to the individual — that a life built on honour tends, by its very nature, to be longer and steadier and more blessed. And there is real truth in that. The soul that has learned to honour has learned to be humble, teachable, and grateful — and those are the very habits that keep a person out of a thousand ditches.</p>
+
+  <p>But others read it as a promise to the community — to a whole people — and notice that the promise is tied to the land: <em>"long upon the land which the Lord thy God giveth thee."</em> A society that honours its elders does not throw away its own accumulated wisdom. It does not have to learn every lesson from scratch, paying again in blood and tears for knowledge that the previous generation already purchased. It holds onto its inheritance. It endures.</p>
+
+  <p>That is exactly what we just saw in the story of Aeneas. The man who carried his father was given a thousand years upon the land. The honour and the longevity were not two unrelated things — the one produced the other. God is not bribing us. As in so many other places in Scripture, He is describing reality. He is telling us that honour is woven into the way the world actually works.</p>
+
+  <hr class="divider">
+
+  <!-- VI -->
+  <div class="section-label">VI — The daughters who made light of their father</div>
+  <h2>King Lear divides his kingdom.</h2>
+
+  <p>In Shakespeare's <em>King Lear</em>, an ageing king decides to divide his kingdom among his three daughters. But he does it in a foolish way: he announces that he will give the largest share to whichever daughter says she loves him most. He turns love into a competition of flattery.</p>
+
+  <p>His two eldest daughters, Goneril and Regan, understand the game perfectly. They pour out lavish, extravagant speeches. They tell the old king they love him more than eyesight, more than space, more than liberty. It is completely beautiful and completely empty. They do not, and cannot, mean a word of it. They are flattering a foolish old man in order to get his kingdom.</p>
+
+  <p>But his youngest daughter, Cordelia — the one he loves most — will not play. When her turn comes, she says simply that she loves her father according to her bond, no more and no less; that she loves him as a daughter should, honestly and truly. Honest love. Real honour. The kind with weight in it.</p>
+
+  <p>And the old king, drunk on flattery, cannot tell the difference between the gold and the gilt. Enraged that Cordelia will not flatter him, he disinherits her, banishes her, and hands his entire kingdom to the two daughters whose words were sweet and whose hearts were poison.</p>
+
+  <p>The moment Goneril and Regan have what they wanted, the flattery vanishes. They begin to strip their father of everything — his servants, his dignity, his very shelter. They turn the old man out into a storm in the dead of night, into the wind and the rain, and bar the doors behind him. And somewhere out in that storm, Lear cries out the line that should haunt every ungrateful child:</p>
+
+  <blockquote>"How sharper than a serpent's tooth it is to have a thankless child."</blockquote>
+
+  <p>That is the dishonour. Now hear the fruit of it. It does not end well for Goneril and Regan. The same ruthlessness with which they treated their father turns inward and devours them. They fall to scheming against each other. Jealousy poisons them — quite literally, in the end: Goneril poisons her own sister Regan, and then takes her own life. Both daughters who made light of their father are dead before the play is over, destroyed not by their father's curse but by the very poison they themselves had sown. The kingdom they grasped at lies in ruins.</p>
+
+  <p>Shakespeare compresses the timeline. But the moral architecture is exactly the one God describes. Dishonour is a seed. And it always, always bears its fruit.</p>
+
+  <hr class="divider">
+
+  <!-- VII -->
+  <div class="section-label">VII — What happens when we don't</div>
+  <h2>The stage and the Scripture say the same thing.</h2>
+
+  <p>You will remember the story of Absalom — King David's own son, beautiful and beloved, who turned against his father. Absalom conspired against David, drove him from his throne, humiliated him before all Israel, and made war on the very man who had given him life. And though he had real grievances — for David had failed him in real ways — grievance is not the same as righteousness, and the path of dishonour led where it always leads. Absalom died alone on a battlefield, caught and helpless, run through and thrown into a pit, his rebellion collapsing around him. And David wept the most terrible words a father can weep: <em>"O Absalom, my son, my son."</em></p>
+
+  <a class="cross-link" href="/faith/sermon-001-the-butterfly-effect.html">
+    <div class="cross-link-text">
+      <div class="cross-link-label">Related sermon</div>
+      <div class="cross-link-title">The Butterfly Effect</div>
+      <div class="cross-link-desc">The full story of David and Absalom — how one act of not looking away set off a chain of consequences that cost thousands of lives.</div>
+    </div>
+    <span class="cross-link-arrow">→</span>
+  </a>
+
+  <p>Years can pass between the seed and the fruit. That is what makes dishonour so deceptive. It does not always strike immediately. The child who mocks a parent's faith may walk away laughing, and seem, for a long time, to suffer nothing at all. But the seed is in the ground. And there comes a day — often years later, in a crisis the young person never saw coming — when they reach for something solid beneath their feet and find that they tore it up long ago. The young man who scorned his father's counsel sometimes finds himself standing at the very wall his father warned him about, with no one left to ask.</p>
+
+  <p>God is not waiting up in heaven, looking for an excuse to punish us. He is telling us the truth about a law as real as any law of physics. Sow honour, and you reap life. Sow contempt, and you reap the whirlwind. Both seeds grow. The only question is which one we are planting.</p>
+
+  <hr class="divider">
+
+  <!-- VIII -->
+  <div class="section-label">VIII — The call</div>
+  <h2>We are not all in the same season of life.</h2>
+
+  <p>Some of us here are the young — the sons and the daughters, whatever our age. And to you the word is this: slow down. There are people around you who have already walked the road that lies ahead of you. They have made the mistakes you are about to make. They have learned things in fifty years that you cannot learn in twenty, no matter how clever you are. Go and sit with them. Ask them. Carry them when they grow heavy, the way Aeneas carried Anchises through the fire — not because they are perfect, for they are not, but because God commanded it, and because their lives hold a treasure yours does not yet contain. Do not be Goneril and Regan, all sweet words and empty hearts. Be Cordelia — honest, faithful, weighty in your love.</p>
+
+  <p>And some of us here are the fathers and the mothers. And to you the word is this: this commandment is not only about the honour you are owed. It is also about being worthy of the honour you ask. Lear demanded love as a performance and could not tell the true daughter from the false. Do not make that mistake. Lead your children in such a way that to honour you is also to honour God. Be the kind of elder whose counsel is worth carrying down into the years — the kind of Anchises who, even from beyond the grave, can show the next generation a future they cannot yet see.</p>
+
+  <div class="principle">
+    <div class="section-label">The commandment, and its promise</div>
+    <p>We live in a world that races past its elders and makes light of the past. Be people who stop. Be people who listen. Be people who treat the weight of a human life as actually heavy — because that is precisely the word God chose.</p>
+    <p><em>Kabad.</em> Weight. Substance. Worth.</p>
+    <p><strong>Honour your father and your mother. It is the first commandment with a promise. And the promise still stands: that thy days may be long upon the land which the Lord thy God giveth thee.</strong></p>
+  </div>
+
+  <div class="tags">
+    <span class="tag">Sermon</span>
+    <span class="tag">Fifth commandment</span>
+    <span class="tag">Honour</span>
+    <span class="tag">Family</span>
+    <span class="tag">Exodus 20</span>
+  </div>
+
+  <footer>
+    <span>© Jakub Szczybura</span>
+    <a href="/faith">← Faith &amp; Reflection</a>
+  </footer>
+
+</div>
+</body>
+</html>
