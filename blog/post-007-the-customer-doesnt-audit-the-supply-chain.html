@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Customer Doesn't Audit the Supply Chain — Jakub Szczybura</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --color-bg: #fafaf8;
+      --color-text: #1a1a1a;
+      --color-muted: #6b6b6b;
+      --color-faint: #9a9a9a;
+      --color-border: rgba(0,0,0,0.1);
+      --color-tag-bg: #f0efe9;
+      --font-serif: 'Georgia', 'Times New Roman', serif;
+      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-mono: 'SF Mono', 'Fira Code', monospace;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --color-bg: #141412;
+        --color-text: #e8e8e4;
+        --color-muted: #9a9a94;
+        --color-faint: #5a5a56;
+        --color-border: rgba(255,255,255,0.1);
+        --color-tag-bg: #1e1e1a;
+      }
+    }
+
+    body {
+      font-family: var(--font-serif);
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.8;
+      font-size: 18px;
+      padding: 0 0 6rem;
+    }
+
+    .container { max-width: 660px; margin: 0 auto; padding: 0 1.5rem; }
+
+    .post-meta {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      color: var(--color-faint);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+    }
+
+    h1 {
+      font-family: var(--font-serif);
+      font-size: 36px;
+      font-weight: normal;
+      line-height: 1.25;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.01em;
+    }
+
+    .lede {
+      font-size: 20px;
+      color: var(--color-muted);
+      line-height: 1.6;
+      margin-bottom: 3rem;
+      font-style: italic;
+      border-bottom: 0.5px solid var(--color-border);
+      padding-bottom: 2rem;
+    }
+
+    .section-label {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-faint);
+      margin-bottom: 0.75rem;
+      margin-top: 3rem;
+    }
+
+    h2 {
+      font-family: var(--font-serif);
+      font-size: 22px;
+      font-weight: normal;
+      margin-bottom: 1.25rem;
+      color: var(--color-text);
+    }
+
+    p { margin-bottom: 1.4rem; }
+    p:last-child { margin-bottom: 0; }
+    em { font-style: italic; }
+
+    blockquote {
+      border-left: 2px solid var(--color-text);
+      margin: 2.5rem 0;
+      padding: 0.25rem 0 0.25rem 1.5rem;
+      font-size: 20px;
+      font-style: italic;
+      color: var(--color-text);
+      line-height: 1.5;
+    }
+
+    .insight {
+      background: var(--color-tag-bg);
+      border-radius: 8px;
+      padding: 1.5rem 1.75rem;
+      margin: 2.5rem 0;
+      font-size: 17px;
+      line-height: 1.75;
+      color: var(--color-text);
+    }
+
+    hr.divider {
+      border: none;
+      border-top: 0.5px solid var(--color-border);
+      margin: 3rem 0;
+    }
+
+    .principle {
+      background: var(--color-tag-bg);
+      border-radius: 8px;
+      padding: 1.75rem 2rem;
+      margin-top: 3rem;
+    }
+    .principle .section-label { margin-top: 0; }
+    .principle p {
+      font-size: 17px;
+      line-height: 1.7;
+      margin-bottom: 1rem;
+      color: var(--color-text);
+    }
+    .principle p:last-child { margin-bottom: 0; }
+    .principle strong { font-style: italic; font-weight: normal; }
+
+    .tags {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 0.5px solid var(--color-border);
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-family: var(--font-sans);
+    }
+
+    .tag {
+      font-size: 12px;
+      color: var(--color-muted);
+      background: var(--color-tag-bg);
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+
+    footer {
+      margin-top: 5rem;
+      padding-top: 2rem;
+      border-top: 0.5px solid var(--color-border);
+      font-family: var(--font-sans);
+      font-size: 13px;
+      color: var(--color-faint);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    footer a { color: var(--color-muted); text-decoration: none; }
+    footer a:hover { color: var(--color-text); }
+  </style>
+</head>
+<body>
+<script src="/nav.js"></script>
+<div class="container">
+
+  <div class="post-meta">2026 &nbsp;·&nbsp; 5 min read</div>
+
+  <h1>The Customer Doesn't Audit the Supply Chain</h1>
+
+  <p class="lede">A nineteen-year-old jogging around the block with a few euros in his hand learned something that most boardrooms arguing about proprietary AI still haven't figured out: the customer is buying the plate, not the kitchen.</p>
+
+  <div class="section-label">The brief</div>
+  <h2>The menu had gyros on it. We didn't make gyros.</h2>
+
+  <p>When I was nineteen, I worked in a restaurant in Greece for a summer. The menu had gyros on it, which was a problem, because we didn't actually make gyros. What we had was a kiosk around the corner that did.</p>
+
+  <p>So when a table ordered one, I'd take off my apron, jog around the block, hand over a few euros, jog back, and plate it in the kitchen like it had come off our own spit the whole time. Nobody at the table ever knew. Nobody asked. They got a hot gyros, on time, on one of our plates, and as far as they were concerned that was the whole story.</p>
+
+  <div class="section-label">The floor</div>
+  <h2>What they were actually buying.</h2>
+
+  <p>It worked because the thing they were actually buying wasn't "a gyros made on these premises." It was a good gyros, delivered without friction, while they sat at our table with their friends. The kiosk, the jog, the handoff in the kitchen — none of that was the product. It was infrastructure. Invisible by design, and rightly so.</p>
+
+  <hr class="divider">
+
+  <div class="section-label">The reframe</div>
+  <h2>The same instinct, with more money behind it.</h2>
+
+  <p>Years later, a different scene played out: sitting in on a meeting at a food delivery startup, watching two departments argue like it was a deleted scene from <em>Silicon Valley</em>. The trigger was mundane: a driver had a flat tire mid-delivery. The proposed fix was to route that order through a competitor's delivery network so the customer still got their food on time.</p>
+
+  <p>I expected at least some hesitation about handing business to a rival. There wasn't any. The answer came back flat:</p>
+
+  <blockquote>"Yes. Whatever it takes to please the customer."</blockquote>
+
+  <p>It's the same move I was making at nineteen, just institutionalised and with real stakes attached. The company didn't care whose driver, whose app, or whose logo touched the order along the way. They cared whether the customer's experience held up. Pride in "we do this ourselves" lost to "the customer doesn't know and shouldn't have to care."</p>
+
+  <hr class="divider">
+
+  <div class="section-label">The build</div>
+  <h2>Where this shows up now.</h2>
+
+  <p>I'd suggest the more interesting version of this argument is happening in boardrooms right now, around AI.</p>
+
+  <p>A lot of executive energy currently goes into questions like: did we build this model ourselves, is our AI proprietary, are we "just" a wrapper around someone else's API. Those are legitimate questions — they matter for cost structure, defensibility, and risk exposure, and a CEO should be asking them.</p>
+
+  <p>But they're internal questions. They're about your supply chain, not the customer's experience of the plate. The person using the product isn't evaluating whether your AI is "real" by some architectural standard. They're evaluating whether their problem got solved, reliably, at a price and speed that makes sense. A well-orchestrated wrapper that consistently delivers a good outcome will beat a proprietary model that doesn't, every time, in the market that actually pays the bills.</p>
+
+  <div class="insight">
+    That's not an argument for indifference to what's under the hood. Build-versus-buy decisions have real consequences for margin, lock-in, and long-term defensibility, and getting them wrong is expensive. It's an argument for keeping those questions in the right place. They belong in your cost models and your risk reviews. They don't belong in the customer's experience of your product, and they shouldn't be the thing that decides whether a leadership team feels good about what it shipped.
+  </div>
+
+  <div class="principle">
+    <div class="section-label">The principle</div>
+    <p>The customer never audited how the gyros got to the plate. They audited the plate.</p>
+    <p><strong>Worth remembering the next time a room full of smart people is arguing about the kiosk, and nobody's asked yet whether the customer even knows it exists.</strong></p>
+  </div>
+
+  <div class="tags">
+    <span class="tag">AI strategy</span>
+    <span class="tag">Product</span>
+    <span class="tag">CTO thinking</span>
+    <span class="tag">Build vs buy</span>
+  </div>
+
+  <footer>
+    <span>© Jakub Szczybura</span>
+    <a href="/blog">All posts →</a>
+  </footer>
+
+</div>
+</body>
+</html>
