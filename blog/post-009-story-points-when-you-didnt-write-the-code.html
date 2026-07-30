@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Story Points When You Didn't Write the Code — Jakub Szczybura</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --color-bg: #fafaf8;
+      --color-text: #1a1a1a;
+      --color-muted: #6b6b6b;
+      --color-faint: #9a9a9a;
+      --color-border: rgba(0,0,0,0.1);
+      --color-tag-bg: #f0efe9;
+      --color-accent-bg: #f5f0e8;
+      --color-accent-border: #c8a96e;
+      --font-serif: 'Georgia', 'Times New Roman', serif;
+      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-mono: 'SF Mono', 'Fira Code', monospace;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --color-bg: #141412;
+        --color-text: #e8e8e4;
+        --color-muted: #9a9a94;
+        --color-faint: #5a5a56;
+        --color-border: rgba(255,255,255,0.1);
+        --color-tag-bg: #1e1e1a;
+        --color-accent-bg: #1e1a12;
+        --color-accent-border: #8a6a2e;
+      }
+    }
+
+    body {
+      font-family: var(--font-serif);
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.8;
+      font-size: 18px;
+      padding: 0 0 6rem;
+    }
+
+    .container { max-width: 660px; margin: 0 auto; padding: 0 1.5rem; }
+
+    .post-meta {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      color: var(--color-faint);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+    }
+
+    h1 {
+      font-family: var(--font-serif);
+      font-size: 36px;
+      font-weight: normal;
+      line-height: 1.25;
+      margin-bottom: 1rem;
+      letter-spacing: -0.01em;
+    }
+
+    .lede {
+      font-size: 20px;
+      color: var(--color-muted);
+      line-height: 1.6;
+      margin-bottom: 3rem;
+      font-style: italic;
+      border-bottom: 0.5px solid var(--color-border);
+      padding-bottom: 2rem;
+    }
+
+    .section-label {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-faint);
+      margin-bottom: 0.75rem;
+      margin-top: 3rem;
+    }
+
+    h2 {
+      font-family: var(--font-serif);
+      font-size: 22px;
+      font-weight: normal;
+      margin-bottom: 1.25rem;
+      color: var(--color-text);
+    }
+
+    h3 {
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-top: 2rem;
+      margin-bottom: 0.6rem;
+    }
+
+    p { margin-bottom: 1.4rem; }
+    p:last-child { margin-bottom: 0; }
+    em { font-style: italic; }
+    strong { font-weight: 600; }
+
+    blockquote {
+      border-left: 2px solid var(--color-text);
+      margin: 2.5rem 0;
+      padding: 0.25rem 0 0.25rem 1.5rem;
+      font-size: 20px;
+      font-style: italic;
+      color: var(--color-text);
+      line-height: 1.5;
+    }
+
+    .insight {
+      background: var(--color-tag-bg);
+      border-radius: 8px;
+      padding: 1.5rem 1.75rem;
+      margin: 2.5rem 0;
+      font-size: 17px;
+      line-height: 1.75;
+      color: var(--color-text);
+    }
+
+    /* Data callout — green tint, distinct from amber insight */
+    .data-note {
+      background: #f0f5f0;
+      border-left: 3px solid #6b8f71;
+      border-radius: 0 6px 6px 0;
+      margin: 2rem 0;
+      padding: 1.1rem 1.4rem;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .data-note {
+        background: #111a12;
+        border-left-color: #4a6f50;
+      }
+      .data-note-label { color: #4a8f54 !important; }
+      .data-note p { color: #a0c0a4 !important; }
+    }
+
+    .data-note-label {
+      font-family: var(--font-sans);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #6b8f71;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    .data-note p {
+      font-size: 15px;
+      color: #3a4a3c;
+      line-height: 1.7;
+      margin-bottom: 0.5rem;
+    }
+
+    .data-note p:last-child { margin-bottom: 0; }
+
+    /* Stat row */
+    .stat-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin: 2rem 0;
+    }
+
+    @media (max-width: 480px) { .stat-row { grid-template-columns: 1fr 1fr; } }
+
+    .stat-block {
+      background: var(--color-accent-bg);
+      border-radius: 8px;
+      padding: 1.1rem 1.25rem;
+      text-align: center;
+    }
+
+    .stat-number {
+      font-family: var(--font-serif);
+      font-size: 1.9rem;
+      font-weight: normal;
+      color: var(--color-accent-border);
+      display: block;
+      margin-bottom: 0.3rem;
+      letter-spacing: -0.02em;
+    }
+
+    .stat-label {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      color: var(--color-muted);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      line-height: 1.4;
+    }
+
+    /* Refinement questions box */
+    .refinement {
+      background: var(--color-accent-bg);
+      border-left: 3px solid var(--color-accent-border);
+      border-radius: 0 6px 6px 0;
+      margin: 2rem 0;
+      padding: 1.25rem 1.5rem;
+    }
+
+    .refinement-label {
+      font-family: var(--font-sans);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-accent-border);
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+
+    .refinement-q {
+      font-size: 16px;
+      color: var(--color-text);
+      line-height: 1.7;
+      margin-bottom: 1rem;
+      padding-left: 1rem;
+      border-left: 1.5px solid var(--color-border);
+    }
+
+    .refinement-q:last-child { margin-bottom: 0; }
+
+    .refinement-q strong {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.2rem;
+      font-size: 14px;
+      font-family: var(--font-sans);
+      letter-spacing: 0.04em;
+    }
+
+    hr.divider {
+      border: none;
+      border-top: 0.5px solid var(--color-border);
+      margin: 3rem 0;
+    }
+
+    .principle {
+      background: var(--color-tag-bg);
+      border-radius: 8px;
+      padding: 1.75rem 2rem;
+      margin-top: 3rem;
+    }
+    .principle .section-label { margin-top: 0; }
+    .principle p {
+      font-size: 17px;
+      line-height: 1.7;
+      margin-bottom: 1rem;
+      color: var(--color-text);
+    }
+    .principle p:last-child { margin-bottom: 0; }
+    .principle strong { font-style: italic; font-weight: normal; }
+
+    /* Sources */
+    .sources {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 0.5px solid var(--color-border);
+      font-family: var(--font-sans);
+      font-size: 12px;
+      color: var(--color-faint);
+      line-height: 1.7;
+    }
+
+    .sources-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-faint);
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    .tags {
+      margin-top: 2rem;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-family: var(--font-sans);
+    }
+
+    .tag {
+      font-size: 12px;
+      color: var(--color-muted);
+      background: var(--color-tag-bg);
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+
+    footer {
+      margin-top: 5rem;
+      padding-top: 2rem;
+      border-top: 0.5px solid var(--color-border);
+      font-family: var(--font-sans);
+      font-size: 13px;
+      color: var(--color-faint);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    footer a { color: var(--color-muted); text-decoration: none; }
+    footer a:hover { color: var(--color-text); }
+  </style>
+</head>
+<body>
+<script src="/nav.js"></script>
+<div class="container">
+
+  <div class="post-meta">August 2026 &nbsp;·&nbsp; 9 min read</div>
+
+  <h1>Story Points When You Didn't Write the Code</h1>
+
+  <p class="lede">Estimation was always a proxy for scarce human capacity. The capacity that's scarce has changed. Most teams haven't noticed their points now measure the wrong resource.</p>
+
+  <p>I've now watched three different answers to the same question play out in real organisations. The question: how do you size a Jira story when an AI does most of the building?</p>
+
+  <p>One CTO I know settled it by decree. Every story is one point. Velocity becomes a count of things finished. Another organisation I worked with kept estimating as though a human would write the code by hand, then quietly absorbed the fact that sprints finished early and scope kept getting topped up mid-cycle. The third answer, which is the most common one, is drift: nobody decides anything, the old numbers keep getting assigned out of habit, and everyone privately agrees they mean less each quarter.</p>
+
+  <p>All three are responses to the same underlying event. Story points were invented to ration a scarce resource, and the resource they were built to ration has stopped being scarce. Before deciding what to estimate now, it's worth being precise about what the old estimates were actually for.</p>
+
+  <hr class="divider">
+
+  <div class="section-label">What points were rationing</div>
+  <h2>Strip away the ceremony.</h2>
+
+  <p>A story point was always a claim about consumption: this item will consume roughly this much of our team's limited capacity to produce working software. The Fibonacci scale, the poker, the relative-sizing doctrine — all of it existed because the constrained input was skilled human hours spent designing and writing code, and because forecasting required converting a backlog into a number of sprints.</p>
+
+  <p>Two things followed from that. First, the estimate had a customer: someone converted points into dates, headcount decisions, or commitments. Second, the estimation conversation had a side benefit that was often worth more than the number — it forced the team to discover, before work started, that two engineers had completely different models of what the story involved.</p>
+
+  <p>Both purposes survive. The input being rationed does not.</p>
+
+  <hr class="divider">
+
+  <div class="section-label">Where the effort actually went</div>
+  <h2>The honest data tells a consistent story.</h2>
+
+  <div class="stat-row">
+    <div class="stat-block">
+      <span class="stat-number">+59%</span>
+      <span class="stat-label">Feature branch activity year-on-year</span>
+    </div>
+    <div class="stat-block">
+      <span class="stat-number">2.09×</span>
+      <span class="stat-label">Per-capita PR throughput under 2× mandate</span>
+    </div>
+    <div class="stat-block">
+      <span class="stat-number">−19%</span>
+      <span class="stat-label">Actual velocity vs expected +24%</span>
+    </div>
+  </div>
+
+  <div class="data-note">
+    <span class="data-note-label">The data</span>
+    <p>CircleCI's 2026 throughput data shows feature branch activity up 59% year over year while main branch throughput for the median team fell. Code is being produced faster than it is being accepted.</p>
+    <p>A Carnegie Mellon and Stanford study of 802 developers and roughly 196,000 pull requests found per-capita PR throughput hit 2.09× baseline — while the load on each reviewer roughly doubled. Agent-authored pull requests receive lower review rates, faster merges, and less discussion than human-authored ones. Scrutiny is thinning precisely where it should be thickening.</p>
+    <p>The METR randomised controlled trial found experienced open-source developers expected AI tools to make them 24% faster. Measured end to end, they were 19% slower. After living through the experiment, they still believed the tools had sped them up by about 20%. A 39-point gap between perceived and actual velocity, in the population best positioned to know.</p>
+  </div>
+
+  <p>The generation step compressed. The verification step didn't, and in many settings it grew, because reviewing a large diff you didn't write is a genuinely different and slower activity than reviewing a colleague's work whose reasoning you watched develop. The cost of a story moved downstream and changed shape.</p>
+
+  <p>This is why "estimate as if a human wrote it" fails on two counts. The obvious count: the reference class is evaporating, and within a few years nobody on the team will have a calibrated sense of hand-built effort to reference. The less obvious count: the METR result shows that even people who still possess that reference can't apply it to AI-assisted work. Their introspection is off by nearly 40 points. You'd be anchoring on a memory filtered through a systematically broken perception.</p>
+
+  <hr class="divider">
+
+  <div class="section-label">The flat-one gambit</div>
+  <h2>Taken seriously, it's not an estimation scheme at all.</h2>
+
+  <p>The everything-is-one-point rule deserves more respect than it usually gets, because it's not really an estimation scheme. It's the no-estimates position wearing a Jira costume: right-size every story during refinement, then just count throughput. Cycle time and item count replace velocity, and forecasting becomes Monte Carlo over historical completion rates rather than arithmetic over guesses.</p>
+
+  <p>For a certain kind of team this is correct. If your stories are genuinely sliced small, if the flow of work is steady, and if nobody downstream converts points into promises, then estimation was overhead and the flat one prices it accurately.</p>
+
+  <p>But notice what the rule actually did: it relocated the judgement. "Every story is a one" only produces a usable forecast if stories are roughly uniform, and making them uniform requires exactly the sizing skill you claim to have retired — exercised implicitly, during slicing, with no number attached and no disagreement surfaced.</p>
+
+  <div class="insight">
+    The single innocuous-looking story that touches payout reconciliation in the legacy database takes three weeks. Nothing in your tracking system flagged it as different from the story that renamed a button. Estimates existed partly to make that difference visible before work started. A constant makes nothing visible.
+  </div>
+
+  <p>The flat one is a reasonable endpoint for teams with mature slicing discipline and no forecast customers. It is a poor starting point for anyone else.</p>
+
+  <hr class="divider">
+
+  <div class="section-label">What is still scarce</div>
+  <h2>Attention applied with judgment — spent in three specific places.</h2>
+
+  <p>Not code production. Not, increasingly, test production, documentation, or migration scripts. What remains stubbornly human, and therefore stubbornly finite, is attention applied with judgment.</p>
+
+  <h3>Specification</h3>
+  <p>Someone has to convert intent into a description precise enough that an agent's output can be judged against it. Ambiguous stories used to be resolved through a hundred micro-decisions an engineer made while typing. Those decisions still exist; they've moved forward into the spec, or they leak into review as surprises.</p>
+
+  <h3>Verification</h3>
+  <p>Someone has to decide the output is correct, safe, and consistent with the architecture — and the data above says this is now the system's bottleneck. Verification cost has almost nothing to do with lines of code produced and almost everything to do with how expensive it is to check the work: does a test suite meaningfully cover it, or does a human have to reason through the change? Can it be validated in staging, or only against production data? Is correctness observable at all, or only discoverable at month-end close?</p>
+
+  <h3>Blast radius</h3>
+  <p>Someone has to own the consequences. A change that can be reverted in a minute consumes little attention regardless of size. A change to authentication, money movement, or an irreversible data migration consumes a great deal of it, even when the diff is four lines.</p>
+
+  <blockquote>A large, well-documented, well-tested surface is big context and cheap attention. A one-line change to billing logic is tiny context and expensive attention.</blockquote>
+
+  <hr class="divider">
+
+  <div class="section-label">A workable scheme</div>
+  <h2>Keep points. Keep Fibonacci. Change only the anchor question.</h2>
+
+  <p>The old anchor: how much effort to build this? The new anchor: <strong>how much human attention will this consume before we'd bet on it in production?</strong></p>
+
+  <p>Concretely, size against three questions during refinement:</p>
+
+  <div class="refinement">
+    <span class="refinement-label">The three refinement questions</span>
+    <div class="refinement-q">
+      <strong>1. How expensive is the spec?</strong>
+      How many decisions must a human make before an agent can start — and how many are still unmade in the story as written?
+    </div>
+    <div class="refinement-q">
+      <strong>2. How expensive is the check?</strong>
+      Can correctness be verified mechanically (evals, tests, staged rollout), or does it require a human to reason through the change? Does anyone on the team currently understand the touched system well enough to review it?
+    </div>
+    <div class="refinement-q">
+      <strong>3. How expensive is being wrong?</strong>
+      Reversible in minutes, or a customer-facing incident with regulatory adjacency?
+    </div>
+  </div>
+
+  <p>A story that scores low on all three is a one regardless of how much code the agent emits. A story that scores high on any one of them earns real points even if the diff is trivial. You will find this produces strange-looking numbers at first — a 3,000-line generated CRUD module sized at 2, a config change sized at 8 — and those strange numbers are the method working. They're pricing the resource you actually run out of.</p>
+
+  <p>Two implementation notes. First, start tracking review and verification time as a first-class field, separate from total cycle time. It is your new constraint, and you cannot manage a constraint you don't measure. Second, expect Goodhart. Any number in Jira becomes a target within two quarters; the defence is the same as it always was — keep the number owned by the team that does the work, and never wire it to individual performance.</p>
+
+  <hr class="divider">
+
+  <div class="section-label">The lane that leaves the system</div>
+  <h2>Not all work needs to be pointed at all.</h2>
+
+  <p>The scheme above covers work where a human is in the loop. An increasing fraction won't be. Dependency bumps, test backfills, well-specified refactors gated by comprehensive evals — work where the specification exists, verification is mechanical, and blast radius is contained — will run agent-to-merge with no human attention consumed at all.</p>
+
+  <p>Don't point that work. Pointing it would be pricing consumption of a resource it doesn't consume. Route it into a separate lane measured the way you'd measure any automated pipeline: throughput, cycle time, eval pass rate, revert rate. Over time, the interesting management signal becomes the migration rate between lanes — how much of your backlog graduates from attention-priced to fully automated each quarter. That number tells you more about your engineering organisation's real AI maturity than any velocity chart ever did.</p>
+
+  <div class="principle">
+    <div class="section-label">The principle</div>
+    <p>Story points were never a measurement of the software. They were a measurement of the organisation — of what it found difficult, what it couldn't parallelise, where its judgment was thin.</p>
+    <p>That hasn't changed. What's changed is the answer. <strong>The difficulty was never really in the typing, and now the typing is gone, the estimate finally has to say what the difficulty actually is: deciding what to build, and knowing whether you built it.</strong></p>
+  </div>
+
+  <div class="sources">
+    <span class="sources-label">Sources</span>
+    METR (2025) randomised controlled trial on AI tooling and developer velocity · Carnegie Mellon / Stanford field study of 802 developers and ~196,000 pull requests · CircleCI 2026 State of Software Delivery throughput data · Hands on running of engineering teams and executive advisory conversations
+  </div>
+
+  <div class="tags">
+    <span class="tag">Engineering leadership</span>
+    <span class="tag">AI strategy</span>
+    <span class="tag">CTO thinking</span>
+    <span class="tag">Agile</span>
+    <span class="tag">Estimation</span>
+  </div>
+
+  <footer>
+    <span>© Jakub Szczybura</span>
+    <a href="/blog">All posts →</a>
+  </footer>
+
+</div>
+</body>
+</html>
