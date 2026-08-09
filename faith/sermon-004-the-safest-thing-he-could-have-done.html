@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Safest Thing He Could Have Done — Jakub Szczybura</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --color-bg: #fafaf8;
+      --color-text: #1a1a1a;
+      --color-muted: #6b6b6b;
+      --color-faint: #9a9a9a;
+      --color-border: rgba(0,0,0,0.1);
+      --color-tag-bg: #f0efe9;
+      --color-accent-bg: #f5f0e8;
+      --color-accent-border: #c8a96e;
+      --font-serif: 'Georgia', 'Times New Roman', serif;
+      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-mono: 'SF Mono', 'Fira Code', monospace;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --color-bg: #141412;
+        --color-text: #e8e8e4;
+        --color-muted: #9a9a94;
+        --color-faint: #5a5a56;
+        --color-border: rgba(255,255,255,0.1);
+        --color-tag-bg: #1e1e1a;
+        --color-accent-bg: #1e1a12;
+        --color-accent-border: #8a6a2e;
+      }
+    }
+
+    body {
+      font-family: var(--font-serif);
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.85;
+      font-size: 18px;
+      padding: 0 0 6rem;
+    }
+
+    .container { max-width: 660px; margin: 0 auto; padding: 0 1.5rem; }
+
+    .post-meta {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      color: var(--color-faint);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+    }
+
+    h1 {
+      font-family: var(--font-serif);
+      font-size: 38px;
+      font-weight: normal;
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.01em;
+    }
+
+    .lede {
+      font-size: 20px;
+      color: var(--color-muted);
+      line-height: 1.6;
+      margin-bottom: 3rem;
+      font-style: italic;
+      border-bottom: 0.5px solid var(--color-border);
+      padding-bottom: 2rem;
+    }
+
+    .section-label {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--color-faint);
+      margin-bottom: 0.75rem;
+      margin-top: 3.5rem;
+    }
+
+    h2 {
+      font-family: var(--font-serif);
+      font-size: 24px;
+      font-weight: normal;
+      margin-bottom: 1.25rem;
+      color: var(--color-text);
+      line-height: 1.3;
+    }
+
+    h3 {
+      font-family: var(--font-serif);
+      font-size: 19px;
+      font-weight: normal;
+      font-style: italic;
+      margin: 2rem 0 1.1rem;
+      color: var(--color-text);
+      line-height: 1.3;
+    }
+
+    p { margin-bottom: 1.4rem; }
+    p:last-child { margin-bottom: 0; }
+    em { font-style: italic; }
+
+    /* Scripture block */
+    .scripture {
+      background: var(--color-accent-bg);
+      border-left: 3px solid var(--color-accent-border);
+      border-radius: 0 6px 6px 0;
+      margin: 2rem 0;
+      padding: 1.25rem 1.5rem;
+    }
+
+    .scripture-ref {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-accent-border);
+      margin-bottom: 0.6rem;
+    }
+
+    .scripture p {
+      font-size: 17px;
+      font-style: italic;
+      color: var(--color-text);
+      line-height: 1.75;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Pull quote */
+    blockquote {
+      border-left: 2px solid var(--color-text);
+      margin: 2.5rem 0;
+      padding: 0.25rem 0 0.25rem 1.5rem;
+      font-size: 21px;
+      font-style: italic;
+      color: var(--color-text);
+      line-height: 1.45;
+    }
+
+    /* Principle / closing box */
+    .principle {
+      background: var(--color-tag-bg);
+      border-radius: 8px;
+      padding: 1.75rem 2rem;
+      margin-top: 3rem;
+    }
+    .principle .section-label { margin-top: 0; }
+    .principle p {
+      font-size: 17px;
+      line-height: 1.75;
+      margin-bottom: 1rem;
+      color: var(--color-text);
+    }
+    .principle p:last-child { margin-bottom: 0; }
+    .principle strong { font-style: italic; font-weight: normal; }
+
+    hr.divider {
+      border: none;
+      border-top: 0.5px solid var(--color-border);
+      margin: 3.5rem 0;
+    }
+
+    .tags {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 0.5px solid var(--color-border);
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-family: var(--font-sans);
+    }
+
+    .tag {
+      font-size: 12px;
+      color: var(--color-muted);
+      background: var(--color-tag-bg);
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+
+    .footnote {
+      font-family: var(--font-sans);
+      font-size: 13px;
+      color: var(--color-faint);
+      font-style: italic;
+      margin-bottom: 2.5rem;
+    }
+
+    footer {
+      margin-top: 5rem;
+      padding-top: 2rem;
+      border-top: 0.5px solid var(--color-border);
+      font-family: var(--font-sans);
+      font-size: 13px;
+      color: var(--color-faint);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    footer a { color: var(--color-muted); text-decoration: none; }
+    footer a:hover { color: var(--color-text); }
+  </style>
+</head>
+<body>
+<script src="/nav.js"></script>
+<div class="container">
+
+  <div class="post-meta">Faith &amp; Reflection &nbsp;·&nbsp; Sermon &nbsp;·&nbsp; August 2026</div>
+
+  <h1>The Safest Thing He Could Have Done</h1>
+
+  <p class="lede">A master hands out talents before he leaves — five, two, one, each sized to the servant who receives it. Two trade and double what they were given. One buries his in the ground. The parable isn't really about the money. It's about what unused capacity does to the person holding it.</p>
+
+  <p class="footnote">Scripture quotations taken from the New King James Version®. Copyright © 1982 by Thomas Nelson. Used by permission. All rights reserved.</p>
+
+  <!-- The story -->
+  <div class="section-label">The story</div>
+  <h2>Matthew 25 — the parable of the talents.</h2>
+
+  <p>A man is going on a journey. Before he leaves he calls three servants and hands out money — talents — five to one, two to another, one to the third. Not equal. And not arbitrary either: the text says it was given "to each according to his own ability" (v. 15). Then he leaves.</p>
+
+  <p>Two of them trade with what they were given and double it. The third digs a hole and buries his.</p>
+
+  <p>When the master comes back, the first two hear the same line: "Well done, good and faithful servant; you have been faithful over a few things, I will make you ruler over many things. Enter into the joy of your lord" (v. 21, 23). Same commendation, even though they started with different amounts and finished six talents apart.</p>
+
+  <p>The third explains himself: "Lord, I knew you to be a hard man&hellip; And I was afraid, and went and hid your talent in the ground" (v. 24-25). The master calls him a wicked and lazy servant. Not because he lost the money, but because he did nothing with it.</p>
+
+  <p>We will focus on three things in this parable. How the amounts were decided. What the reward actually was. And what happened to the talent that never got used.</p>
+
+  <hr class="divider">
+
+  <!-- 1 -->
+  <div class="section-label">I — The split wasn't favouritism</div>
+  <h2>Five, two, one — according to his own ability.</h2>
+
+  <p>The first thing we notice is the inequality. Five, two, one. It looks arbitrary, and if it's arbitrary then the third servant has a grievance — he was set up to underperform.</p>
+
+  <p>But the text explains that they were given different amounts "according to his own ability." The master already had a read on what each of them could handle, and the allocation followed the read. Therefore, it wasn't favouritism, and rather it was an assessment.</p>
+
+  <p>The one-talent servant wasn't given a smaller job because he mattered less. He was given the job that matched what the master judged he could carry. And a talent, incidentally, was not small — roughly seventy-five pounds of silver, somewhere in the order of fifteen to twenty years of a labourer's wages. He wasn't under-resourced. He was given something substantial, sized to him.</p>
+
+  <p>So the comparison the third servant might have been tempted to make — he got five and I got one — was never the relevant comparison. And we'll see that even in our lives, this kind of comparison is never relevant. Anyhow, the master's response proves it. The two-talent servant doesn't get a smaller "well done." He gets the identical commendation as the man who returned six more. Same words. Nobody is graded against the person next to them.</p>
+
+  <p>That's right: God isn't measuring you against the person in the row in front of you. He also isn't measuring you against the version of you that had more time, more money, better health, or an easier last year. He only asks one question: what did you do with what you were actually given?</p>
+
+  <p>There's a second thing hiding in "according to his own ability," and it's actually telling us something very useful if we understand it. If the allocation reflects a read on you, then the size of what's in your hands right now is information. It isn't a verdict on your worth, but it is a statement about what you've currently demonstrated you can carry. And that read is not fixed — which is exactly what the second point is about.</p>
+
+  <hr class="divider">
+
+  <!-- 2 -->
+  <div class="section-label">II — Faithful in little, trusted with much</div>
+  <h2>The mechanism, stated by the master himself.</h2>
+
+  <div class="scripture">
+    <div class="scripture-ref">Matthew 25:21</div>
+    <p>"You have been faithful over a few things, I will make you ruler over many things."</p>
+  </div>
+
+  <p>That's the mechanism, stated by the master himself. Small scope handled well is what justifies larger scope. Note what he doesn't say — he doesn't say "you turned two into four, so here are four more." The reward isn't a bigger allocation of the same thing. It's a change of category: from managing money to ruling, from servant to someone brought into the master's own joy. Faithfulness in the small thing didn't earn a larger version of the small thing. It earned a different kind of trust altogether.</p>
+
+  <p>How amazing is that.</p>
+
+  <p>This is how trust works everywhere, not just in parables. Nobody hands you the large scope on day one, because trust is expensive to extend without proof. You get the small project first, and what you do with it becomes the evidence that justifies the next one. So "faithful in small things" isn't only a virtue to admire. It's the actual mechanism by which anything larger ever gets handed over.</p>
+
+  <h3>The evidence is fruit</h3>
+
+  <p>If trust is extended on evidence, the obvious question is: what counts as evidence? Jesus is consistent about this.</p>
+
+  <div class="scripture">
+    <div class="scripture-ref">Matthew 7:16-18</div>
+    <p>"You will know them by their fruits. Do men gather grapes from thornbushes or figs from thistles? Even so, every good tree bears good fruit, but a bad tree bears bad fruit. A good tree cannot bear bad fruit, nor can a bad tree bear good fruit."</p>
+  </div>
+
+  <p>And again in Matthew 12:33 — "a tree is known by its fruit."</p>
+
+  <p>Fruit is readable output. You can't inspect a root system directly; you can inspect what came off the branches. That's the point of the image. The fruit isn't the achievement God is chasing, the fruit is the evidence of something real underneath that can't be seen any other way.</p>
+
+  <p>Then Matthew 7:19, which connects straight back to our parable: "Every tree that does not bear good fruit is cut down and thrown into the fire."</p>
+
+  <p>Note it doesn't say: every tree that bears bad fruit. It says: every tree that does not bear good fruit. That's the same category as the buried talent. Notice that nobody in Matthew 25 makes a bad trade — we never get the case of the servant who invested and lost, which is interesting, because that's the case most of us are actually afraid of. The case that gets condemned is the one where nothing happened at all. The failure on the table isn't a bad action. It's the lack of action. Not badness of the fruit. It's barrenness of the branch.</p>
+
+  <h3>Where the fruit comes from</h3>
+
+  <p>In order to avoid a misunderstanding that could arise here, that we must hustle all the time, let's see what the Bible tells us about where the fruit actually comes from.</p>
+
+  <div class="scripture">
+    <div class="scripture-ref">John 15:4-5</div>
+    <p>"Abide in Me, and I in you. As the branch cannot bear fruit of itself, unless it abides in the vine, neither can you, unless you abide in Me. I am the vine, you are the branches. He who abides in Me, and I in him, bears much fruit; for without Me you can do nothing."</p>
+  </div>
+
+  <p>A branch doesn't produce fruit by trying harder. It produces fruit because it's connected to something feeding it. Cut the same branch off the vine and no amount of effort changes the outcome — at that point it isn't a motivation problem, it's a supply problem.</p>
+
+  <p>But that doesn't get the third servant off the hook. He wasn't cut off. He had the talent in his hand, the master's trust, and the same instruction the others had. The Bible tells us that abiding isn't passive. The branch stays on the vine; the servant is expected to trade. Both of those are things that the servant chooses to do or not. Both of those are what you choose.</p>
+
+  <h3>How the capacity gets built</h3>
+
+  <p>So if the master's read on you can be updated, and fruit is what updates it, how does the capacity actually grow?</p>
+
+  <p>Hebrews 12 answers it directly.</p>
+
+  <div class="scripture">
+    <div class="scripture-ref">Hebrews 12:5-7</div>
+    <p>"My son, do not despise the chastening of the LORD, nor be discouraged when you are rebuked by Him; for whom the LORD loves He chastens" &mdash; which is Proverbs 3:12 almost word for word, "for whom the LORD loves He corrects, just as a father corrects the son in whom he delights." And: "If you endure chastening, God deals with you as with sons; for what son is there whom a father does not chasten?"</p>
+  </div>
+
+  <p>Both passages make the same point, and it's one we instinctively resist: correction is presented as evidence of relationship, not evidence of displeasure. A father who never corrects isn't being kind. He's being absent.</p>
+
+  <p>Correction is not the same thing as punishment. Punishment is backward-looking — it settles a debt. Correction is forward-looking — it builds something. And Hebrews says what it builds: "Now no chastening seems to be joyful for the present, but painful; nevertheless, afterward it yields the peaceable fruit of righteousness to those who have been trained by it" (v. 11).</p>
+
+  <p>Trained by it. Not merely enduring it — trained by it. And the word underneath that phrase is <em>gymnazō</em>, which is the root of our word gymnasium. That is exactly the picture: a muscle under load, in a gym. That's training language, not sentencing language.</p>
+
+  <p>The words themselves carry it, too. Disciple and discipline come from the same root, the Latin <em>discere</em>, to learn. A disciple is, in the original sense, someone under training. "You must follow my discipline" and "you are my disciple" are almost the same thing. Wanting the title without the training is wanting something the word doesn't contain.</p>
+
+  <p>This explains something about prayer that I realised when I heard Morgan Freeman, playing God in <em>Bruce Almighty</em>, ask: if someone prays for patience, do you think God gives them patience? Or, does He give them the opportunity to be patient?</p>
+
+  <blockquote>If someone prays for patience, do you think God gives them patience? Or does He give them the opportunity to be patient?</blockquote>
+
+  <p>How simple and yet profound is this question! Indeed, when we pray for patience, what tends to show up is an opportunity to be patient — a delay, a difficult person, a situation that won't resolve on our timeline. That isn't God being evasive. It's the same mechanism. Patience is fruit. Fruit grows under load, on a branch that stays attached to the vine. It doesn't arrive fully formed.</p>
+
+  <p>Which means every small responsibility in front of you is functioning less like an exam with a pass or fail grade and, rather, is more like a gym. The point was never to get it perfect first time. The point was to get under the load — because that's what moves the master's read.</p>
+
+  <hr class="divider">
+
+  <!-- 3 -->
+  <div class="section-label">III — Unused capacity doesn't stay yours</div>
+  <h2>Now the hard part of the parable.</h2>
+
+  <div class="scripture">
+    <div class="scripture-ref">Matthew 25:29</div>
+    <p>"For to everyone who has, more will be given, and he will have abundance; but from him who does not have, even what he has will be taken away."</p>
+  </div>
+
+  <p>It's certainly worth disambiguating, because it gets misunderstood and misused &ndash; when taken out of context. It is not a general economic law &mdash; "the rich get richer, deal with it." It is not a claim that poverty or lack of resources is a moral failing. You cannot use it to justify inequality as natural or deserved. And the parable's own logic contradicts that reading anyway, for the reason we established at the start: the third servant wasn't poor and wasn't under-resourced. He was given a substantial sum, sized to his ability, and he did nothing with it.</p>
+
+  <p>Look at verse 28, immediately before: "Therefore take the talent from him, and give it to him who has ten talents." What gets redistributed is the unused talent, specifically. The one in the ground, producing nothing. Nothing is taken from the first two servants — they keep everything they earned.</p>
+
+  <p>So the warning is narrower and much more useful than the misreading. The teaching here is: unused capacity doesn't stay yours by default.</p>
+
+  <p>There's a saying you've probably heard: if you're not moving forward, you're going back. That's not just motivational framing, it's how this actually works. An opportunity, a gift, or a trust that sits idle doesn't hold its value. It atrophies, or it gets reassigned. A skill you don't practise degrades. A role you're given but never grow into eventually goes to someone who will use it. Trust extended and never acted on gets withdrawn. Usually not as a punishment — more the way an unused muscle wastes whether or not anybody intended it to.</p>
+
+  <p>And this is exactly the same picture John 15 opens with.</p>
+
+  <div class="scripture">
+    <div class="scripture-ref">John 15:2</div>
+    <p>"Every branch in Me that does not bear fruit He takes away; and every branch that bears fruit He prunes, that it may bear more fruit."</p>
+  </div>
+
+  <p>Two branches. One producing, one not. The barren one is removed; the fruitful one is pruned so it produces more. Same logic as verses 28 and 29, in horticultural language instead of financial language. Both texts say the same thing: standing still isn't an available option. You're either being grown or being cleared.</p>
+
+  <h3>Why he really buried it</h3>
+
+  <p>The third servant says he was afraid of the master. I don't think fear is the bottom of it.</p>
+
+  <p>Look at what burying the talent actually achieves. Trade it and he might lose it — and then he's exposed, visibly responsible for a bad outcome. Bury it and nothing can go wrong that he didn't choose. He removes the one variable that made him vulnerable, and the price of removing it is that no fruit is possible at all. He traded upside for control.</p>
+
+  <p>Pastor Justo Morales put it like this: when we're in charge of our lives, when we're the ones in control, our pride gets in the way.</p>
+
+  <blockquote>When we're in charge of our lives, when we're the ones in control, our pride gets in the way.</blockquote>
+
+  <p>That's the diagnosis. The third servant wasn't humble. He was proud in the particular way that looks like humility — the sort that would rather produce nothing than produce something imperfect and be answerable for it. Burying the talent felt like caution. What it actually said was: I'll decide the terms on which I'm willing to be trusted.</p>
+
+  <p>And notice how he justifies it: "I knew you to be a hard man." He'd already formed a view of the master's character, and that view licensed the inaction. It's worth asking whether we do the same — whether some of what we call caution is really a verdict we've passed on God. That He's unreasonable. That He'll hold a failed attempt against us. That the safest posture with Him is to keep our heads down and lose nothing.</p>
+
+  <p>The master's treatment of the first two suggests otherwise. They took risk and were commended, not audited. The one thing he would not accept was an empty hand.</p>
+
+  <hr class="divider">
+
+  <!-- Take out -->
+  <div class="section-label">What to take out</div>
+  <h2>Three things to carry out.</h2>
+
+  <p>The size of what you've been given isn't a verdict on your worth. It's a read on what you can currently carry, in this particular task or circumstance, and reads get updated. There's no comparison, nobody being measured against the person next to them. Two talents well traded gets the identical "well done" as five. Our job is to stay humble and do our best work.</p>
+
+  <p>Small scope handled well is how larger scope ever arrives. Not because God is running a promotion scheme, but because that's what trust is — it's extended on evidence, and the evidence is fruit. Which grows under load, on a branch that stays attached to the vine. So the small responsibility in front of you isn't a holding pattern before the real assignment. It is the mechanism.</p>
+
+  <p>And nothing you've been given stays yours by sitting still. That's the warning. Playing it safe with what God has given you is not neutral. In this parable it's the failure.</p>
+
+  <p>Ask yourself honestly: what's one talent — a skill, an opportunity, a responsibility, a relationship — sitting in front of you right now that you could be doing more with? Not once conditions improve. Now, at the size you've actually been trusted with.</p>
+
+  <p>Where does fear of getting it wrong stop you from even starting? The parable's answer to that fear isn't "don't be afraid." It's: bury nothing. Trade it.</p>
+
+  <p>We need to be aware of not crossing the line where "I'm being careful" becomes "I'm avoiding being accountable for the outcome." That's a pitfall that's easy to miss because it never announces itself. Nobody experiences it as rebellion. It feels like prudence, like not overstepping, like waiting for a clearer sign, like protecting what you were given rather than risking it.</p>
+
+  <p>The third servant had an assignment in the story — one talent, sized to him, a task — and he failed it. He failed it not through incompetence. Through fear that never got tested against reality.</p>
+
+  <div class="principle">
+    <div class="section-label">Faithful in small things</div>
+    <p>The size of what's in your hands is a read, not a verdict — and reads get updated by fruit, and fruit grows under load, on a branch that stays attached to the vine.</p>
+    <p>Small scope handled well is not a holding pattern. It is the mechanism by which anything larger is ever handed over.</p>
+    <p><strong>Let's think of a skill, a responsibility, anything else we may have been avoiding. You've got something in your hands right now. Trade it.</strong></p>
+  </div>
+
+  <div class="tags">
+    <span class="tag">Sermon</span>
+    <span class="tag">Parable of the Talents</span>
+    <span class="tag">Faithfulness</span>
+    <span class="tag">Matthew 25</span>
+    <span class="tag">Discipline</span>
+  </div>
+
+  <footer>
+    <span>© Jakub Szczybura</span>
+    <a href="/faith">← Faith &amp; Reflection</a>
+  </footer>
+
+</div>
+</body>
+</html>
