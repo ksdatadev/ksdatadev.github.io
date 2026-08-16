@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <style>
+    .bg { fill: #f5f0e8; }
+    .fg { fill: #1a1a1a; }
+    @media (prefers-color-scheme: dark) {
+      .bg { fill: #1e1a12; }
+      .fg { fill: #e8e8e4; }
+    }
+  </style>
+  <rect width="32" height="32" rx="6" class="bg" />
+  <text x="16" y="21.5" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="14" font-weight="bold" class="fg">TiC</text>
+</svg>
