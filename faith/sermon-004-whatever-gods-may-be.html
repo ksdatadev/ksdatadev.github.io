@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Whatever Gods May Be — Jakub Szczybura</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --color-bg: #fafaf8;
+      --color-text: #1a1a1a;
+      --color-muted: #6b6b6b;
+      --color-faint: #9a9a9a;
+      --color-border: rgba(0,0,0,0.1);
+      --color-tag-bg: #f0efe9;
+      --color-accent-bg: #f5f0e8;
+      --color-accent-border: #c8a96e;
+      --font-serif: 'Georgia', 'Times New Roman', serif;
+      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-mono: 'SF Mono', 'Fira Code', monospace;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --color-bg: #141412;
+        --color-text: #e8e8e4;
+        --color-muted: #9a9a94;
+        --color-faint: #5a5a56;
+        --color-border: rgba(255,255,255,0.1);
+        --color-tag-bg: #1e1e1a;
+        --color-accent-bg: #1e1a12;
+        --color-accent-border: #8a6a2e;
+      }
+    }
+
+    body {
+      font-family: var(--font-serif);
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.85;
+      font-size: 18px;
+      padding: 0 0 6rem;
+    }
+
+    .container { max-width: 660px; margin: 0 auto; padding: 0 1.5rem; }
+
+    .post-meta {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      color: var(--color-faint);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+    }
+
+    h1 {
+      font-family: var(--font-serif);
+      font-size: 38px;
+      font-weight: normal;
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.01em;
+    }
+
+    .lede {
+      font-size: 20px;
+      color: var(--color-muted);
+      line-height: 1.6;
+      margin-bottom: 3rem;
+      font-style: italic;
+      border-bottom: 0.5px solid var(--color-border);
+      padding-bottom: 2rem;
+    }
+
+    .section-label {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--color-faint);
+      margin-bottom: 0.75rem;
+      margin-top: 3.5rem;
+    }
+
+    h2 {
+      font-family: var(--font-serif);
+      font-size: 24px;
+      font-weight: normal;
+      margin-bottom: 1.25rem;
+      color: var(--color-text);
+      line-height: 1.3;
+    }
+
+    h3 {
+      font-family: var(--font-serif);
+      font-size: 19px;
+      font-weight: normal;
+      font-style: italic;
+      margin: 2rem 0 1.1rem;
+      color: var(--color-text);
+      line-height: 1.3;
+    }
+
+    p { margin-bottom: 1.4rem; }
+    p:last-child { margin-bottom: 0; }
+    em { font-style: italic; }
+
+    /* Scripture block */
+    .scripture {
+      background: var(--color-accent-bg);
+      border-left: 3px solid var(--color-accent-border);
+      border-radius: 0 6px 6px 0;
+      margin: 2rem 0;
+      padding: 1.25rem 1.5rem;
+    }
+
+    .scripture-ref {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-accent-border);
+      margin-bottom: 0.6rem;
+    }
+
+    .scripture p {
+      font-size: 17px;
+      font-style: italic;
+      color: var(--color-text);
+      line-height: 1.75;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Poem block — deliberately muted, not gold, to keep it visually distinct from Scripture */
+    .poem-block {
+      background: var(--color-tag-bg);
+      border-left: 3px solid var(--color-border);
+      border-radius: 0 6px 6px 0;
+      margin: 2rem 0;
+      padding: 1.25rem 1.5rem;
+    }
+
+    .poem-ref {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-faint);
+      margin-bottom: 0.6rem;
+    }
+
+    .poem-block p {
+      font-size: 17px;
+      font-style: italic;
+      color: var(--color-text);
+      line-height: 1.65;
+      margin-bottom: 1rem;
+    }
+    .poem-block p:last-child { margin-bottom: 0; }
+
+    /* Pull quote */
+    blockquote {
+      border-left: 2px solid var(--color-text);
+      margin: 2.5rem 0;
+      padding: 0.25rem 0 0.25rem 1.5rem;
+      font-size: 21px;
+      font-style: italic;
+      color: var(--color-text);
+      line-height: 1.45;
+    }
+
+    /* Principle / closing box */
+    .principle {
+      background: var(--color-tag-bg);
+      border-radius: 8px;
+      padding: 1.75rem 2rem;
+      margin-top: 3rem;
+    }
+    .principle .section-label { margin-top: 0; }
+    .principle p {
+      font-size: 17px;
+      line-height: 1.75;
+      margin-bottom: 1rem;
+      color: var(--color-text);
+    }
+    .principle p:last-child { margin-bottom: 0; }
+    .principle strong { font-style: italic; font-weight: normal; }
+
+    hr.divider {
+      border: none;
+      border-top: 0.5px solid var(--color-border);
+      margin: 3.5rem 0;
+    }
+
+    .tags {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 0.5px solid var(--color-border);
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-family: var(--font-sans);
+    }
+
+    .tag {
+      font-size: 12px;
+      color: var(--color-muted);
+      background: var(--color-tag-bg);
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+
+    .footnote {
+      font-family: var(--font-sans);
+      font-size: 13px;
+      color: var(--color-faint);
+      font-style: italic;
+      margin-bottom: 2.5rem;
+    }
+
+    footer {
+      margin-top: 5rem;
+      padding-top: 2rem;
+      border-top: 0.5px solid var(--color-border);
+      font-family: var(--font-sans);
+      font-size: 13px;
+      color: var(--color-faint);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    footer a { color: var(--color-muted); text-decoration: none; }
+    footer a:hover { color: var(--color-text); }
+  </style>
+</head>
+<body>
+<script src="/nav.js"></script>
+<div class="container">
+
+  <div class="post-meta">Faith &amp; Reflection &nbsp;·&nbsp; Sermon &nbsp;·&nbsp; July 2026</div>
+
+  <h1>Whatever Gods May Be</h1>
+
+  <p class="lede">An Englishman in a hospital bed, about to lose his second leg to tuberculosis, writes that he is the master of his fate. The line has carried real people through real darkness for a hundred and fifty years. This isn't about whether it works. It's about where the strength it offers actually comes from — and whether that's the same place ours comes from.</p>
+
+  <p class="footnote">Scripture quotations taken from the New King James Version&reg;. Copyright &copy; 1982 by Thomas Nelson. Used by permission. All rights reserved.</p>
+
+  <!-- I -->
+  <div class="section-label">I — The poem</div>
+  <h2>Out of the night that covers me — <em>Invictus</em>, by William Ernest Henley, 1875.</h2>
+
+  <div class="poem-block">
+    <div class="poem-ref">Invictus &middot; William Ernest Henley, 1875</div>
+    <p>Out of the night that covers me,<br>
+    Black as the pit from pole to pole,<br>
+    I thank whatever gods may be<br>
+    For my unconquerable soul.</p>
+
+    <p>In the fell clutch of circumstance<br>
+    I have not winced nor cried aloud.<br>
+    Under the bludgeonings of chance<br>
+    My head is bloody, but unbowed.</p>
+
+    <p>Beyond this place of wrath and tears<br>
+    Looms but the Horror of the shade,<br>
+    And yet the menace of the years<br>
+    Finds and shall find me unafraid.</p>
+
+    <p>It matters not how strait the gate,<br>
+    How charged with punishments the scroll,<br>
+    I am the master of my fate,<br>
+    I am the captain of my soul.</p>
+  </div>
+
+  <p>Henley was twenty-five when he wrote this. Tuberculosis of the bone had already taken one leg, and was threatening the other. He wrote it from a hospital bed, not knowing whether he would keep the leg he had left. That matters, because it means the poem is not cheap bravado — it came from a man with every reason for despair, who chose defiance instead. For a hundred and fifty years it has done for others exactly what it did for him: given people something to stand on when nothing else was standing.</p>
+
+  <p>We are not here to take that away from the poem. We are here to ask a harder question than whether it works. We are here to ask where the strength it offers actually comes from — and whether that is the same place our strength comes from.</p>
+
+  <p>It would not be the first time a sermon has reached outside Scripture to make a biblical point. Our own Sabbath School quarterly for the fourth quarter of 2022, "On Death, Dying, and the Future Hope," opens its first lesson with James Hilton's novel <em>Lost Horizon</em> — a story built almost entirely out of Buddhist ideas about escaping time and finding a hidden, perfect world. Alberto Timm, the theologian who wrote that lesson, is not confused about Buddhism. He sets Hilton's fictional paradise beside the real one, so the true hope of the resurrection stands out sharper for the contrast.</p>
+
+  <p>We will use Henley's poem in a similar way today — not to adopt what he believed, but to hold it up next to what we know is true, to highlight the difference, and to derive real hope out of it.</p>
+
+  <hr class="divider">
+
+  <!-- II -->
+  <div class="section-label">II — Where the poem places the weight</div>
+  <h2>Notice first what Henley's poem actually praises.</h2>
+
+  <p>It praises courage — the refusal to wince or cry aloud. It praises endurance — a head that stays unbowed under repeated blows. It praises composure — facing "the menace of the years" without flinching. And it praises a kind of unbroken integrity, a self that circumstance cannot reshape. These are not small virtues, and Scripture does not despise a single one of them. Rather, Scripture commands them. Paul tells us in Romans 5 that tribulation produces perseverance, and James tells us to count it all joy when we fall into various trials, because the testing of our faith produces patience also. So we are not dealing with a poem that celebrates something the Bible condemns. We are dealing with a poem that celebrates courage, endurance, composure, and integrity — virtues the Bible also loves — but insists that a man must find them alone, inside himself, with no one standing behind him.</p>
+
+  <p>Where does Henley put the source of his endurance? Look closely at "I thank whatever gods may be" — that "may be" is not incidental. It is the subjunctive of doubt. Henley is not thanking God, and he is not even quite thanking the gods; he is thanking whichever gods there may or may not turn out to be, a hedge that stops just short of denying them outright and comes no closer than that to affirming them. Compare the two halves of that couplet: on the question of whether there is anyone to thank, Henley will commit to nothing more than "may be." On the question of his own soul, he commits without qualification — "unconquerable," no hedge at all. The poem is confident about the self and agnostic about God, in the same breath. Everything after that line follows from the same certainty: my head, unbowed; I have not winced; I am the master; I am the captain. The poem has exactly one actor in it whose existence is not in doubt, and that actor is the man himself, standing where he stands entirely alone.</p>
+
+  <p>Now set that beside the Psalms. David also wrote out of darkness — more darkness, probably, than Henley ever knew, hunted for years by a king who wanted him dead. And when David describes what gets him through, he does not say, "I thank whatever gods may be, for my unconquerable soul." He says, in Psalm 18, "You will light my lamp; the LORD my God will enlighten my darkness." The darkness is the same. The source of light is not. David does not credit his own resolve. He credits the Lord who kindles it.</p>
+
+  <p>Or take Psalm 121, which begins with a question we might expect Henley to ask: "I will lift up my eyes to the hills — from whence comes my help?" And then the psalmist answers his own question — not with "from within me," but with "my help comes from the LORD, who made heaven and earth." The psalmist is looking for someone outside himself before he has even finished asking. Or Psalm 23, which faces down exactly the horror Henley faces down — "the valley of the shadow of death" — and finds its courage not in self-mastery but in company: "I will fear no evil; for You are with me." Not "I am unafraid," as Henley says of himself, but "You are with me" — the fear is answered by a presence; David is not alone.</p>
+
+  <p>Therefore we can say the contrast precisely. Henley's hero says, I face the darkness alone, and I am equal to it. Scripture says, we face the darkness too — and we are not alone in it, and that is why we need not fear it.</p>
+
+  <p>And this is where the poem's final lines become the whole argument in miniature:</p>
+
+  <blockquote>It matters not how strait the gate,<br>
+  How charged with punishments the scroll,<br>
+  I am the master of my fate,<br>
+  I am the captain of my soul.</blockquote>
+
+  <p>Against those four lines, James asks us to remember something we constantly forget: "You do not know what will happen tomorrow. For what is your life? It is even a vapor that appears for a little time and then vanishes away. Instead you ought to say, 'If the Lord wills, we shall live and do this or that.'" Scripture does not let us claim mastery over our own fate. Proverbs 16:9 puts it even more directly: "A man's heart plans his way, But the LORD directs his steps." And Jeremiah 10:23 tells us plainly, "It is not in man who walks to direct his own steps." Henley's final claim — I am the master of my fate — is precisely the claim the Bible tells us not to make. Not because humility forbids boasting, though it does, but because the claim is not true. We are not, in the end, the captains of our own souls. "The LORD directs his steps" — whether we notice it, thank Him for it, or not.</p>
+
+  <hr class="divider">
+
+  <!-- III -->
+  <div class="section-label">III — A man who lived the poem</div>
+  <h2>Nelson Mandela said <em>Invictus</em> helped him survive eighteen years on Robben Island.</h2>
+
+  <p>We should be honest about something before we go further: this poem has done real good in the world, in the hands of at least one man we all recognize.</p>
+
+  <p>Nelson Mandela spent eighteen years on Robben Island, much of it doing forced labor in a limestone quarry, with only limited contact with his family, under a regime that wanted his spirit broken as much as his body confined. He later said that <em>Invictus</em> helped him survive that. The line that stayed with him most was "my head is bloody, but unbowed" — the refusal to let his captors determine who he was.</p>
+
+  <p>What did he actually do with that resolve? Not what the poem, read on its own, might suggest. He did not use it to justify pride or vengeance. He used it to build a rigid personal discipline in prison — exercise, study, even learning Afrikaans so he could understand the men who guarded him. And after his release in 1990, rather than pursuing the revenge that eighteen years in a quarry might have earned him a right to, he pursued reconciliation: the Truth and Reconciliation Commission, working alongside former enemies, publicly backing the same national rugby team that had symbolized apartheid to so many black South Africans. The same resilience that got him through the quarry became, in his hands, a tool for forgiveness rather than triumph.</p>
+
+  <p>We might reasonably ask how much of that turn — from survival to reconciliation — was the poem, and how much of it was the Christian formation of his childhood, or simply the grace of God working in a man who never stopped describing himself, in his own speeches, in the language of forgiveness and justice that Scripture gave him. We cannot answer that with certainty, and we should not pretend to. What we can say is that the poem gave Mandela psychological armor; it did not give him a moral compass. Something else supplied that.</p>
+
+  <p>And there is a final irony here. The poem's most famous line is "I am the master of my fate." But Mandela's most remarkable act was voluntarily surrendering power — stepping down after a single term as president, when nothing but his own conviction required him to. A man who truly believed he alone commanded his fate had far less reason to hand power back. The poem gave him the strength to endure the quarry. It was something outside the poem that taught him to let go of the presidency.</p>
+
+  <hr class="divider">
+
+  <!-- IV -->
+  <div class="section-label">IV — The same question, asked more gently</div>
+  <h2>Rudyard Kipling's "If—," published in 1910.</h2>
+
+  <p>We turn now to a different poem on the same theme, one that agrees with Scripture far more often than Henley does before it finally parts ways with it. Kipling's poem was addressed as advice from a father to his son.</p>
+
+  <div class="poem-block">
+    <div class="poem-ref">If&mdash; &middot; Rudyard Kipling, 1910</div>
+    <p>If you can keep your head when all about you<br>
+    Are losing theirs and blaming it on you,<br>
+    If you can trust yourself when all men doubt you,<br>
+    But make allowance for their doubting too&hellip;</p>
+
+    <p>If you can talk with crowds and keep your virtue,<br>
+    Or walk with Kings &mdash; nor lose the common touch,<br>
+    If neither foes nor loving friends can hurt you,<br>
+    If all men count with you, but none too much;<br>
+    If you can fill the unforgiving minute<br>
+    With sixty seconds' worth of distance run,<br>
+    Yours is the Earth and everything that's in it,<br>
+    And &mdash; which is more &mdash; you'll be a Man, my son!</p>
+  </div>
+
+  <p>This poem deserves more credit than Henley's, because it names its virtues plainly. Read it in full — not only the two stanzas above, but the poem as Kipling wrote it — and it calls for real ones: self-control under provocation, patience that does not tire of waiting, honesty even when lied about, humility that does not gloat in triumph or collapse in disaster, the discipline to start over after real loss without complaint, and the ability to stay ordinary — to keep the common touch — even after success. Kipling is not vague about what he wants from a man. And in several places, what he wants lines up with Scripture almost exactly. "Keep your head when all about you are losing theirs" is close cousin to Proverbs 16:32 — "he who is slow to anger is better than the mighty." And Kipling's picture of the man who can "talk with crowds and keep your virtue, or walk with kings — nor lose the common touch" is very close to what Micah 6:8 asks of us: to do justly, to love mercy, and to walk humbly with our God. That is a real point of agreement, and we ought not manufacture a conflict where the poem has, in fact, found something true.</p>
+
+  <p>But look again at the line that gives the whole poem its hinge: "If you can trust yourself when all men doubt you." That is precisely where Kipling and Scripture part ways, because Proverbs 3:5 gives us the opposite instruction: "Trust in the LORD with all your heart, and lean not on your own understanding." Kipling tells the son, when everyone doubts you, trust yourself — face the doubt alone, and hold your ground alone. Scripture tells us, in that same moment, do not lean on your own understanding at all — lean on the Lord's, because we were never meant to hold that ground by ourselves.</p>
+
+  <p>The poem's closing promise is the largest claim in either poem: "Yours is the Earth and everything that's in it&hellip; and you'll be a Man, my son." Self-mastery, Kipling promises, wins you the whole world. Christ asks a very different question in Matthew 16:26: "For what profit is it to a man if he gains the whole world, and loses his own soul?" Notice, too, that the poem is called "If—," not "When—." Every virtue in it is offered as a condition, not a certainty — and Kipling never claims the condition has actually been met. The promise stands on an "if" that may never resolve, and even where it does, it cannot make good on what it offers, because the world it promises is not the world's to give, and the soul it assumes is safe is exactly what is at risk.</p>
+
+  <hr class="divider">
+
+  <!-- V -->
+  <div class="section-label">V — One more voice, saying the same thing in prose</div>
+  <h2>Ralph Waldo Emerson: "Trust thyself: every heart vibrates to that iron string."</h2>
+
+  <p>We could go on to a third writer from roughly the same era, the American essayist Ralph Waldo Emerson, whose essay "Self-Reliance" gave nineteenth-century America perhaps its most quoted line on this subject. The virtue Emerson calls for is a real one too — the courage to be authentic, to refuse conformity for its own sake, to act from conviction rather than from the pressure of a watching crowd. Emerson believed each person carries something like an inner divine spark, and that the highest moral act is to follow it rather than to conform to the expectations of others.</p>
+
+  <p>We do not need to walk through Emerson point by point, because by now the pattern should already be obvious to us. Henley, Kipling, and Emerson are three different writers, two poets and an essayist, writing decades apart — arriving at the same root conviction: that the source of strength, of virtue, of a well-lived life, is inside the man himself. Trust yourself. Master your fate. Vibrate to your own iron string. Different words, one assumption — and the same hidden cost inside all three: a man who trusts only himself has, by definition, no one else to trust.</p>
+
+  <hr class="divider">
+
+  <!-- VI -->
+  <div class="section-label">VI — What the text actually says</div>
+  <h2>Jeremiah 17:5-8 — the shrub and the tree.</h2>
+
+  <p>We have heard what three writers believe. Scripture does not need to answer them as an equal; it simply says what is true, and names, more precisely than we could, exactly what is at stake in all three.</p>
+
+  <div class="scripture">
+    <div class="scripture-ref">Jeremiah 17:5-8</div>
+    <p>"Thus says the LORD: 'Cursed is the man who trusts in man and makes flesh his strength, whose heart departs from the LORD. For he shall be like a shrub in the desert, and shall not see when good comes, but shall inhabit the parched places in the wilderness, in a salt land which is not inhabited.</p>
+    <p>Blessed is the man who trusts in the LORD, and whose hope is the LORD. For he shall be like a tree planted by the waters, which spreads out its roots by the river, and will not fear when heat comes; but its leaf will be green, and will not be anxious in the year of drought, nor will cease from yielding fruit.'"</p>
+  </div>
+
+  <p>Read that again next to Henley's final stanza. Jeremiah does not say the self-reliant man is wicked in some dramatic, obvious way. He says something more unsettling: that man is like a shrub in the desert — not destroyed, just parched, planted alone in soil that cannot sustain him, unable even to notice when relief finally comes, because he has no roots reaching for it and no one beside him to point it out. That is what "I am the captain of my soul" produces over time, no matter how bravely it is said. Not collapse. Just drought, and a man alone in it.</p>
+
+  <p>And the alternative Jeremiah offers is not the absence of strength. It is a tree — rooted, green, still bearing fruit in a year of drought, because its roots reach past the surface, down to a river the drought cannot touch. That is what "the LORD is my shepherd" produces. Not a weaker version of Henley's resolve. A resolve with an actual water source underneath it.</p>
+
+  <p>This is the whole argument, in one passage: the poets and Scripture praise nearly the same virtues — endurance, composure, integrity, the refusal to be broken by circumstance. But the poets root those virtues in the self, which is a shrub in the desert no matter how determined it is. God's word roots them in the Lord, which is a tree by the river no matter how dry the year gets. Same fruit, asked for in the same breath, from two entirely different soils.</p>
+
+  <hr class="divider">
+
+  <!-- VII -->
+  <div class="section-label">VII — Reading rightly</div>
+  <h2>So we return to the question we opened with.</h2>
+
+  <p>If a sermon can quote a poem, and our own quarterly can open a lesson with a novel about Shangri-La, and we can spend a Sabbath evening on Henley and Kipling and Emerson — are we in danger of being led by voices that do not know the Lord?</p>
+
+  <p>Timm's introduction to that quarterly already answers our opening question, and the answer applies just as well today. He did not quote Hilton's Shangri-La because he believed in it. He quoted it because setting a false paradise next to the true one makes the true one clearer, not dimmer. That only works, however, if the reader already knows which one is true before the comparison starts. A false paradise read by someone who does not know Scripture is just a false paradise. The same false paradise read by someone rooted daily in the word becomes an argument for the true one.</p>
+
+  <p>The same is true of these poems. Read them without daily grounding in Scripture, and they may end up teaching that strength comes from within, and we will not notice it happening — because that is a beautiful and half-true thing to believe, and it costs nothing to believe it until the drought comes. Read them with Jeremiah 17 already planted in us, and they become something else: a mirror that shows us, more clearly than a straightforward warning ever could, exactly what it looks like to be a shrub in the desert, bravely, eloquently, and alone.</p>
+
+  <p>That is why we can use Henley's stanzas today without becoming Henley's disciples. We are not borrowing his theology. We are borrowing his honesty about what self-reliance actually promises, so that we can set it, plainly, against what the Lord actually delivers.</p>
+
+  <hr class="divider">
+
+  <!-- VIII -->
+  <div class="section-label">VIII — The closing word</div>
+  <h2>The LORD is my shepherd; I shall not want.</h2>
+
+  <p>Henley's poem ends with the loneliest sentence either poet wrote: "I am the captain of my soul." It is a brave sentence. It has carried real people through real darkness, Mandela among them. But it is not, in the end, a true sentence, and Scripture will not let us rest in it.</p>
+
+  <p>We have a better sentence, and it comes from a shepherd-king who also knew the valley of the shadow of death, and who did not need to master his fate, because he had already given it to someone stronger than himself.</p>
+
+  <div class="scripture">
+    <div class="scripture-ref">Psalm 23:1</div>
+    <p>"The LORD is my shepherd; I shall not want."</p>
+  </div>
+
+  <p>Let that be the last word we carry out of this room today — not because it is more comforting than Henley's line, though it is, but because, unlike his, it is planted by the water.</p>
+
+  <div class="principle">
+    <div class="section-label">Planted by the water</div>
+    <p>Henley, Kipling, and Emerson praise almost the same virtues Scripture does — courage, endurance, integrity, self-control. The difference is not the fruit. It is the root.</p>
+    <p>Trust in man, and you are a shrub in the desert — parched, alone, unable even to see relief when it comes. Trust in the LORD, and you are a tree by the river, still green in the year of drought.</p>
+    <p><strong>You do not have to master your own fate to be unbowed. You only have to be planted by the water.</strong></p>
+  </div>
+
+  <div class="tags">
+    <span class="tag">Sermon</span>
+    <span class="tag">Jeremiah 17</span>
+    <span class="tag">Self-Reliance</span>
+    <span class="tag">Invictus</span>
+    <span class="tag">Psalm 23</span>
+  </div>
+
+  <footer>
+    <span>© Jakub Szczybura</span>
+    <a href="/faith">← Faith &amp; Reflection</a>
+  </footer>
+
+</div>
+</body>
+</html>
