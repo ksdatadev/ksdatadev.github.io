@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trusting Outcomes, Not Code — Jakub Szczybura</title>
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --color-bg: #fafaf8;
+      --color-text: #1a1a1a;
+      --color-muted: #6b6b6b;
+      --color-faint: #9a9a9a;
+      --color-border: rgba(0,0,0,0.1);
+      --color-tag-bg: #f0efe9;
+      --color-accent-bg: #f5f0e8;
+      --color-accent-border: #c8a96e;
+      --font-serif: 'Georgia', 'Times New Roman', serif;
+      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-mono: 'SF Mono', 'Fira Code', monospace;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --color-bg: #141412;
+        --color-text: #e8e8e4;
+        --color-muted: #9a9a94;
+        --color-faint: #5a5a56;
+        --color-border: rgba(255,255,255,0.1);
+        --color-tag-bg: #1e1e1a;
+        --color-accent-bg: #1e1a12;
+        --color-accent-border: #8a6a2e;
+      }
+    }
+
+    body {
+      font-family: var(--font-serif);
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.8;
+      font-size: 18px;
+      padding: 0 0 6rem;
+    }
+
+    .container { max-width: 660px; margin: 0 auto; padding: 0 1.5rem; }
+
+    .post-meta {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      color: var(--color-faint);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+    }
+
+    h1 {
+      font-family: var(--font-serif);
+      font-size: 36px;
+      font-weight: normal;
+      line-height: 1.25;
+      margin-bottom: 1rem;
+      letter-spacing: -0.01em;
+    }
+
+    .lede {
+      font-size: 20px;
+      color: var(--color-muted);
+      line-height: 1.6;
+      margin-bottom: 3rem;
+      font-style: italic;
+      border-bottom: 0.5px solid var(--color-border);
+      padding-bottom: 2rem;
+    }
+
+    .section-label {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-faint);
+      margin-bottom: 0.75rem;
+      margin-top: 3rem;
+    }
+
+    h2 {
+      font-family: var(--font-serif);
+      font-size: 22px;
+      font-weight: normal;
+      margin-bottom: 1.25rem;
+      color: var(--color-text);
+    }
+
+    p { margin-bottom: 1.4rem; }
+    p:last-child { margin-bottom: 0; }
+    em { font-style: italic; }
+    strong { font-weight: 600; }
+
+    blockquote {
+      border-left: 2px solid var(--color-text);
+      margin: 2.5rem 0;
+      padding: 0.25rem 0 0.25rem 1.5rem;
+      font-size: 20px;
+      font-style: italic;
+      color: var(--color-text);
+      line-height: 1.5;
+    }
+
+    .insight {
+      background: var(--color-tag-bg);
+      border-radius: 8px;
+      padding: 1.5rem 1.75rem;
+      margin: 2.5rem 0;
+      font-size: 17px;
+      line-height: 1.75;
+      color: var(--color-text);
+    }
+
+    hr.divider {
+      border: none;
+      border-top: 0.5px solid var(--color-border);
+      margin: 3rem 0;
+    }
+
+    .principle {
+      background: var(--color-tag-bg);
+      border-radius: 8px;
+      padding: 1.75rem 2rem;
+      margin-top: 3rem;
+    }
+    .principle .section-label { margin-top: 0; }
+    .principle p {
+      font-size: 17px;
+      line-height: 1.7;
+      margin-bottom: 1rem;
+      color: var(--color-text);
+    }
+    .principle p:last-child { margin-bottom: 0; }
+    .principle strong { font-style: italic; font-weight: normal; }
+
+    .tags {
+      margin-top: 2rem;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-family: var(--font-sans);
+    }
+
+    .tag {
+      font-size: 12px;
+      color: var(--color-muted);
+      background: var(--color-tag-bg);
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+
+    footer {
+      margin-top: 5rem;
+      padding-top: 2rem;
+      border-top: 0.5px solid var(--color-border);
+      font-family: var(--font-sans);
+      font-size: 13px;
+      color: var(--color-faint);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    footer a { color: var(--color-muted); text-decoration: none; }
+    footer a:hover { color: var(--color-text); }
+  </style>
+</head>
+<body>
+<script src="/nav.js"></script>
+<div class="container">
+
+  <div class="post-meta">September 2026 &nbsp;·&nbsp; 8 min read</div>
+
+  <h1>Trusting Outcomes, Not Code</h1>
+
+  <p class="lede">Are "trusting engineers on outcomes" and "trusting a model on outcomes" comparable things?</p>
+
+  <p>In <em>Demon in White</em>, Hadrian Marlowe can see countless parallel outcomes at once and choose the one where he doesn't get burned. He doesn't fully understand how he does it. Ask him to explain it and the honest answer is <em>I just knew.</em></p>
+
+  <p>Experienced engineers have a version of that ability. Not science-fiction mysticism — compression. Pattern-matching built from hundreds of prior cycles, fast enough to feel like instinct. It only works in domains they've actually cycled through: a senior engineer's gut is reliable on a well-trodden architecture decision because they've watched that specific failure mode play out before. The same gut is far less reliable on something genuinely novel, because there's nothing underneath the confidence except the confidence.</p>
+
+  <p>As a CTO or VP of Engineering, you already run on a version of this trust, and it's more radical than it sounds when you say it plainly: you sign off on outcomes for code you have not personally read a line of. You didn't write it, you didn't review every diff, and you still put your name behind it. That's not negligence. It's a functioning trust structure — built on the engineer's track record, the review process around them, and the fact that being wrong has consequences for the person who was wrong.</p>
+
+  <p>That trust was never free. It was built the slow way, over years, by engineers who first wrote bad code, watched it fail, and developed the pattern-matching to catch failure before it shipped. It's far more difficult to go the slow way in the current development routine, so naturally, we're bound to run out of engineers with that gut instinct defined as above — and with them, the supply of people whose track record is what the trust was actually built on.</p>
+
+  <p>Now, what about a model. Isn't it extremely good at pattern recognition? Yes — it has the well-trodden paths very well covered, which is exactly where trust is easiest to extend, because there's a track record to check it against. The more difficult question is trust on the paths that aren't well-trodden: how does a model earn the same confidence a senior engineer earns on unfamiliar ground, when it has no track record there to point to and no consequence if it gets it wrong?</p>
+
+  <hr class="divider">
+
+  <div class="section-label">What changes when the builder isn't a person</div>
+  <h2>Accountability has to move somewhere else, deliberately.</h2>
+
+  <p>Trusting an engineer on outcomes works because of three things that aren't really about the code: accountability, a checkable history, and the ability to ask "why did you do it this way" and get an answer that holds up under pressure. A model, today, has none of those by default. It has no stake in being wrong, no track record you can look up, and its explanation for its own output is generated after the fact — often a plausible story rather than a real account of what happened, which is a different failure mode than an engineer being mistaken.</p>
+
+  <p>That doesn't mean the trust model collapses. It means the accountability has to move somewhere else, deliberately, rather than being assumed.</p>
+
+  <p>The operational shape this is taking is the development of better harnesses. A harness is the scaffolding around the model: what tools it can call, what procedures it follows, what it can execute and check, how its output gets verified before anyone relies on it, and who — or what — reviews it before it ships.</p>
+
+  <p>Add a harsh automated review layer on top — tests that fail loudly, checks that flag simplification and hardcoding, not just syntax errors — and you get something closer to a small team than a single author: a builder, an independent reviewer running in its own session with none of the builder's context, and a set of standing checks that don't care who wrote the code. The independence is worth the cost. A reviewer sharing the builder's session inherits the builder's blind spots; a genuinely separate session, given only the artifact and the stated requirement, has to reconstruct intent from evidence rather than from memory of its own reasoning. Whether that's equivalent to an engineering team with real judgment and real accountability is the open question, and "no worse than a human team" needs a specific domain and a specific failure rate attached to it before it's worth believing, not a general statement of confidence.</p>
+
+  <p>This won't move at one speed. Most organisations will keep a human in the review seat for a long time, not out of caution alone but because building a harness rigorous enough to replace that seat is a process change, not a technology change. The model access is already commoditized. The harness is an operating discipline: who reviews what, on what cadence, with what authority to block a release. Process change is slower than technology change almost everywhere, and this won't be the exception. The organisations that get to fully autonomous, end-to-end development first will be technology-first, engineering-led organisations that treat the harness itself as the product of an engineering effort, not a policy memo. Everywhere else, a person stays in the loop, correctly, because the process work hasn't been done yet.</p>
+
+  <p>What's changed in the last twelve months is how far that harness now reaches. Fully autonomous, end-to-end development — spec in, working system out, with no engineer touching the intermediate steps — is already happening in production for specific, bounded categories of application. My own position is that the harness-building itself becomes standard practice at the engineering frontier within another year, even though a proportion of organisations will trail past that timeline for the process reasons above.</p>
+
+  <hr class="divider">
+
+  <div class="section-label">2016, 2025, 2027</div>
+  <h2>The bottleneck has moved from typing to verifying.</h2>
+
+  <p>In 2016, a development team was a fixed unit: a small number of engineers, a backlog, a release cadence measured in weeks. Expertise was concentrated in people, and the main lever you had as a leader was who you hired.</p>
+
+  <p>In 2025, the team is a hybrid: engineers directing models, reviewing output, still doing the parts that require judgment about what shouldn't be built, not just what can be. The bottleneck has partly shifted from typing code to verifying it — which is a different skill than the one most engineering hiring still selects for.</p>
+
+  <p>By 2027, the transitional shape is a small number of people functioning less like builders and more like the second, independent review session in the harness described above — holding a fast, cheap, occasionally-confident system accountable to outcomes it has no stake in getting right. That role exists mainly because most organisations haven't yet done the process work to trust removing it. By 2027, the models and the harness around them are likely already good enough for a lot of that trust to transfer.</p>
+
+  <p>Past 2027, both sides of the lag close. The technology keeps improving — better separation between building and checking, sharper automated adversarial review, tighter feedback loops on the checks themselves. Adoption starts catching up too: the process work — who reviews what, on what cadence, with what authority to block a release — stops being novel and starts being a known playbook other companies can copy rather than invent. The technology lead compounds early. The process lag closes later, once the harness stops being something you have to design from scratch and becomes something you adopt.</p>
+
+  <div class="insight">
+    Most human review gets squeezed out of the software development loop eventually. It means the trust question this piece opened with resolves in the model's favour: the harness around it becomes good enough that the difference between a model and an engineer stops mattering for the outcome.
+  </div>
+
+  <div class="principle">
+    <div class="section-label">The principle</div>
+    <p>Trust in an engineer was never trust in their code. It was trust in the structure around them — accountability, a checkable history, and consequences for being wrong.</p>
+    <p>A model has none of that by default. <strong>Build the harness that supplies it, or you're not extending trust — you're just skipping the check.</strong></p>
+  </div>
+
+  <div class="tags">
+    <span class="tag">AI strategy</span>
+    <span class="tag">Engineering leadership</span>
+    <span class="tag">CTO thinking</span>
+    <span class="tag">Trust &amp; verification</span>
+  </div>
+
+  <footer>
+    <span>© Jakub Szczybura</span>
+    <a href="/blog">All posts →</a>
+  </footer>
+
+</div>
+</body>
+</html>
