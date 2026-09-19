@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How Do I Know the Rice Is Done — Jakub Szczybura</title>
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --color-bg: #fafaf8;
+      --color-text: #1a1a1a;
+      --color-muted: #6b6b6b;
+      --color-faint: #9a9a9a;
+      --color-border: rgba(0,0,0,0.1);
+      --color-tag-bg: #f0efe9;
+      --color-accent-bg: #f5f0e8;
+      --color-accent-border: #c8a96e;
+      --font-serif: 'Georgia', 'Times New Roman', serif;
+      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-mono: 'SF Mono', 'Fira Code', monospace;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --color-bg: #141412;
+        --color-text: #e8e8e4;
+        --color-muted: #9a9a94;
+        --color-faint: #5a5a56;
+        --color-border: rgba(255,255,255,0.1);
+        --color-tag-bg: #1e1e1a;
+        --color-accent-bg: #1e1a12;
+        --color-accent-border: #8a6a2e;
+      }
+    }
+
+    body {
+      font-family: var(--font-serif);
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.85;
+      font-size: 18px;
+      padding: 0 0 6rem;
+    }
+
+    .container { max-width: 660px; margin: 0 auto; padding: 0 1.5rem; }
+
+    .post-meta {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      color: var(--color-faint);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+    }
+
+    h1 {
+      font-family: var(--font-serif);
+      font-size: 38px;
+      font-weight: normal;
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.01em;
+    }
+
+    .lede {
+      font-size: 20px;
+      color: var(--color-muted);
+      line-height: 1.6;
+      margin-bottom: 3rem;
+      font-style: italic;
+      border-bottom: 0.5px solid var(--color-border);
+      padding-bottom: 2rem;
+    }
+
+    .section-label {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--color-faint);
+      margin-bottom: 0.75rem;
+      margin-top: 3.5rem;
+    }
+
+    h2 {
+      font-family: var(--font-serif);
+      font-size: 24px;
+      font-weight: normal;
+      margin-bottom: 1.25rem;
+      color: var(--color-text);
+      line-height: 1.3;
+    }
+
+    h3 {
+      font-family: var(--font-serif);
+      font-size: 19px;
+      font-weight: normal;
+      font-style: italic;
+      margin: 2rem 0 1.1rem;
+      color: var(--color-text);
+      line-height: 1.3;
+    }
+
+    p { margin-bottom: 1.4rem; }
+    p:last-child { margin-bottom: 0; }
+    em { font-style: italic; }
+
+    /* Scripture block */
+    .scripture {
+      background: var(--color-accent-bg);
+      border-left: 3px solid var(--color-accent-border);
+      border-radius: 0 6px 6px 0;
+      margin: 2rem 0;
+      padding: 1.25rem 1.5rem;
+    }
+
+    .scripture-ref {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-accent-border);
+      margin-bottom: 0.6rem;
+    }
+
+    .scripture p {
+      font-size: 17px;
+      font-style: italic;
+      color: var(--color-text);
+      line-height: 1.75;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Pull quote */
+    blockquote {
+      border-left: 2px solid var(--color-text);
+      margin: 2.5rem 0;
+      padding: 0.25rem 0 0.25rem 1.5rem;
+      font-size: 21px;
+      font-style: italic;
+      color: var(--color-text);
+      line-height: 1.45;
+    }
+
+    /* Principle / closing box */
+    .principle {
+      background: var(--color-tag-bg);
+      border-radius: 8px;
+      padding: 1.75rem 2rem;
+      margin-top: 3rem;
+    }
+    .principle .section-label { margin-top: 0; }
+    .principle p {
+      font-size: 17px;
+      line-height: 1.75;
+      margin-bottom: 1rem;
+      color: var(--color-text);
+    }
+    .principle p:last-child { margin-bottom: 0; }
+    .principle strong { font-style: italic; font-weight: normal; }
+
+    hr.divider {
+      border: none;
+      border-top: 0.5px solid var(--color-border);
+      margin: 3.5rem 0;
+    }
+
+    .tags {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 0.5px solid var(--color-border);
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-family: var(--font-sans);
+    }
+
+    .tag {
+      font-size: 12px;
+      color: var(--color-muted);
+      background: var(--color-tag-bg);
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+
+    .footnote {
+      font-family: var(--font-sans);
+      font-size: 13px;
+      color: var(--color-faint);
+      font-style: italic;
+      margin-bottom: 2.5rem;
+    }
+
+    footer {
+      margin-top: 5rem;
+      padding-top: 2rem;
+      border-top: 0.5px solid var(--color-border);
+      font-family: var(--font-sans);
+      font-size: 13px;
+      color: var(--color-faint);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    footer a { color: var(--color-muted); text-decoration: none; }
+    footer a:hover { color: var(--color-text); }
+  </style>
+</head>
+<body>
+<script src="/nav.js"></script>
+<div class="container">
+
+  <div class="post-meta">Faith &amp; Reflection &nbsp;·&nbsp; Sermon &nbsp;·&nbsp; September 2026</div>
+
+  <h1>How Do I Know the Rice Is Done</h1>
+
+  <p class="lede">Three of Japan's biggest electronics companies spent thirty years trying to engineer the perfect rice cooker, and kept failing. The breakthrough came from a woman who had never set foot in a lab, but had cooked rice a thousand times a year. It's a story about where real answers actually come from — and it usually isn't where we'd look first.</p>
+
+  <p class="footnote">Scripture quotations taken from the Holy Bible, New International Version&reg; (NIV&reg;). Copyright &copy; 1973, 1978, 1984, 2011 by Biblica, Inc.&trade; Used by permission. All rights reserved worldwide.</p>
+
+  <!-- The story -->
+  <div class="section-label">The story</div>
+  <h2>Rice cooker.</h2>
+
+  <p>Rice in Japan isn't just food — it's rhythm, routine, and expectation. For most of the twentieth century, a typical household built every meal around it. Breakfast: rice. Lunch: rice. Dinner — want to guess? Rice. Getting it right wasn't optional, and it wasn't occasional. It was daily, repetitive pressure. Undercook it and it's hard. Overcook it and it's mush. Burn it and the whole meal is compromised.</p>
+
+  <p>That burden fell almost entirely on the person cooking — usually the housewife — who had to master heat, timing, and instinct. Cooking rice wasn't "set and forget," as it is now. It was watch, listen, adjust, every single time.</p>
+
+  <p>So it's no surprise that engineers thought: surely this can be automated.</p>
+
+  <p>In the 1920s, Mitsubishi Electric made one of the first attempts. They built a rudimentary electric rice cooker — more a heated pot than a smart device. It could heat rice, yes, but it couldn't judge it. There was no feedback loop. Users still had to decide when to stop. It didn't remove the skill; it just changed the heat source. It was never widely adopted, because it never solved the real problem: consistency.</p>
+
+  <p>After the war, the problem became more urgent. Japan was rebuilding, and efficiency at home mattered. Companies tried again. In the 1940s, Sony experimented with a more technical solution — electrodes that measured changes in the rice-and-water mixture. On paper it sounded clever. In practice it was chaotic. Rice came out inconsistently, sometimes raw, sometimes burnt. The system tried to measure the process without understanding it. Sony abandoned the effort.</p>
+
+  <p>Engineering-first thinking kept missing the point. But they kept trying.</p>
+
+  <p>In the 1950s, Toshiba assigned an engineer, Yoshitada Minami, to solve it. He built prototypes. They failed. Rice was still inconsistent. The models didn't translate into real kitchens. The gap between theory and daily use was still there.</p>
+
+  <p>So he did something different. He brought the problem home.</p>
+
+  <p>His wife cooked rice every day — three times a day, roughly a thousand times a year — and she lived with the consequences of getting it wrong. She took over the experimentation, not in a lab, but in her own kitchen. She didn't run equations. She ran repetition. And she didn't ask "how do we engineer a cooker?" She asked a smaller, more useful question: <em>how do I know the rice is done?</em></p>
+
+  <p>Through trial after trial, she focused on one simple observation. As long as water was present, the pot stayed at a steady boiling temperature. When the water was gone, the temperature rose — and burnt the rice. That shift, from stable boiling to rising heat, was the signal she had always used, almost instinctively, to know the rice was ready.</p>
+
+  <p>That insight became the breakthrough. Minami translated it into a mechanism: a thermostat that would detect the temperature rise and automatically switch off the heat. Not electrodes. Not complex sensors. Just a thermometer — a system that mirrored how an experienced cook already did it.</p>
+
+  <p>In 1955, Toshiba released the first automatic rice cooker as we know it. It worked consistently, reliably, at scale. And it changed daily life. For generations, cooking rice had meant waking early, tending a fire, watching, adjusting, never leaving the kitchen. Now millions of women could set the rice cooking and go do something else in the meantime. Time, quite literally, was returned to them.</p>
+
+  <p>It was expensive at first — roughly a third of an average monthly salary. Even so, by the end of the decade over half of Japanese households owned one. A decade later, over ninety percent did. It had become universal.</p>
+
+  <p>The real breakthrough didn't come from better technology. It came from listening to the person who already knew the answer. An engineer couldn't solve it in isolation. Two major companies couldn't brute-force it with experimentation. But a housewife, cooking rice a thousand times a year, understood the process well enough to hand her judgment to a machine. Next time you use one, think of the inventor: Fumiko Minami.</p>
+
+  <hr class="divider">
+
+  <!-- Transition -->
+  <div class="section-label">What this is actually about</div>
+  <h2>Underneath the appliance is a question about where truth comes from.</h2>
+
+  <p>On the surface this is a story about companies failing until they finally get it right. But underneath, it reveals something about how insight actually emerges — because the turning point didn't come from more intelligence, more effort, or more resources. It came from a shift in where they looked, how they understood, and whom they involved.</p>
+
+  <p>That pattern doesn't stay in engineering. It shows up in life. It shows up in faith. And it challenges three assumptions we tend to hold without examining them: that wisdom comes from status rather than humility; that understanding comes from thinking rather than doing; and that we're meant to solve life's problems on our own, without inviting help in.</p>
+
+  <hr class="divider">
+
+  <!-- 1 -->
+  <div class="section-label">I — Wisdom through the least expected</div>
+  <h2>God's wisdom often comes through the "least expected" people.</h2>
+
+  <p>The breakthrough didn't come from the corporate labs at Mitsubishi Electric or Sony, or even from the engineering team at Toshiba. It came from a housewife — someone with no formal authority, but deep daily-life understanding.</p>
+
+  <p>We find the same pattern in Scripture.</p>
+
+  <div class="scripture">
+    <div class="scripture-ref">1 Corinthians 1:26-27</div>
+    <p>"Brothers and sisters, think of what you were when you were called. Not many of you were wise by human standards; not many were influential; not many were of noble birth. But God chose the foolish things of the world to shame the wise; God chose the weak things of the world to shame the strong."</p>
+  </div>
+
+  <div class="scripture">
+    <div class="scripture-ref">James 2:5</div>
+    <p>"Listen, my dear brothers and sisters: has not God chosen those who are poor in the eyes of the world to be rich in faith and to inherit the kingdom he promised those who love him?"</p>
+  </div>
+
+  <p>God often chooses those the world overlooks. In John 4, Jesus reveals himself to a Samaritan woman — not to the religious elite of the day — and within days the entire village follows him. Not exactly the profile you'd design an evangelism strategy around, and yet it was the most effective one in the chapter.</p>
+
+  <p>The people closest to the problem often understand it best. Spiritually, the same is true — humility and lived faith carry more weight than status or intellect. Consider the parable in Luke 18.</p>
+
+  <div class="scripture">
+    <div class="scripture-ref">Luke 18:10-14</div>
+    <p>"Two men went up to the temple to pray, one a Pharisee and the other a tax collector. The Pharisee stood by himself and prayed: 'God, I thank you that I am not like other people — robbers, evildoers, adulterers — or even like this tax collector. I fast twice a week and give a tenth of all I get.' But the tax collector stood at a distance. He would not even look up to heaven, but beat his breast and said, 'God, have mercy on me, a sinner.' I tell you that this man, rather than the other, went home justified before God. For all those who exalt themselves will be humbled, and those who humble themselves will be exalted."</p>
+  </div>
+
+  <p>The message is clear: it isn't who you were born, or who you present yourself to be. It's what you make of yourself before God. No one is too small to be his messenger.</p>
+
+  <p>Earlier this year I attended Glendale church in Indianapolis, where an elder gave a sermon titled "Jesus' household was messy too." He walked through Jesus' genealogy — Lot and his daughters - incest, Rahab - a prostitute, and several other names most of us wouldn't put in a family Bible without wincing. The point was that Jesus can relate to us because his own background was, if anything, more shameful than most of ours. Is that genealogy fitting for the saviour of mankind? By the standards of the day, plenty of people didn't think so. He wasn't quite the saviour they'd been expecting.</p>
+
+  <p>Wisdom — God's wisdom especially — keeps showing up through the people least expected to carry it.</p>
+
+  <hr class="divider">
+
+  <!-- 2 -->
+  <div class="section-label">II — Understanding through action</div>
+  <h2>True understanding comes from action — from doing.</h2>
+
+  <p>Think about it honestly: can you understand something deeply while standing outside of it? The engineers kept trying to measure rice cooking. They observed, they theorised, they experimented — but they didn't live it. They didn't have to get it right for the family a thousand times a year. The breakthrough came from someone who cooked rice three times a day, who abided in the process.</p>
+
+  <p>There are two teachings hiding in that observation. The first is about abiding in God.</p>
+
+  <div class="scripture">
+    <div class="scripture-ref">John 15:5</div>
+    <p>"I am the vine; you are the branches. If you abide in me and I in you, you will bear much fruit; apart from me you can do nothing."</p>
+  </div>
+
+  <div class="scripture">
+    <div class="scripture-ref">Psalm 34:8</div>
+    <p>"Taste and see that the Lord is good; blessed is the one who takes refuge in him."</p>
+  </div>
+
+  <div class="scripture">
+    <div class="scripture-ref">Hebrews 5:14</div>
+    <p>"But solid food is for the mature, who by constant use have trained themselves to distinguish good from evil."</p>
+  </div>
+
+  <p>We don't truly understand faith by analysing it from a distance. We understand it by living it daily, through repetition and experience. Just as in the story: the engineers had knowledge, but the housewife had understanding, gained through repetition. Faith cannot only be studied — it has to be practised.</p>
+
+  <p>The second teaching is that action creates direction. This is a well-studied idea across psychology and entrepreneurship: in complex, unpredictable situations, you cannot fully plan your way forward. Understanding emerges after you interact with reality, not before. Action is how you generate the feedback that tells you whether to keep going or change course — and if you never act, you never get that information.</p>
+
+  <p>The American psychologist Kurt Lewin studied this in the early twentieth century and put it simply: you don't understand a system until you try to change it. You cannot really learn until you engage with it. A good piece of advice for daily life follows from this: when you don't know what to do, do something. Not something random — take the smallest meaningful step you can identify, treat it as an experiment, see what happens, and adjust based on what you learn. Then repeat.</p>
+
+  <p>When I was growing up, i had a friend a few years my senior, who wanted to make extra money but couldn't decide where to start. Chickens and eggs? House repairs? He talked about it for two years without settling on anything. Then one day he simply started fixing his own fence, which had been damaged the previous winter. By the end of the week, three neighbours had asked him to repair their fences, gates and sheds. That one small action showed people what he could do, showed him what people actually needed, and gave him a clear direction he'd failed to find in two years of thinking about it.</p>
+
+  <p>Direction, and understanding, come from action.</p>
+
+  <hr class="divider">
+
+  <!-- 3 -->
+  <div class="section-label">III — Bring God into the problem</div>
+  <h2>Bring God into the problem — but don't step away from it.</h2>
+
+  <p>In the rice cooker story, the breakthrough came from proximity. The engineer couldn't solve it alone, so he brought the problem to someone who lived it daily — his wife. He didn't abandon the problem. He shared it with someone closer to it. That's the model for us as well.</p>
+
+  <p>God needs to be close to your problem. So do you. You're already the one closest to your own situation — your decisions, your pressures, your responsibilities — and that means you can't simply outsource the effort or disengage and say "God will handle it." Instead, you bring him into it early: through prayer, reflection, seeking wisdom.</p>
+
+  <blockquote>Ever heard of the still small voice?<br>
+  Ever heard — the still small voice?<br>
+  Ever listened to — the still small voice?</blockquote>
+
+  <p>There's an intentional tension held together in Scripture on exactly this point.</p>
+
+  <div class="scripture">
+    <div class="scripture-ref">Philippians 4:6-7</div>
+    <p>"Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God. And the peace of God, which transcends all understanding, will guard your hearts and your minds in Christ Jesus."</p>
+  </div>
+
+  <p>A mind guarded like that is not a mind less equipped to face the problem. It's more likely to meet it clearly.</p>
+
+  <div class="scripture">
+    <div class="scripture-ref">Proverbs 3:5-6</div>
+    <p>"Trust in the Lord with all your heart and lean not on your own understanding; in all your ways submit to him, and he will make your paths straight."</p>
+  </div>
+
+  <p>Notice what it doesn't say. It doesn't say he will solve your problem for you. It says he will make your path straight. You still have to walk it. And James makes sure we don't drift into passivity on the strength of that promise.</p>
+
+  <div class="scripture">
+    <div class="scripture-ref">James 2:17</div>
+    <p>"In the same way, faith by itself, if it is not accompanied by action, is dead."</p>
+  </div>
+
+  <p>So how do we actually know when to fight a battle ourselves and when to hand it over? I don't think there's a clean formula. In mathematics, when a problem has no exact solution, we reach for heuristics — practical rules that get us close enough. The travelling salesman problem is the classic case: a delivery driver needs to visit Indianapolis, Fort Wayne, Muncie, and Richmond exactly once each, by the shortest total route, with no backtracking. There's no clean formula that hands you the answer, but there are heuristics that get remarkably close.</p>
+
+  <p>I think something similar applies here, so here's the rough heuristic I try to follow. First, consciously choose to give the situation to the Lord. Then pray specifically — ask him to guide my thoughts and my next steps. Next, take responsibility and list what I can actually do. For each option on that list, ask: what would Jesus do here — is this aligned with his character and his will? If it is good and right, act on it without hesitation, and keep doing everything genuinely within my responsibility. Only once I've fully engaged — acted in good faith, without avoidance — do I leave the outcome with the Lord.</p>
+
+  <p>It's not a choice between faith and action. It's holding both at once: doing everything that's actually yours to do, and trusting God with what is beyond you. That's exactly what the engineer in the rice cooker story did. He didn't give up, and he didn't blindly push forward on his own either. He brought the problem to someone with deeper insight, and stayed engaged until the solution emerged.</p>
+
+  <p>Rice cooker.</p>
+
+  <hr class="divider">
+
+  <!-- Take out -->
+  <div class="section-label">What to take out</div>
+  <h2>Three things to carry out.</h2>
+
+  <p>Wisdom, and especially God's wisdom, comes from places and people we don't expect, and often in moments we're inclined to overlook. Don't grade a person's insight by their title or their platform.</p>
+
+  <p>Understanding doesn't come from standing back and thinking about a problem — not on its own. It comes from stepping forward, engaging with life, and letting reality teach you as you act. When you don't know what to do, the answer is rarely more analysis. It's usually the smallest honest step available to you.</p>
+
+  <p>And we were never meant to carry our burdens in isolation. We're called to bring them before God — not after we've exhausted ourselves trying everything else, but in the middle of it, as we work and as we trust. Bringing God into a problem isn't a substitute for engaging with it yourself. It's what makes the engaging bearable.</p>
+
+  <div class="principle">
+    <div class="section-label">The principle</div>
+    <p>Stay humble enough to learn from unlikely places. Stay faithful enough to act even when you're unsure. And stay close enough to God to bring him into every part of the process.</p>
+    <p><strong>Until clarity comes, and peace follows.</strong></p>
+  </div>
+
+  <div class="tags">
+    <span class="tag">Sermon</span>
+    <span class="tag">Wisdom</span>
+    <span class="tag">Faith &amp; Action</span>
+    <span class="tag">Humility</span>
+    <span class="tag">1 Corinthians 1</span>
+  </div>
+
+  <footer>
+    <span>© Jakub Szczybura</span>
+    <a href="/faith">← Faith &amp; Reflection</a>
+  </footer>
+
+</div>
+</body>
+</html>
