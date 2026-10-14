@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>What Makes a Dataset AI-Ready? — Jakub Szczybura</title>
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --color-bg: #fafaf8;
+      --color-text: #1a1a1a;
+      --color-muted: #6b6b6b;
+      --color-faint: #9a9a9a;
+      --color-border: rgba(0,0,0,0.1);
+      --color-tag-bg: #f0efe9;
+      --color-accent-bg: #f5f0e8;
+      --color-accent-border: #c8a96e;
+      --font-serif: 'Georgia', 'Times New Roman', serif;
+      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-mono: 'SF Mono', 'Fira Code', monospace;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --color-bg: #141412;
+        --color-text: #e8e8e4;
+        --color-muted: #9a9a94;
+        --color-faint: #5a5a56;
+        --color-border: rgba(255,255,255,0.1);
+        --color-tag-bg: #1e1e1a;
+        --color-accent-bg: #1e1a12;
+        --color-accent-border: #8a6a2e;
+      }
+    }
+
+    body {
+      font-family: var(--font-serif);
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.8;
+      font-size: 18px;
+      padding: 0 0 6rem;
+    }
+
+    .container { max-width: 660px; margin: 0 auto; padding: 0 1.5rem; }
+
+    .post-meta {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      color: var(--color-faint);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+    }
+
+    h1 {
+      font-family: var(--font-serif);
+      font-size: 36px;
+      font-weight: normal;
+      line-height: 1.25;
+      margin-bottom: 1rem;
+      letter-spacing: -0.01em;
+    }
+
+    .lede {
+      font-size: 20px;
+      color: var(--color-muted);
+      line-height: 1.6;
+      margin-bottom: 3rem;
+      font-style: italic;
+      border-bottom: 0.5px solid var(--color-border);
+      padding-bottom: 2rem;
+    }
+
+    .section-label {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-faint);
+      margin-bottom: 0.75rem;
+      margin-top: 3rem;
+    }
+
+    h2 {
+      font-family: var(--font-serif);
+      font-size: 22px;
+      font-weight: normal;
+      margin-bottom: 1.25rem;
+      color: var(--color-text);
+      line-height: 1.3;
+    }
+
+    h3 {
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-top: 2.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    p { margin-bottom: 1.4rem; }
+    p:last-child { margin-bottom: 0; }
+    em { font-style: italic; }
+    strong { font-weight: 600; }
+
+    code {
+      font-family: var(--font-mono);
+      font-size: 15px;
+      background: var(--color-tag-bg);
+      padding: 2px 6px;
+      border-radius: 3px;
+    }
+
+    blockquote {
+      border-left: 2px solid var(--color-text);
+      margin: 2.5rem 0;
+      padding: 0.25rem 0 0.25rem 1.5rem;
+      font-size: 20px;
+      font-style: italic;
+      color: var(--color-text);
+      line-height: 1.5;
+    }
+
+    .insight {
+      background: var(--color-accent-bg);
+      border-left: 3px solid var(--color-accent-border);
+      border-radius: 0 6px 6px 0;
+      margin: 2rem 0;
+      padding: 1.1rem 1.4rem;
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--color-text);
+    }
+
+    hr.divider {
+      border: none;
+      border-top: 0.5px solid var(--color-border);
+      margin: 3rem 0;
+    }
+
+    ul.plain { margin: 0 0 1.4rem 1.25rem; }
+    ul.plain li { margin-bottom: 0.5rem; font-size: 17px; }
+
+    .step-list { list-style: none; counter-reset: steps; margin: 1.25rem 0 1.75rem; }
+    .step-list li {
+      counter-increment: steps;
+      padding: 0.6rem 0 0.6rem 2.5rem;
+      position: relative;
+      font-size: 16px;
+      color: var(--color-muted);
+      border-bottom: 0.5px solid var(--color-border);
+    }
+    .step-list li strong { color: var(--color-text); font-weight: 600; }
+    .step-list li:last-child { border-bottom: none; }
+    .step-list li::before {
+      content: counter(steps);
+      position: absolute;
+      left: 0;
+      top: 0.65rem;
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--color-faint);
+      background: var(--color-tag-bg);
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 20px;
+    }
+
+    .table-wrap { overflow-x: auto; margin: 1.5rem 0 2rem; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: var(--font-sans);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    th {
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--color-faint);
+      padding: 0.6rem 0.75rem 0.6rem 0;
+      border-bottom: 0.5px solid var(--color-text);
+    }
+    td {
+      vertical-align: top;
+      padding: 0.7rem 0.75rem 0.7rem 0;
+      border-bottom: 0.5px solid var(--color-border);
+      color: var(--color-muted);
+    }
+    td:first-child { color: var(--color-text); }
+
+    .checklist-group {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin: 2rem 0 0.5rem;
+    }
+    .checklist { list-style: none; margin-bottom: 1rem; }
+    .checklist li {
+      position: relative;
+      padding: 0.5rem 0 0.5rem 2rem;
+      font-size: 16px;
+      line-height: 1.6;
+      border-bottom: 0.5px solid var(--color-border);
+    }
+    .checklist li:last-child { border-bottom: none; }
+    .checklist li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.85rem;
+      width: 13px;
+      height: 13px;
+      border: 1px solid var(--color-faint);
+      border-radius: 3px;
+    }
+
+    .principle {
+      background: var(--color-tag-bg);
+      border-radius: 8px;
+      padding: 1.75rem 2rem;
+      margin-top: 3rem;
+    }
+    .principle .section-label { margin-top: 0; }
+    .principle p {
+      font-size: 17px;
+      line-height: 1.7;
+      margin-bottom: 1rem;
+      color: var(--color-text);
+    }
+    .principle p:last-child { margin-bottom: 0; }
+    .principle strong { font-style: italic; font-weight: normal; }
+
+    .tags {
+      margin-top: 2rem;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-family: var(--font-sans);
+    }
+
+    .tag {
+      font-size: 12px;
+      color: var(--color-muted);
+      background: var(--color-tag-bg);
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+
+    footer {
+      margin-top: 5rem;
+      padding-top: 2rem;
+      border-top: 0.5px solid var(--color-border);
+      font-family: var(--font-sans);
+      font-size: 13px;
+      color: var(--color-faint);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    footer a { color: var(--color-muted); text-decoration: none; }
+    footer a:hover { color: var(--color-text); }
+  </style>
+</head>
+<body>
+<script src="/nav.js"></script>
+<div class="container">
+
+  <div class="post-meta">October 2026 &nbsp;·&nbsp; 19 min read</div>
+
+  <h1>What Makes a Dataset AI-Ready?</h1>
+
+  <p class="lede">A practical framework for preparing enterprise data for reliable AI-powered answers.</p>
+
+  <blockquote>A dataset is AI-ready when an AI system can answer a defined set of business questions correctly, consistently, and with evidence that its answers are trustworthy.</blockquote>
+
+  <p>Clean data is not enough. The system needs to know what a row represents, which measures are authoritative, how records relate, when the data was true, what it cannot tell us, and which users are allowed to see the results.</p>
+
+  <p>Many AI errors begin before the model generates an answer. An ambiguous metric, an undocumented join, or an incomplete reporting period can produce a plausible result from a perfectly executable query.</p>
+
+  <p>AI readiness therefore requires more than good data. It requires explicit context, enforceable controls, and evidence from real business questions.</p>
+
+  <p>This article sets out twelve features of an AI-ready data product, explains the failure each helps prevent, and describes how to test whether the resulting AI system is fit for its intended use.</p>
+
+  <hr class="divider">
+
+  <div class="section-label">Intended use</div>
+  <h2>Readiness starts with intended use</h2>
+
+  <p>AI readiness is not an absolute property of a dataset. It is relative to the questions the system is expected to answer, the users who will ask them, and the consequences of getting an answer wrong.</p>
+
+  <p>A marketing dataset may be adequate for exploratory segmentation but inadequate for calculating a board-approved revenue figure. A clinical dataset may support exploratory analysis but require additional validation and controls before it can support a regulated decision.</p>
+
+  <p>Before preparing a dataset, define three things:</p>
+
+  <ul class="plain">
+    <li><strong>What the AI should answer.</strong> Identify the business questions, users, metrics, and decisions the data must support.</li>
+    <li><strong>What the AI must not answer.</strong> Identify questions the data cannot support, restricted information, and decisions requiring additional review.</li>
+    <li><strong>What constitutes an acceptable answer.</strong> Define accuracy requirements, evidence, access restrictions, and acceptable residual risk.</li>
+  </ul>
+
+  <p>These requirements determine which controls are mandatory and how readiness will be evaluated.</p>
+
+  <p>It is also important to distinguish three related forms of readiness:</p>
+
+  <ol class="step-list">
+    <li><strong>Data readiness:</strong> The data is sufficiently trustworthy, interpretable, current, and documented for its intended use.</li>
+    <li><strong>Access and execution readiness:</strong> The system can discover and query approved data correctly, while enforcing the user's permissions.</li>
+    <li><strong>AI application readiness:</strong> The complete system answers representative questions accurately and consistently, provides appropriate evidence, and handles unsupported questions safely.</li>
+  </ol>
+
+  <p>The twelve features below primarily address the first level, while also identifying the metadata and controls needed by the other two. A well-documented dataset is a prerequisite for many applications, but documentation alone does not prove that an AI system can use it correctly.</p>
+
+  <hr class="divider">
+
+  <div class="section-label">The answering pipeline</div>
+  <h2>How an AI system answers a data question</h2>
+
+  <p>A typical AI-powered data-answering system follows eight steps. Each depends on the quality of the information and controls available to it.</p>
+
+  <ol class="step-list">
+    <li><strong>Interpret the question.</strong> Identify the metric, entities, filters, and time window. “How many serious adverse events occurred in Q2?” implies a count, an event definition, a seriousness criterion, and a reporting period.</li>
+    <li><strong>Discover candidate data.</strong> Search the catalogue or approved data products using names, descriptions, tags, and business terminology.</li>
+    <li><strong>Load context.</strong> Retrieve the relevant schema, definitions, relationships, constraints, and limitations. Context windows are finite, so relevance matters.</li>
+    <li><strong>Plan the query.</strong> Select tables, join paths, filters, and aggregations.</li>
+    <li><strong>Generate the query.</strong> Produce SQL, invoke a governed semantic layer, or retrieve relevant documents, depending on the architecture.</li>
+    <li><strong>Execute securely.</strong> Run the operation under the asking user's permissions and applicable policies.</li>
+    <li><strong>Validate the result.</strong> Check execution, semantic correctness, plausibility, and reconciliation against trusted results where available.</li>
+    <li><strong>Answer with provenance.</strong> Report the result, its definition, the relevant data cut-off, and any material limitations.</li>
+  </ol>
+
+  <p>Two principles follow.</p>
+
+  <p>First, the system cannot reliably resolve business definitions or data limitations that have not been made available to it. Tribal knowledge remains invisible unless it is captured in an accessible, usable form.</p>
+
+  <p>Second, errors can compound. A wrong dataset selection or join can produce a confident, well-formatted answer that is fundamentally incorrect.</p>
+
+  <div class="insight">Metadata cannot eliminate every model error. It can, however, make many errors preventable, detectable, and testable.</div>
+
+  <hr class="divider">
+
+  <div class="section-label">The framework</div>
+  <h2>The twelve features of an AI-ready data product</h2>
+
+  <div class="section-label">Structural features</div>
+
+  <p>Structure tells the system what a row represents, how records relate, and what operations are valid. Errors here often produce plausible numbers that are nevertheless wrong.</p>
+
+  <h3>1. Declared grain</h3>
+
+  <p><strong>What it is.</strong> A concise statement defining what one row represents: one patient, one patient per visit, one adverse event, or one order line.</p>
+
+  <p><strong>How the AI uses it.</strong> Grain determines the meaning of counts and aggregations. A question about patients requires a distinct patient count when the underlying table contains multiple events per patient.</p>
+
+  <p><strong>Without it.</strong> The system counts rows rather than the intended entities. A patient with three headaches may be counted three times in an adverse-events table, inflating the reported number of patients.</p>
+
+  <p>Grain should be explicit at the table or data-product level, including whether a record represents an entity, an event, a snapshot, or a relationship.</p>
+
+  <h3>2. Keys and documented join paths</h3>
+
+  <p><strong>What it is.</strong> Primary keys, foreign keys, composite keys where applicable, and approved relationships between datasets, including their expected cardinality.</p>
+
+  <p><strong>How the AI uses it.</strong> The system uses these definitions to select valid joins and understand whether joining two tables will preserve, multiply, or eliminate records.</p>
+
+  <p>Column names alone are unreliable. Two tables may contain a <code>SUBJECT_ID</code> with different meanings, or the correct relationship may depend on multiple columns.</p>
+
+  <p><strong>Without it.</strong> The system may join on a misleadingly similar field or assume a one-to-one relationship where one-to-many is correct. Duplicated records can multiply sums, while incomplete join keys can associate unrelated records.</p>
+
+  <p>Document the valid join paths and validate their expected cardinality. Where a join changes the grain of the result, make that behaviour explicit.</p>
+
+  <h3>3. Consistent, correctly typed fields</h3>
+
+  <p><strong>What it is.</strong> Correct data types, consistent representations, documented null semantics, and explicit constraints for fields that must contain valid values.</p>
+
+  <p><strong>How the AI uses it.</strong> Query generation depends on the difference between dates, numbers, strings, categorical values, and missing information.</p>
+
+  <p><strong>Without it.</strong> Dates stored as text may sort incorrectly. Numeric strings can be compared lexicographically, so <code>"100"</code> may sort below <code>"9"</code>. A null representing “not applicable” may be interpreted like a null representing “unknown.”</p>
+
+  <p>The query may execute without an error, making the resulting mistake difficult to detect.</p>
+
+  <p>Document the intended types and meanings, but do not rely on documentation alone. Test type conformance, required values, uniqueness, and other relevant constraints where they can be enforced or validated.</p>
+
+  <div class="section-label">Semantic features</div>
+
+  <p>Structure can be correct while the answer remains wrong. Semantic features establish what the data means in business terms and how that meaning should be applied.</p>
+
+  <h3>4. Business definitions for tables and columns</h3>
+
+  <p><strong>What it is.</strong> Plain-language descriptions of each table and important column, explaining what it represents, how it is derived, and which business questions it supports.</p>
+
+  <p><strong>How the AI uses it.</strong> Definitions help the system discover relevant datasets and select the right fields when several candidates appear suitable.</p>
+
+  <p><strong>Without it.</strong> A column called <code>STATUS</code> might describe enrolment, data quality, or processing. Faced with <code>REVENUE</code>, <code>NET_REVENUE</code>, and <code>REV_ADJ</code>, the system may select the wrong measure because its name looks appropriate.</p>
+
+  <p>Descriptions should use the vocabulary of the business, including synonyms that people use when asking questions. Where possible, connect these descriptions to a governed catalogue rather than maintaining disconnected documentation.</p>
+
+  <h3>5. Controlled vocabularies and documented valid values</h3>
+
+  <p><strong>What it is.</strong> The allowed values of coded fields and their meanings, with references to applicable standards or internal code lists.</p>
+
+  <p>Examples include MedDRA, CDISC controlled terminology, and organisation-specific classifications.</p>
+
+  <p><strong>How the AI uses it.</strong> The system needs to know the actual stored values before generating filters. “Serious” might be represented as <code>Y</code>, <code>YES</code>, <code>1</code>, or a code from a controlled vocabulary.</p>
+
+  <p><strong>Without it.</strong> A query may filter for <code>seriousness = 'Serious'</code> when the field stores <code>Y</code>, returning no records. The system may then incorrectly conclude that no serious events occurred.</p>
+
+  <p>Hierarchical vocabularies introduce further complications. In MedDRA, a preferred term can be associated with multiple system organ classes. Summing across those classes can double-count records unless the intended classification and aggregation rules are clear.</p>
+
+  <p>Document valid values, their meanings, their versions, and any relevant hierarchy or aggregation rules.</p>
+
+  <h3>6. Units and scales</h3>
+
+  <p><strong>What it is.</strong> The unit of every measured value, including currency, scale, measurement conventions, and applicable conversion rules.</p>
+
+  <p><strong>How the AI uses it.</strong> Units determine whether values can be compared, averaged, or added together meaningfully.</p>
+
+  <p><strong>Without it.</strong> Laboratory results recorded in mg/dL at some sites and mmol/L at others may be combined incorrectly. Revenue stored in thousands may be reported as though it were stored in individual currency units. A total combining several currencies may be meaningless.</p>
+
+  <p>Make units machine-readable wherever possible. Document conversion rules and identify fields that contain mixed units or currencies. A label alone is not enough if the underlying values have not been normalised or their differences cannot be resolved reliably.</p>
+
+  <h3>7. Population and metric conventions</h3>
+
+  <p><strong>What it is.</strong> The approved filters, populations, and calculations used to produce business measures. Examples include the definition of an active customer, the exclusion of test accounts, the population used for a clinical analysis, and the calculation of a conversion rate.</p>
+
+  <p><strong>How the AI uses it.</strong> The system needs consistent rules for deciding which records count and how metrics are calculated.</p>
+
+  <p><strong>Without it.</strong> Two users can ask the same question and receive different answers because the system independently invents slightly different filters. In a clinical trial, counting all randomised subjects instead of the protocol-defined analysis population can materially change a reported rate.</p>
+
+  <p>This is where a governed semantic layer becomes particularly valuable.</p>
+
+  <div class="insight">Metadata explains what data means. A semantic layer defines how governed business measures are calculated. Where an approved definition exists, the AI should invoke it rather than reconstructing its logic in generated SQL.</div>
+
+  <p>For important metrics, document the authoritative definition, its owner, and its permitted variations. Reusable business logic should be governed centrally wherever practical.</p>
+
+  <div class="section-label">Temporal features</div>
+
+  <p>Time introduces a distinct class of errors. A dataset can be structurally correct and semantically well documented but still produce a misleading answer because it is stale, incomplete, or interpreted against the wrong point in time.</p>
+
+  <h3>8. Freshness, cut-off, and as-of semantics</h3>
+
+  <p><strong>What it is.</strong> Machine-readable information about the last successful refresh, expected refresh schedule, data cut-off, completeness, and whether the dataset represents live data, a locked snapshot, or a historical view.</p>
+
+  <p>Each relevant date field also needs a documented meaning: event date, recorded date, processing date, or another business-specific timestamp.</p>
+
+  <p><strong>How the AI uses it.</strong> The system uses this information to select the appropriate date field, determine which periods are covered, and disclose the temporal scope of its answer.</p>
+
+  <p><strong>Without it.</strong> Asked about “this month,” the system may query data last refreshed six weeks ago and report an apparent decline that is actually missing data. Filtering by processing date rather than event date can move records between reporting periods.</p>
+
+  <p>Freshness metadata should therefore include more than a timestamp. Where relevant, capture expected latency, completeness indicators, late-arriving records, and the rules used to establish that a reporting period is complete.</p>
+
+  <p>If the data does not yet cover the requested period, the system should disclose the limitation or decline to provide a definitive answer.</p>
+
+  <h3>9. History, versioning, and restatements</h3>
+
+  <p><strong>What it is.</strong> A documented approach to historical change, including whether old values are overwritten, how effective dates are represented, which versions of coding dictionaries apply, and when published figures have been restated.</p>
+
+  <p><strong>How the AI uses it.</strong> Historical questions often require reconstructing what was true at a particular time, rather than applying today's definitions to yesterday's records.</p>
+
+  <p><strong>Without it.</strong> A query about last year's sales by region may use current customer-region assignments because historical values were overwritten. An adverse event coded under an earlier MedDRA version may be grouped incorrectly using a later classification.</p>
+
+  <p>The system needs to distinguish between at least two different questions:</p>
+
+  <ul class="plain">
+    <li>What do we currently believe happened in the past?</li>
+    <li>What did we know or report at that time?</li>
+  </ul>
+
+  <p>Those questions may require different historical views.</p>
+
+  <p>Document effective dates, versioned reference data, restatement policies, and the treatment of backdated corrections. Where historical reconstruction is required, ensure the underlying data model preserves the information needed to perform it.</p>
+
+  <div class="section-label">Known quality issues and limitations</div>
+
+  <p>Every real dataset has defects, gaps, and boundaries. AI readiness requires making those limitations discoverable rather than expecting the system to infer them.</p>
+
+  <h3>10. A documented register of known issues</h3>
+
+  <p><strong>What it is.</strong> A maintained register of known gaps, duplicates, placeholder values, incomplete reporting, test records, accepted limitations, and questions the dataset cannot answer reliably.</p>
+
+  <p><strong>How the AI uses it.</strong> The system can apply documented exclusions, recognise suspicious results, qualify answers, or refuse questions that exceed the dataset's capabilities.</p>
+
+  <p><strong>Without it.</strong> An average age calculation may include records with a placeholder birth date of <code>1900-01-01</code>. Test patients may be included in a clinical count. A dataset that cannot distinguish new from returning customers may nevertheless produce a confident answer to “How many new customers did we acquire?”</p>
+
+  <p>The register should distinguish between three categories:</p>
+
+  <ul class="plain">
+    <li><strong>Known defects</strong> that require correction or controlled exclusion.</li>
+    <li><strong>Limitations</strong> that affect interpretation but are accepted for a defined use.</li>
+    <li><strong>Unsupported questions</strong> for which the data does not contain sufficient evidence.</li>
+  </ul>
+
+  <p>Where possible, connect known issues to machine-readable quality rules and tests rather than relying exclusively on free-text warnings.</p>
+
+  <div class="insight">An explicit statement that a question cannot be answered reliably is often more valuable than a plausible number. It turns an unsupported claim into a limitation the user can act on.</div>
+
+  <div class="section-label">Governance features</div>
+
+  <p>Governance determines which data the system may use, whether the result can be trusted, and who is accountable for correcting problems.</p>
+
+  <h3>11. Sensitivity classification enforced as access policy</h3>
+
+  <p><strong>What it is.</strong> Table- and column-level classifications for personal data, regulated information such as GxP data, commercially restricted information, and sensitive clinical information such as blinded treatment assignments.</p>
+
+  <p>These classifications should inform enforceable access policies, not merely appear as descriptive tags in a catalogue.</p>
+
+  <p><strong>How the AI uses it.</strong> The system discovers and queries data within the user's authorised scope. The execution layer enforces permissions, while the application applies appropriate disclosure and response controls.</p>
+
+  <p><strong>Without it.</strong> An AI assistant can become an unintended route around existing access restrictions. A user without permission to view patient identifiers might ask a question that exposes them indirectly. In a blinded study, a seemingly innocuous comparison could reveal treatment allocation.</p>
+
+  <div class="insight">The key principle is that the model must not be the security enforcement point. A model's awareness of a restriction does not guarantee that it will obey it.</div>
+
+  <p>Access must be enforced at the data or execution layer, with policies appropriate to the data and use case. Depending on the environment, these may include row-level and column-level controls, restrictions on combinations of fields, aggregation safeguards, and auditing of queries and answers.</p>
+
+  <p>Testing should verify that prohibited access is actually blocked, including cases where sensitive information could be inferred from otherwise permissible results.</p>
+
+  <h3>12. Lineage, ownership, and a defined data-product boundary</h3>
+
+  <p><strong>What it is.</strong> Three related but distinct things:</p>
+
+  <ul class="plain">
+    <li><strong>Lineage:</strong> Where the data originated and how it was transformed.</li>
+    <li><strong>Ownership:</strong> Who is accountable for its definitions, quality, and correction.</li>
+    <li><strong>Data-product boundary:</strong> Which datasets, interfaces, and approved sources the AI is expected or permitted to use.</li>
+  </ul>
+
+  <p><strong>How the AI uses it.</strong> Lineage helps establish provenance and identify authoritative sources. Ownership provides a route for resolving defects. The product boundary limits discovery to appropriate, governed data.</p>
+
+  <p><strong>Without it.</strong> A catalogue may contain raw extracts, analyst sandboxes, deprecated tables, and curated versions of the same information. The system selects whichever table most closely matches the question's wording, even if it is no longer authoritative.</p>
+
+  <p>When an answer is wrong, the lack of clear ownership makes the problem difficult to resolve, and the same error may recur for other users.</p>
+
+  <p>Identify the authoritative data products, document their lineage, assign accountable owners, and make approved interfaces discoverable. Where multiple sources legitimately exist, specify when each should be used.</p>
+
+  <hr class="divider">
+
+  <div class="section-label">A worked example</div>
+  <h2>Answering a clinical question</h2>
+
+  <p>Consider the question:</p>
+
+  <blockquote>“How many patients experienced a serious adverse event in Q2?”</blockquote>
+
+  <p>Without sufficient context, the system might discover an adverse-events table, filter a text field using the wrong seriousness code, count event rows rather than distinct patients, and query a reporting period that is not yet complete.</p>
+
+  <p>The SQL may execute successfully. The answer may even look reasonable. None of that establishes that it is correct.</p>
+
+  <p>With an AI-ready data product, the system has the information and controls needed to:</p>
+
+  <ol class="step-list">
+    <li>Identify the table's grain and count distinct patients rather than events.</li>
+    <li>Apply the approved definition of a serious adverse event and the correct stored values.</li>
+    <li>Select the event date rather than the processing date.</li>
+    <li>Establish whether Q2 is complete and identify the relevant data cut-off.</li>
+    <li>Execute within the user's permissions and applicable clinical-data controls.</li>
+    <li>Validate the result against an independently established calculation.</li>
+    <li>Report the number alongside the definition, data snapshot, and material limitations.</li>
+  </ol>
+
+  <p>The example illustrates why the twelve features work together. It also shows why documentation alone is insufficient: the query generation, execution, validation, and access controls must all operate correctly.</p>
+
+  <hr class="divider">
+
+  <div class="section-label">Evaluation</div>
+  <h2>Proving readiness: business questions, ground truth, and evaluation</h2>
+
+  <p>The twelve features describe the data context and controls needed for reliable answers. Evaluation determines whether the complete AI system can use them successfully.</p>
+
+  <p>A completed catalogue is not proof of readiness. Neither is a demonstration in which a handful of hand-picked questions happen to work.</p>
+
+  <p>A defensible evaluation starts with representative business questions and independently verified expected answers.</p>
+
+  <h3>1. Capture the questions the business actually asks</h3>
+
+  <p>Build a set of real questions using the vocabulary of the intended users. Include the questions the data product is expected to answer, as well as important questions it cannot answer.</p>
+
+  <p>This exercise helps focus metadata work on business value. It can also expose gaps early, before the system is deployed.</p>
+
+  <h3>2. Establish ground truth independently</h3>
+
+  <p>For each evaluable question, establish the correct answer using an independently reviewed calculation, authoritative report, or other trusted reference.</p>
+
+  <p>An engineer-written SQL query is a useful starting point, but it is not automatically ground truth. The reference calculation must use the correct business definition and should be reviewed by the appropriate data steward or domain expert.</p>
+
+  <p>Pin the evaluation to a frozen data snapshot. Otherwise, a changed result tomorrow may reflect changing data rather than a change in the AI system.</p>
+
+  <p>Record the metric definition, population, time period, and relevant assumptions alongside the expected answer.</p>
+
+  <h3>3. Build a representative evaluation set</h3>
+
+  <p>For an initial pilot, 15–25 questions can provide a useful starting point. The required coverage should then grow according to the complexity of the data product, the variety of supported questions, observed failure modes, and the consequences of an incorrect answer.</p>
+
+  <p>Include a mix of:</p>
+
+  <ul class="plain">
+    <li>Simple lookups and filters.</li>
+    <li>Aggregations and distinct counts.</li>
+    <li>Multi-table joins.</li>
+    <li>Time-bound and historical questions.</li>
+    <li>Questions requiring governed business definitions.</li>
+    <li>Boundary conditions and incomplete reporting periods.</li>
+    <li>Ambiguous questions that need clarification.</li>
+    <li>Questions the data cannot answer.</li>
+    <li>Questions that attempt to access restricted information.</li>
+  </ul>
+
+  <p>The aim is not to maximise the number of questions. It is to cover the ways the system could fail in realistic use.</p>
+
+  <h3>4. Define what constitutes a pass</h3>
+
+  <p>A successful query execution is not necessarily a correct answer. Evaluation should distinguish several dimensions:</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Dimension</th><th>What it tests</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Execution correctness</td><td>Does the query run safely and successfully?</td></tr>
+        <tr><td>Answer correctness</td><td>Does the result match the independently verified answer within the agreed tolerance?</td></tr>
+        <tr><td>Semantic correctness</td><td>Were the right metric, population, filters, joins, and reporting period used?</td></tr>
+        <tr><td>Safety and provenance</td><td>Were permissions respected, and was appropriate evidence provided?</td></tr>
+        <tr><td>Appropriate refusal</td><td>Did the system avoid inventing an answer when the data could not support one?</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>Define acceptance thresholds before testing. The acceptable error rate and required evidence should reflect the intended use and the consequences of failure.</p>
+
+  <p>A low-risk exploratory assistant and a system supporting consequential clinical or financial decisions should not automatically be held to the same acceptance criteria.</p>
+
+  <h3>5. Measure repeatability</h3>
+
+  <p>Language-model output can vary between runs. Repeat representative questions to identify inconsistent query plans, unstable interpretations, and variable answers.</p>
+
+  <p>Report pass rates and the nature of failures, not just a single successful demonstration. The number of repetitions should be proportionate to the risk and the variability observed.</p>
+
+  <h3>6. Use ablation to measure the value of metadata</h3>
+
+  <p>Compare performance with and without the metadata or controls being introduced, holding other material variables constant.</p>
+
+  <p>This helps establish whether the work improves answer quality and identifies which improvements provide the greatest benefit.</p>
+
+  <p>Ablation results should be interpreted carefully: the observed difference may depend on the model, prompt, retrieval approach, semantic layer, or execution environment. The experiment should isolate the factor being evaluated as far as practical.</p>
+
+  <h3>7. Add regression testing</h3>
+
+  <p>Re-run the evaluation suite after material changes to data, metadata, business definitions, models, prompts, or query-generation logic.</p>
+
+  <p>A fix for one question should not silently break another. Version the evaluation set and record the system configuration and results so changes can be investigated.</p>
+
+  <h3>8. Measure operational performance</h3>
+
+  <p>Correctness is essential, but production readiness may also depend on latency, cost per successful answer, retry rate, and the frequency with which users need to correct or clarify results.</p>
+
+  <p>These are measures of the complete AI application rather than the dataset itself. They help determine whether a technically correct solution is also viable in practice.</p>
+
+  <hr class="divider">
+
+  <div class="section-label">Diagnosis</div>
+  <h2>Turn failures into specific improvements</h2>
+
+  <p>Evaluation is most useful when a failure leads to an actionable change.</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Observed failure</th><th>Likely area to investigate</th><th>Typical improvement</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Counts inflated by duplicates</td><td>Grain or join cardinality</td><td>Clarify grain; validate join paths</td></tr>
+        <tr><td>Correct query shape, wrong measure</td><td>Business definitions</td><td>Improve descriptions; invoke governed metrics</td></tr>
+        <tr><td>Zero results for a known population</td><td>Coded values or filters</td><td>Document valid values and test filter logic</td></tr>
+        <tr><td>Different answers to the same question</td><td>Metric conventions or query generation</td><td>Govern definitions; test repeatability</td></tr>
+        <tr><td>Apparent decline in recent periods</td><td>Freshness or completeness</td><td>Publish cut-offs; add completeness checks</td></tr>
+        <tr><td>Confident answer to an unsupported question</td><td>Known limitations or refusal behaviour</td><td>Document limitations; test unanswerable questions</td></tr>
+        <tr><td>Restricted information in a response</td><td>Access enforcement or inference controls</td><td>Correct policies; test prohibited queries</td></tr>
+        <tr><td>Answer based on a deprecated table</td><td>Lineage or data-product boundary</td><td>Identify authoritative sources and restrict discovery</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>The table is a diagnostic guide, not proof that each symptom has a single cause. A wrong answer may result from several interacting failures. Evaluation should identify the actual cause before prescribing a fix.</p>
+
+  <p>The important principle is that an observed failure becomes a specific improvement, and regression testing provides evidence that the improvement worked.</p>
+
+  <hr class="divider">
+
+  <div class="section-label">Checklist</div>
+  <h2>Assessing an AI-ready data product</h2>
+
+  <p>Use this checklist to establish whether the applicable features are documented, implemented, and supported by evidence.</p>
+
+  <div class="checklist-group">Structure and semantics</div>
+  <ul class="checklist">
+    <li>Grain is stated clearly for each relevant table.</li>
+    <li>Primary keys, foreign keys, composite keys, and valid join cardinalities are documented and tested where applicable.</li>
+    <li>Column types, null meanings, and relevant data constraints are defined.</li>
+    <li>Table and column descriptions use business language and relevant synonyms.</li>
+    <li>Valid values and their meanings are documented for coded fields.</li>
+    <li>Units, scales, currencies, and conversion rules are explicit.</li>
+    <li>Population rules and metric definitions are governed, with a semantic layer used where appropriate.</li>
+  </ul>
+
+  <div class="checklist-group">Time and quality</div>
+  <ul class="checklist">
+    <li>Refresh schedules, observed freshness, cut-offs, completeness, and date-column meanings are available.</li>
+    <li>Historical handling, versioned reference data, and restatement rules are documented where relevant.</li>
+    <li>Known defects, accepted limitations, and unsupported questions are registered.</li>
+    <li>Relevant quality constraints, reconciliations, and validation checks have been tested.</li>
+  </ul>
+
+  <div class="checklist-group">Governance and provenance</div>
+  <ul class="checklist">
+    <li>Sensitivity classifications are applied and backed by enforceable access policies.</li>
+    <li>Relevant row-, column-, aggregation-, and inference-based risks have been assessed.</li>
+    <li>Lineage, accountable ownership, and the approved data-product boundary are defined.</li>
+    <li>The evidence required to reproduce or investigate an answer is available.</li>
+  </ul>
+
+  <div class="checklist-group">Evaluation and operational readiness</div>
+  <ul class="checklist">
+    <li>Representative business questions are captured.</li>
+    <li>Expected answers have been independently established against a frozen data snapshot.</li>
+    <li>Acceptance criteria cover answer correctness, semantic correctness, safety, provenance, and appropriate refusal.</li>
+    <li>Repeatability and regression tests have been run.</li>
+    <li>Material failures have been fixed or explicitly accepted as residual risk.</li>
+    <li>Operational measures such as latency and cost have been assessed where relevant.</li>
+    <li>The data steward and appropriate business or technical owners have approved the defined use case.</li>
+  </ul>
+
+  <p>Not every item will apply identically to every dataset. Any item marked not applicable should have a clear rationale, particularly where security, regulatory obligations, or consequential decisions are involved.</p>
+
+  <p>The objective is not to maximise the number of completed boxes. It is to demonstrate that the controls necessary for the intended use are effective.</p>
+
+  <hr class="divider">
+
+  <div class="section-label">Where to start</div>
+  <h2>Harvest before you document</h2>
+
+  <p>Much of the necessary metadata already exists, scattered across the enterprise. Clinical submissions may contain Define-XML; data catalogues hold schemas, definitions, and owners; transformation pipelines encode derivation logic; and query logs reveal how analysts actually use the data.</p>
+
+  <p>Harvest these sources before asking stewards to document everything from scratch. Generate draft descriptions and relationship definitions where possible, then have the accountable owners review them.</p>
+
+  <p>Prioritise the work according to the questions the business needs answered.</p>
+
+  <p>Grain, metric definitions, valid values, and freshness are often high-value starting points because they influence many common queries. Lineage, historical reconstruction, and more sophisticated controls become particularly important where the use case requires them.</p>
+
+  <p>A practical rollout can follow five steps:</p>
+
+  <ol class="step-list">
+    <li><strong>Select a use case.</strong> Choose a data product and a small set of valuable, representative business questions.</li>
+    <li><strong>Assess the context.</strong> Identify missing definitions, relationships, temporal information, limitations, and controls.</li>
+    <li><strong>Make critical rules enforceable.</strong> Implement or validate the constraints and access policies that cannot safely depend on model instructions.</li>
+    <li><strong>Evaluate the complete system.</strong> Compare its answers with independently verified results, investigate failures, and establish acceptance thresholds.</li>
+    <li><strong>Expand with evidence.</strong> Address the largest remaining risks, add questions to the regression suite, and extend the approach to other data products.</li>
+  </ol>
+
+  <p>This creates a feedback loop between business demand, metadata improvement, technical controls, and measured performance.</p>
+
+  <div class="principle">
+    <div class="section-label">Conclusion</div>
+    <p>AI readiness is not established by a completed catalogue or a checklist of metadata fields. It is established when the data's meaning, limitations, and controls are explicit, and the system demonstrates that it can use them correctly.</p>
+    <p>Start with the questions the business needs answered. Document the data those questions depend on, make critical rules enforceable, and test the answers against independently verified results.</p>
+    <p><strong>Do not declare a dataset AI-ready because it is documented. Declare it ready for a defined use because the evidence supports it.</strong></p>
+  </div>
+
+  <div class="tags">
+    <span class="tag">Data strategy</span>
+    <span class="tag">AI readiness</span>
+    <span class="tag">Data governance</span>
+    <span class="tag">Evaluation</span>
+  </div>
+
+  <footer>
+    <span>© Jakub Szczybura</span>
+    <a href="/blog">All posts →</a>
+  </footer>
+
+</div>
+</body>
+</html>
