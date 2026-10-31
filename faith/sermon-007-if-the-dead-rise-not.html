@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>If the Dead Rise Not — Jakub Szczybura</title>
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --color-bg: #fafaf8;
+      --color-text: #1a1a1a;
+      --color-muted: #6b6b6b;
+      --color-faint: #9a9a9a;
+      --color-border: rgba(0,0,0,0.1);
+      --color-tag-bg: #f0efe9;
+      --color-accent-bg: #f5f0e8;
+      --color-accent-border: #c8a96e;
+      --font-serif: 'Georgia', 'Times New Roman', serif;
+      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-mono: 'SF Mono', 'Fira Code', monospace;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --color-bg: #141412;
+        --color-text: #e8e8e4;
+        --color-muted: #9a9a94;
+        --color-faint: #5a5a56;
+        --color-border: rgba(255,255,255,0.1);
+        --color-tag-bg: #1e1e1a;
+        --color-accent-bg: #1e1a12;
+        --color-accent-border: #8a6a2e;
+      }
+    }
+
+    body {
+      font-family: var(--font-serif);
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.85;
+      font-size: 18px;
+      padding: 0 0 6rem;
+    }
+
+    .container { max-width: 660px; margin: 0 auto; padding: 0 1.5rem; }
+
+    .post-meta {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      color: var(--color-faint);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+    }
+
+    h1 {
+      font-family: var(--font-serif);
+      font-size: 38px;
+      font-weight: normal;
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.01em;
+    }
+
+    .lede {
+      font-size: 20px;
+      color: var(--color-muted);
+      line-height: 1.6;
+      margin-bottom: 3rem;
+      font-style: italic;
+      border-bottom: 0.5px solid var(--color-border);
+      padding-bottom: 2rem;
+    }
+
+    .section-label {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--color-faint);
+      margin-bottom: 0.75rem;
+      margin-top: 3.5rem;
+    }
+
+    h2 {
+      font-family: var(--font-serif);
+      font-size: 24px;
+      font-weight: normal;
+      margin-bottom: 1.25rem;
+      color: var(--color-text);
+      line-height: 1.3;
+    }
+
+    h3 {
+      font-family: var(--font-serif);
+      font-size: 19px;
+      font-weight: normal;
+      font-style: italic;
+      margin: 2rem 0 1.1rem;
+      color: var(--color-text);
+      line-height: 1.3;
+    }
+
+    p { margin-bottom: 1.4rem; }
+    p:last-child { margin-bottom: 0; }
+    em { font-style: italic; }
+
+    /* Scripture block */
+    .scripture {
+      background: var(--color-accent-bg);
+      border-left: 3px solid var(--color-accent-border);
+      border-radius: 0 6px 6px 0;
+      margin: 2rem 0;
+      padding: 1.25rem 1.5rem;
+    }
+
+    .scripture-ref {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-accent-border);
+      margin-bottom: 0.6rem;
+    }
+
+    .scripture p {
+      font-size: 17px;
+      font-style: italic;
+      color: var(--color-text);
+      line-height: 1.75;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Novel excerpt */
+    .novel {
+      border-left: 2px solid var(--color-border);
+      margin: 2rem 0;
+      padding: 0.25rem 0 0.25rem 1.5rem;
+    }
+    .novel-ref {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-faint);
+      margin-bottom: 0.6rem;
+    }
+    .novel p {
+      font-size: 17px;
+      color: var(--color-muted);
+      line-height: 1.75;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Pull quote */
+    blockquote {
+      border-left: 2px solid var(--color-text);
+      margin: 2.5rem 0;
+      padding: 0.25rem 0 0.25rem 1.5rem;
+      font-size: 21px;
+      font-style: italic;
+      color: var(--color-text);
+      line-height: 1.45;
+    }
+
+    /* Principle / closing box */
+    .principle {
+      background: var(--color-tag-bg);
+      border-radius: 8px;
+      padding: 1.75rem 2rem;
+      margin-top: 3rem;
+    }
+    .principle .section-label { margin-top: 0; }
+    .principle p {
+      font-size: 17px;
+      line-height: 1.75;
+      margin-bottom: 1rem;
+      color: var(--color-text);
+    }
+    .principle p:last-child { margin-bottom: 0; }
+    .principle strong { font-style: italic; font-weight: normal; }
+
+    hr.divider {
+      border: none;
+      border-top: 0.5px solid var(--color-border);
+      margin: 3.5rem 0;
+    }
+
+    .tags {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 0.5px solid var(--color-border);
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-family: var(--font-sans);
+    }
+
+    .tag {
+      font-size: 12px;
+      color: var(--color-muted);
+      background: var(--color-tag-bg);
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+
+    .footnote {
+      font-family: var(--font-sans);
+      font-size: 13px;
+      color: var(--color-faint);
+      font-style: italic;
+      margin-bottom: 2.5rem;
+    }
+
+    footer {
+      margin-top: 5rem;
+      padding-top: 2rem;
+      border-top: 0.5px solid var(--color-border);
+      font-family: var(--font-sans);
+      font-size: 13px;
+      color: var(--color-faint);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    footer a { color: var(--color-muted); text-decoration: none; }
+    footer a:hover { color: var(--color-text); }
+  </style>
+</head>
+<body>
+<script src="/nav.js"></script>
+<div class="container">
+
+  <div class="post-meta">Faith &amp; Reflection &nbsp;·&nbsp; Sermon &nbsp;·&nbsp; November 2026</div>
+
+  <h1>If the Dead Rise Not</h1>
+
+  <p class="lede">At a drunken dinner in Dostoevsky's last novel, an old man asks his sons whether there is a God, and whether there is anything after death. The church at Corinth was asking the same question. Read side by side, <em>The Brothers Karamazov</em> and 1 Corinthians 15 show what follows from each answer.</p>
+
+  <p class="footnote">Scripture quotations are from the King James Version. Quotations from <em>The Brothers Karamazov</em> are from the Constance Garnett translation.</p>
+
+  <!-- Opening -->
+  <div class="section-label">Opening</div>
+  <h2>The brandy table.</h2>
+
+  <div class="scripture">
+    <div class="scripture-ref">John 12:24</div>
+    <p>"Verily, verily, I say unto you, Except a corn of wheat fall into the ground and die, it abideth alone: but if it die, it bringeth forth much fruit."</p>
+  </div>
+
+  <p>With these words Fyodor Dostoevsky begins his last novel, <em>The Brothers Karamazov</em>. Before the first chapter, before we meet a single character, he sets this verse from the Gospel of John at the head of the book.</p>
+
+  <p>He published that novel in 1880, a few months before he died. Early in the book there is a dinner in a small Russian town, at the house of an old landowner named Fyodor Pavlovich Karamazov.</p>
+
+  <p>Fyodor Pavlovich is a buffoon and a sensualist. He has spent his life on drinking, on women and on making fools of other people. When his wives died, he left his small sons to be raised by a servant, in a cottage in the yard, and forgot they existed.</p>
+
+  <p>The novel treats a lot about the state of the dead, about existence of God, and makes some very good points along the way, as well as its final conclusion is exactly in line with how we understand the state of the dead, the resurrection, and what comfort we derive from those facts.</p>
+
+  <p>When I was reading it, it reminded me of Paul's writing to Corinthians. And so, I'll now share how the novel helped me study the Bible.</p>
+
+  <p>One of the early scenes in the novel: a dinner.</p>
+
+  <p>Five people are in the dining room. At the table sit the old man and two of his sons. Ivan is the educated one, a writer of articles, cool and clever. Alyosha is the youngest, a novice at the monastery, gentle and watchful. The old servant Grigory, stern and devout, is in the room as well. He is the man who actually raised those boys. And serving the meal, standing by the door, is a young man named Smerdyakov. He is the cook. Grigory raised him too.</p>
+
+  <p>Over dessert, Grigory tells a story he has heard. A Russian soldier, taken prisoner far away in Asia, was tortured to death rather than renounce Christ. Grigory tells it as a story of faithfulness. Smerdyakov, from the door, disagrees. He argues that the soldier would have committed no sin had he denied Christ and saved his life. He adds that since no one in Russia has faith enough to move a mountain, except perhaps a couple of hermits in the desert, no one can be blamed for having too little. This talk evokes plenty of emotions among the diners and it's worth reading to see how it all develops. Then this question is asked of Alyosha – the novice at the monastery: whether that isn't the faith of their people all over: everyone admits that almost no one truly believes, and everyone goes on as believers anyway. And Alyosha answers firmly and gravely: "No, Smerdyakov has not the Russian faith at all."</p>
+
+  <p>Now the old man – the father – Fyodor Pavlovich drinks more. He apologises to Alyosha for a scene he caused earlier at the monastery, and then he says this: "If there is a God, if He exists, then, of course, I'm to blame, and I shall have to answer for it." For this man, the question of God is a question of accounts. If there is a God, he will be asked about the life he has lived. If there is not, nothing will ever be asked.</p>
+
+  <p>So he asks. And here we let Dostoevsky tell it in his own words. The old man turns first to Ivan:</p>
+
+  <div class="novel">
+    <div class="novel-ref">The Brothers Karamazov · Book III, ch. 8</div>
+    <p>"Speak, all the same, is there a God, or not? Only, be serious. I want you to be serious now."</p>
+    <p>"No, there is no God."</p>
+    <p>"Alyosha, is there a God?"</p>
+    <p>"There is."</p>
+    <p>"Ivan, and is there immortality of some sort, just a little, just a tiny bit?"</p>
+    <p>"There is no immortality either."</p>
+    <p>"None at all?"</p>
+    <p>"None at all."</p>
+    <p>"There's absolute nothingness then. Perhaps there is just something? Anything is better than nothing!"</p>
+    <p>"Alyosha, is there immortality?"</p>
+    <p>"There is."</p>
+    <p>"God and immortality?"</p>
+    <p>"God and immortality. In God is immortality."</p>
+  </div>
+
+  <p>The old man decides that Ivan is more likely right. He asks once more, for the last time, and for the last time Ivan says there is not. Is there a devil, then? No devil either. And then the conversation lingers around a natural corollary proposed by Ivan: there would have been no civilisation if men had not invented God. This remark sparks its own theological, or indeed atheistic, discussion, positing that man made God and not God man. Later in the novel Ivan tells Alyosha exactly this: that man has actually invented God, and that he himself has long resolved not to think whether man created God or God man.</p>
+
+  <p>The evening goes on, and the old man grows drunker. He boasts of how he once tested the faith of his second wife, the mother of Ivan and Alyosha. He took down her holy icon and told her he would spit on it and nothing would happen to him. The same attitude again: nothing will happen to me. That one sentence is the old man's whole theology. As he tells the story, Alyosha collapses, trembling and weeping, exactly as his mother did. At that moment there is shouting in the hall, the door bursts open, and the third son, Dmitri, storms in. The old man runs to Ivan and clings to his coat, screaming that Dmitri will kill him.</p>
+
+  <p>Before the novel ends, the old man will be murdered in that house. And every person who was in that room will answer, one way or another, the question the old man asked: is there anything after death, and will anyone have to answer for the life he has lived?</p>
+
+  <p>The Bible tells us that this same question was being asked in the church at Corinth. Paul writes:</p>
+
+  <div class="scripture">
+    <div class="scripture-ref">1 Corinthians 15:12</div>
+    <p>"Now if Christ be preached that he rose from the dead, how say some among you that there is no resurrection of the dead?"</p>
+  </div>
+
+  <hr class="divider">
+
+  <!-- I -->
+  <div class="section-label">I — 1 Corinthians 15:12–19</div>
+  <h2>If Christ be not raised.</h2>
+
+  <p>Paul follows the answer "no" all the way to its end:</p>
+
+  <div class="scripture">
+    <div class="scripture-ref">1 Corinthians 15:13–14, 17–19</div>
+    <p>"But if there be no resurrection of the dead, then is Christ not risen: and if Christ be not risen, then is our preaching vain, and your faith is also vain… And if Christ be not raised, your faith is vain; ye are yet in your sins. Then they also which are fallen asleep in Christ are perished. If in this life only we have hope in Christ, we are of all men most miserable."</p>
+  </div>
+
+  <p>Paul states the condition under which his whole faith would be false. If the dead rise not, preaching is empty, faith is empty, sins remain unforgiven, and those who have died are simply gone. And, we may add, Fyodor Pavlovich will never face judgement. Paul offers no middle position and no comfortable fallback. Either the dead rise, or we are of all men most miserable.</p>
+
+  <p>The people in Corinth who said "there is no resurrection of the dead" were, many of them, Greeks, raised on the teaching that the soul lives on after death and that the body is like a prison for the soul. A soul that floats free suited them very well. A body raised from the grave seemed crude. And Paul treats their position as no better than unbelief. A future without resurrection is, for Paul, no future at all.</p>
+
+  <p>Now we return to Dostoevsky. On the same day as the dinner we just discussed took place, earlier in the morning, the whole family had gathered at the monastery in the cell of the elder Zosima. There a guest named Miüsov repeats something he once heard Ivan argue at a gathering in town. Ivan had said that there is no law of nature that makes men love one another. If there has been love on earth, it is only because men have believed in immortality. And if you destroy that belief, Ivan said, then not only love but every living force that keeps the world going would dry up at once. Nothing would be immoral any more. Everything would be lawful.</p>
+
+  <p>The old elder turns to Ivan and asks him whether he really believes this. Ivan answers that he does:</p>
+
+  <blockquote>"There is no virtue if there is no immortality."</blockquote>
+
+  <p>Those of us who have led people at work know something of this. People act differently when they believe they will one day be asked to give an account. One of America's largest banks set its staff aggressive sales targets, and for years employees opened accounts that customers never asked for, some three and a half million of them. They answered to the quota and assumed that no one would ever look behind the numbers. Nothing would happen to them. But the day of reckoning came. More than five thousand employees lost their jobs, the bank paid billions in penalties, and its chief executive was barred from banking for life. What keeps conduct steady is the knowledge that one day someone will look. Ivan saw the same thing on the scale of the whole world.</p>
+
+  <p>Note the shape of what Ivan says. It is Paul's argument in 1 Corinthians 15, run from the other side. Paul says: if the dead rise not, then our faith is vain and our sacrifice is foolish. Ivan says: if there is no immortality, then virtue has no ground and everything is permitted. Both men refuse the comfortable middle where we keep our morals and let go of our hope. Both say the two stand or fall together.</p>
+
+  <p>But there is a difference, and Zosima sees it. Paul holds the condition and the hope. Ivan holds the condition without the hope. He has followed the argument to its end and found nothing there, and still he lives as an honest, serious man. Zosima does not mock him for it. He tells Ivan that this question has not been settled in his heart, and that a question which cannot be answered "yes" will never be answered "no" either. Then he gives thanks for the heart God has given Ivan, a heart capable of suffering over such things and of seeking higher things, "for our dwelling is in the heavens." Note that Zosima is echoing the apostle here:</p>
+
+  <div class="scripture">
+    <div class="scripture-ref">Philippians 3:20</div>
+    <p>"For our conversation is in heaven; from whence also we look for the Saviour."</p>
+  </div>
+
+  <p>Therefore we should not stand over Ivan Karamazov as though he were a fool. He is closer to Paul than most comfortable believers. He has seen that if there is nothing after death, then the whole moral structure of our lives stands on air. The tragedy of Ivan is that he has seen the condition clearly and cannot see the answer. And as the novel goes on, the rest of the household will show us what happens when that condition is answered with "no."</p>
+
+  <hr class="divider">
+
+  <!-- II -->
+  <div class="section-label">II — 1 Corinthians 15:32</div>
+  <h2>Let us eat and drink.</h2>
+
+  <p>Paul then takes his argument from the abstract to his own life:</p>
+
+  <div class="scripture">
+    <div class="scripture-ref">1 Corinthians 15:32</div>
+    <p>"If after the manner of men I have fought with beasts at Ephesus, what advantageth it me, if the dead rise not? let us eat and drink; for to morrow we die."</p>
+  </div>
+
+  <p>Note that the last words are a quotation. Paul is citing the prophet Isaiah. In Isaiah 22, Jerusalem is surrounded by its enemies, and the Lord calls the city to repentance:</p>
+
+  <div class="scripture">
+    <div class="scripture-ref">Isaiah 22:12–13</div>
+    <p>"And in that day did the Lord GOD of hosts call to weeping, and to mourning… And behold joy and gladness, slaying oxen, and killing sheep, eating flesh, and drinking wine: let us eat and drink; for to morrow we shall die."</p>
+  </div>
+
+  <p>The city facing judgement holds a feast. The feast is their answer to the call to account.</p>
+
+  <p>Therefore "let us eat and drink" is more than appetite. It is a position on the question of accounts. If nothing comes after death, then nothing will be asked, and the sensible course is to take what we can while we can.</p>
+
+  <p>Fyodor Pavlovich Karamazov is that verse with a face. Dostoevsky calls the book in which he appears "The Sensualists," and the old man is the chief of them. At the brandy table, he says: "If there is a God… I shall have to answer for it." He knows exactly what is at stake. And so he asks Ivan for the answer he wants. He curses the man who first invented God. He spits, in front of his own wife, on what she holds holy, to prove that nothing will happen to him.</p>
+
+  <p>Note the order of things in this man. He lived as he liked first, and only then needed unbelief to make that life safe. The denial is wanted before it is argued. And the Bible tells us that this is the usual order:</p>
+
+  <div class="scripture">
+    <div class="scripture-ref">John 3:19</div>
+    <p>"Men loved darkness rather than light, because their deeds were evil."</p>
+  </div>
+
+  <p>But Dostoevsky shows us something more in the old man, and it brings us to the centre of Paul's argument. When Ivan tells him there is no immortality at all, Fyodor Pavlovich does not rejoice. He begs. "Perhaps there is just something? Anything is better than nothing!" He wants to go on. He simply does not want to be asked.</p>
+
+  <p>What the old man wants is the Corinthian position. He wants a little something after death, a soul that drifts on somewhere, but no God who calls him to account. And note that the Bible gives him no such option. The resurrection Paul preaches is a summons. Jesus says:</p>
+
+  <div class="scripture">
+    <div class="scripture-ref">John 5:28–29</div>
+    <p>"All that are in the graves shall hear his voice, and shall come forth; they that have done good, unto the resurrection of life; and they that have done evil, unto the resurrection of damnation."</p>
+  </div>
+
+  <p>Resurrection means we are raised to stand before God. "For we must all appear before the judgment seat of Christ" (2 Corinthians 5:10). Therefore the old man is right, in his drunken way, that the question of immortality is a question of accounts.</p>
+
+  <p>Fyodor Pavlovich eats and drinks to the very end. He spends his last evening in that house waiting at the window for a woman, with money set aside in an envelope for her. And on that night, the man who was so sure nothing would happen to him is killed. "To morrow we die" comes true for him.</p>
+
+  <hr class="divider">
+
+  <!-- III -->
+  <div class="section-label">III — 1 Corinthians 15:33</div>
+  <h2>Evil communications.</h2>
+
+  <p>Immediately after "let us eat and drink," Paul gives a warning:</p>
+
+  <div class="scripture">
+    <div class="scripture-ref">1 Corinthians 15:33–34</div>
+    <p>"Be not deceived: evil communications corrupt good manners. Awake to righteousness, and sin not; for some have not the knowledge of God: I speak this to your shame."</p>
+  </div>
+
+  <p>Note that this too is a quotation. "Evil communications corrupt good manners" is a line from Menander, a Greek writer of comedies who lived three centuries before Paul. The apostle borrows a proverb from the theatre because it states a plain truth: what we hear shapes what we do. In the Greek, "communications" means company, the conversations we keep. Paul's point is that a denial of the resurrection does not stay a theory. Once it is spoken in the church, it spreads into conduct.</p>
+
+  <p><em>The Brothers Karamazov</em> is built around that verse.</p>
+
+  <p>Go back to the dinner table one last time. Smerdyakov stood by the door arguing that a man may deny Christ and commit no sin. And after he left, Ivan said of him, smiling, "He's storing up ideas." Ivan meant it as contempt. It was a prophecy.</p>
+
+  <p>For months Smerdyakov listens to Ivan. He hears the clever young man say that without immortality there is no virtue, and that everything is lawful. Ivan says it as an argument, the way educated men say such things over dinner. Smerdyakov hears it as permission.</p>
+
+  <p>Then the old man is murdered. Dmitri is arrested, and every piece of evidence points to him. But Ivan cannot rest, and three times he goes to see Smerdyakov. The third and last time, on a night of snowstorm, he finds him sick and thin in a small, overheated room. Ivan demands answers, and Smerdyakov looks at him with contempt and says: "Nothing will happen to you; can't you believe that at last? Go home, go to bed and sleep in peace, don't be afraid of anything."</p>
+
+  <blockquote>Nothing will happen to you.</blockquote>
+
+  <p>It is the old man's sentence, spoken over the icon, now spoken by the servant to the son.</p>
+
+  <p>Smerdyakov thinks Ivan is pretending. He is sure Ivan knew all along. And so he confesses. He killed the old man himself, with his own hands. But in the same breath he lays the guilt at Ivan's feet: "You murdered him; you are the real murderer, I was only your instrument, your faithful servant, and it was following your words I did it." Note which words he means. Ivan had said that if there is no immortality there is no virtue, and that everything is lawful. Smerdyakov heard that as permission, and he acted on it. Therefore, in his eyes, the man who supplied the idea is the real murderer, and the man who struck the blow was only the instrument. Ivan turns cold. He did not know. And when Ivan, in terror, asks whether he is dreaming, Smerdyakov tells him that there is a third person in the room with them: God Himself, Providence, standing beside them now. The murderer, of all people, knows that the question of accounts has not gone away.</p>
+
+  <p>Then Smerdyakov pulls the stolen money out of his stocking and lays it on the table, and tells Ivan to take it. Ivan asks him why he gives it back, if he killed for it. Here is Dostoevsky's text:</p>
+
+  <div class="novel">
+    <div class="novel-ref">The Brothers Karamazov · Book XI, ch. 8</div>
+    <p>"I don't want it," Smerdyakov articulated in a shaking voice, with a gesture of refusal. "I did have an idea of beginning a new life with that money in Moscow or, better still, abroad. I did dream of it, chiefly because 'all things are lawful.' That was quite right what you taught me, for you talked a lot to me about that. For if there's no everlasting God, there's no such thing as virtue, and there's no need of it. You were right there. So that's how I looked at it."</p>
+    <p>"Did you come to that of yourself?" asked Ivan, with a wry smile.</p>
+    <p>"With your guidance."</p>
+  </div>
+
+  <p>Note what has happened to Ivan's words. In the elder's cell he said, "There is no virtue if there is no immortality." Over the stolen money, the murderer gives the same sentence back to him: "if there's no everlasting God, there's no such thing as virtue." The theology of the father has passed through the conversation of the brother into the hands of the servant, and it comes back to the father as a death.</p>
+
+  <p>The story ends darkly. Smerdyakov hangs himself before the trial. Ivan goes to the courtroom to confess that he is guilty, and he breaks down in front of the court.</p>
+
+  <p>Note what Dostoevsky has shown us. Ivan never lifted a hand against his father. He wanted no murder. He only held an idea, and spoke it, and the idea was carried out by someone who heard it without Ivan's scruples. Paul's warning is exactly this: be not deceived. An idea held lightly by a teacher is acted on fully by a listener.</p>
+
+  <p>Therefore this verse is for us. We are parents, teachers, Pathfinder leaders, elders and friends. Someone is always standing by the door, storing up what we say. And what we say carelessly about death, about judgement, about whether anything will be asked of us, may be lived out by someone else in full. "Awake to righteousness, and sin not."</p>
+
+  <hr class="divider">
+
+  <!-- IV -->
+  <div class="section-label">IV — 1 Corinthians 15:42–44, 50–53</div>
+  <h2>Sown in corruption.</h2>
+
+  <p>Paul now answers the man who asks, "How are the dead raised up? and with what body do they come?" (15:35). And his answer begins with the very image Dostoevsky set at the head of his novel:</p>
+
+  <div class="scripture">
+    <div class="scripture-ref">1 Corinthians 15:36–37</div>
+    <p>"Thou fool, that which thou sowest is not quickened, except it die: And that which thou sowest, thou sowest not that body that shall be, but bare grain, it may chance of wheat, or of some other grain."</p>
+  </div>
+
+  <p>Then Paul says:</p>
+
+  <div class="scripture">
+    <div class="scripture-ref">1 Corinthians 15:42–44</div>
+    <p>"So also is the resurrection of the dead. It is sown in corruption; it is raised in incorruption: it is sown in dishonour; it is raised in glory: it is sown in weakness; it is raised in power: it is sown a natural body; it is raised a spiritual body."</p>
+  </div>
+
+  <div class="scripture">
+    <div class="scripture-ref">1 Corinthians 15:52–53</div>
+    <p>"For the trumpet shall sound, and the dead shall be raised incorruptible, and we shall be changed. For this corruptible must put on incorruption, and this mortal must put on immortality."</p>
+  </div>
+
+  <p>Note the order. First the body is sown in corruption. Then, at the trumpet, it is raised in incorruption. Corruption belongs to the grave and incorruption belongs to the resurrection, and Paul does not let us mix the two. Note also the word "put on." Immortality is put on, like a garment given. We do not possess it by nature. The Bible tells us that God "only hath immortality" (1 Timothy 6:16), and that He gives it to His people at the last trump.</p>
+
+  <p>Now we come to the elder Zosima. He is the holy old man who blessed Ivan in his cell and who sent Alyosha out of the monastery into the world. The whole town counts him a saint. And he dies, peacefully, as he had foretold.</p>
+
+  <p>In that church there was a belief that the body of a true saint does not decay. Some holy men of the past, so the story went, lay in their coffins for days and gave off no odour of death, and some even a sweet fragrance. And so the monks and the townspeople come to the elder's coffin expecting a sign. They expect, as Dostoevsky tells us, that to look for decay in the body of such a saint would be an absurdity.</p>
+
+  <p>But the body decays. Dostoevsky tells it plainly:</p>
+
+  <div class="novel">
+    <div class="novel-ref">The Brothers Karamazov · Book VII, ch. 1</div>
+    <p>"The fact is that a smell of decomposition began to come from the coffin, growing gradually more marked, and by three o'clock it was quite unmistakable. In all the past history of our monastery, no such scandal could be recalled, and in no other circumstances could such a scandal have been possible, as showed itself in unseemly disorder immediately after this discovery among the very monks themselves. Afterwards, even many years afterwards, some sensible monks were amazed and horrified, when they recalled that day, that the scandal could have reached such proportions. For in the past, monks of very holy life had died, God-fearing old men, whose saintliness was acknowledged by all, yet from their humble coffins, too, the breath of corruption had come, naturally, as from all dead bodies, but that had caused no scandal nor even the slightest excitement."</p>
+  </div>
+
+  <p>Note that last sentence. Holy men had decayed before, and no one was troubled. This time it is different, because this time the people had been waiting for a miracle.</p>
+
+  <p>And the scandal is enormous. The elder's enemies in the monastery rejoice, and, as the elder himself used to say, "men love the downfall and disgrace of the righteous." One gentle monk, the librarian, tries to remind them that the incorruption of the bodies of the just was never a doctrine of their church, only an opinion, and no one will listen. A fierce old ascetic comes to the door crying out to drive away devils, and the crowd hails him as the true holy man. And Alyosha, who loved the elder more than anyone, turns away from the church, ignores the bell calling him to service, and walks out through the gates of the monastery without a word. His faith is shaken to its roots. What he could not bear was that the man he loved most should be shamed before everyone.</p>
+
+  <p>Why are we looking at this so closely? Because what broke their faith was their expectation. They expected at the moment of death what Paul promises at the sound of the trumpet. They expected the body of a righteous man to be exempt from corruption now, and the Bible never promised that. "It is sown in corruption." Every body is, the saint's as well as the sinner's. The prophet Daniel was told:</p>
+
+  <div class="scripture">
+    <div class="scripture-ref">Daniel 12:13</div>
+    <p>"Go thou thy way till the end be: for thou shalt rest, and stand in thy lot at the end of the days."</p>
+  </div>
+
+  <p>Rest first. Stand at the end.</p>
+
+  <p>And note one more thing. The crowd at the coffin was doing exactly what Jesus refused to do for the crowds of His day. "An evil and adulterous generation seeketh after a sign" (Matthew 12:39). Faith that rests on a sign falls when the sign fails. Faith that rests on the promise can bear the smell of the grave.</p>
+
+  <p>Therefore the answer to the corpse is the trumpet that is still to sound. The elder sleeps in corruption, as every saint before him has slept, and he waits for the trumpet. "Then shall be brought to pass the saying that is written, Death is swallowed up in victory" (15:54).</p>
+
+  <hr class="divider">
+
+  <!-- V -->
+  <div class="section-label">V — 1 Corinthians 15:58</div>
+  <h2>The speech at the stone, and "Therefore".</h2>
+
+  <p>Dostoevsky ends his novel after the trial and after Ivan's breakdown, at the funeral of a child.</p>
+
+  <p>The boy's name is Ilusha. He is nine or ten years old, the son of a poor, broken army captain. Months earlier, Dmitri Karamazov humiliated the captain in the street, dragging him by his beard while his little son ran beside them begging for mercy. After that the schoolboys mocked Ilusha for his father's shame, and they threw stones at him, and he threw stones back. Then the boy fell ill. Alyosha came to that poor house again and again, and slowly the same boys who had stoned Ilusha came to sit by his bed. And now Ilusha is dead.</p>
+
+  <p>At the funeral the father is beside himself with grief. He had wanted to bury his son by a large stone near the bridge, the place where the two of them used to walk, and only with difficulty is he persuaded to bury him in the churchyard. When the coffin is closed, he throws his arms about as though he would not let them cover his boy. Back home, he sees Ilusha's little boots by the bed, and he breaks down completely.</p>
+
+  <p>After the burial, Alyosha stops the boys, a dozen of them, at that stone. He tells them they must never forget this day, nor the boy they once threw stones at and came to love. He tells them that one good memory kept from childhood may save a man one day from evil. And he asks them to be, first of all, kind, then honest, and never to forget one another.</p>
+
+  <p>Then Kolya, the boldest of the boys, a clever, proud lad who liked to sound older than his years, asks the question the whole novel has been asking. Here are Dostoevsky's words:</p>
+
+  <div class="novel">
+    <div class="novel-ref">The Brothers Karamazov · Epilogue, ch. 3</div>
+    <p>"Karamazov," cried Kolya, "can it be true what's taught us in religion, that we shall all rise again from the dead and shall live and see each other again, all, Ilusha too?"</p>
+    <p>"Certainly we shall all rise again, certainly we shall see each other and shall tell each other with joy and gladness all that has happened!" Alyosha answered, half laughing, half enthusiastic.</p>
+    <p>"Ah, how splendid it will be!" broke from Kolya.</p>
+  </div>
+
+  <p>And the boys walk off together, hand in hand, to the funeral meal, crying "Hurrah for Karamazov!"</p>
+
+  <p>Note what Dostoevsky has done. At the brandy table near the beginning, a drunken old man begged his sons for immortality "of some sort, just a little, just a tiny bit," a soul that might drift on somewhere with nothing asked of it. At a child's grave near the end, his youngest son answers a boy's question with the resurrection of the body. "We shall all rise again." No vague survival, no drifting soul. Real children, raised and recognised, telling one another everything. The old man named Karamazov made his name a byword for appetite and contempt. At the end of the book, children shout that same name for joy, because of the son who believed that the dead rise.</p>
+
+  <p>The Bible tells us the same.</p>
+
+  <div class="scripture">
+    <div class="scripture-ref">1 Corinthians 15:51–52</div>
+    <p>"Behold, I shew you a mystery; We shall not all sleep, but we shall all be changed, In a moment, in the twinkling of an eye, at the last trump: for the trumpet shall sound, and the dead shall be raised incorruptible, and we shall be changed."</p>
+  </div>
+
+  <p>And Paul writes to another grieving church:</p>
+
+  <div class="scripture">
+    <div class="scripture-ref">1 Thessalonians 4:16, 18</div>
+    <p>"For the Lord himself shall descend from heaven with a shout… and the dead in Christ shall rise first… Wherefore comfort one another with these words."</p>
+  </div>
+
+  <p>That is what Alyosha does at the stone. He comforts the boys with these words.</p>
+
+  <p>And so we return to Paul's "if." If the dead rise not, then Fyodor Pavlovich was right to eat and drink. Then Ivan was right that virtue stands on nothing. Then Smerdyakov was only consistent. Then the monks were right to despair at the smell of the coffin, and Alyosha's words to the boys were a kind lie told at a grave.</p>
+
+  <p>But Paul does not leave us at the "if." "But now is Christ risen from the dead, and become the firstfruits of them that slept" (15:20). And from that "now," Paul draws his conclusion, and the Bible gives us its own "therefore":</p>
+
+  <div class="scripture">
+    <div class="scripture-ref">1 Corinthians 15:58</div>
+    <p>"Therefore, my beloved brethren, be ye stedfast, unmoveable, always abounding in the work of the Lord, forasmuch as ye know that your labour is not in vain in the Lord."</p>
+  </div>
+
+  <div class="principle">
+    <div class="section-label">Therefore</div>
+    <p>This verse answers a lot. The old man said, nothing will happen to me. Paul says: something will happen to all of us, for the trumpet shall sound. Ivan said, if there is no immortality there is no virtue. Paul says: because the dead are raised, your labour is not in vain.</p>
+    <p>The kindness Alyosha asked of the boys, the faithfulness no one sees, the work that will never be repaid in this life, all of it stands on the resurrection.</p>
+    <p><strong>Therefore we are steadfast. Therefore we are unmoveable. Therefore we abound in the work of the Lord, because the dead rise.</strong></p>
+  </div>
+
+  <div class="tags">
+    <span class="tag">Sermon</span>
+    <span class="tag">Resurrection</span>
+    <span class="tag">State of the dead</span>
+    <span class="tag">Dostoevsky</span>
+    <span class="tag">1 Corinthians 15</span>
+  </div>
+
+  <footer>
+    <span>© Jakub Szczybura</span>
+    <a href="/faith">← Faith &amp; Reflection</a>
+  </footer>
+
+</div>
+</body>
+</html>
