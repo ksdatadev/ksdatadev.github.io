@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Virtues the Last Machine Needed — Jakub Szczybura</title>
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --color-bg: #fafaf8;
+      --color-text: #1a1a1a;
+      --color-muted: #6b6b6b;
+      --color-faint: #9a9a9a;
+      --color-border: rgba(0,0,0,0.1);
+      --color-tag-bg: #f0efe9;
+      --color-accent-bg: #f5f0e8;
+      --color-accent-border: #c8a96e;
+      --font-serif: 'Georgia', 'Times New Roman', serif;
+      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-mono: 'SF Mono', 'Fira Code', monospace;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --color-bg: #141412;
+        --color-text: #e8e8e4;
+        --color-muted: #9a9a94;
+        --color-faint: #5a5a56;
+        --color-border: rgba(255,255,255,0.1);
+        --color-tag-bg: #1e1e1a;
+        --color-accent-bg: #1e1a12;
+        --color-accent-border: #8a6a2e;
+      }
+    }
+
+    body {
+      font-family: var(--font-serif);
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.8;
+      font-size: 18px;
+      padding: 0 0 6rem;
+    }
+
+    .container { max-width: 660px; margin: 0 auto; padding: 0 1.5rem; }
+
+    .post-meta {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      color: var(--color-faint);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+    }
+
+    h1 {
+      font-family: var(--font-serif);
+      font-size: 36px;
+      font-weight: normal;
+      line-height: 1.25;
+      margin-bottom: 1rem;
+      letter-spacing: -0.01em;
+    }
+
+    .lede {
+      font-size: 20px;
+      color: var(--color-muted);
+      line-height: 1.6;
+      margin-bottom: 3rem;
+      font-style: italic;
+      border-bottom: 0.5px solid var(--color-border);
+      padding-bottom: 2rem;
+    }
+
+    .section-label {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-faint);
+      margin-bottom: 0.75rem;
+      margin-top: 3rem;
+    }
+
+    h2 {
+      font-family: var(--font-serif);
+      font-size: 22px;
+      font-weight: normal;
+      margin-bottom: 1.25rem;
+      color: var(--color-text);
+    }
+
+    p { margin-bottom: 1.4rem; }
+    p:last-child { margin-bottom: 0; }
+    em { font-style: italic; }
+    strong { font-weight: 600; }
+
+    blockquote {
+      border-left: 2px solid var(--color-text);
+      margin: 2.5rem 0;
+      padding: 0.25rem 0 0.25rem 1.5rem;
+      font-size: 20px;
+      font-style: italic;
+      color: var(--color-text);
+      line-height: 1.5;
+    }
+
+    .insight {
+      background: var(--color-tag-bg);
+      border-radius: 8px;
+      padding: 1.5rem 1.75rem;
+      margin: 2.5rem 0;
+      font-size: 17px;
+      line-height: 1.75;
+      color: var(--color-text);
+    }
+
+    ul.plain { margin: 0 0 1.4rem 1.25rem; }
+    ul.plain li { margin-bottom: 0.75rem; }
+
+    hr.divider {
+      border: none;
+      border-top: 0.5px solid var(--color-border);
+      margin: 3rem 0;
+    }
+
+    .principle {
+      background: var(--color-tag-bg);
+      border-radius: 8px;
+      padding: 1.75rem 2rem;
+      margin-top: 3rem;
+    }
+    .principle .section-label { margin-top: 0; }
+    .principle p {
+      font-size: 17px;
+      line-height: 1.7;
+      margin-bottom: 1rem;
+      color: var(--color-text);
+    }
+    .principle p:last-child { margin-bottom: 0; }
+    .principle strong { font-style: italic; font-weight: normal; }
+
+    .tags {
+      margin-top: 2rem;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-family: var(--font-sans);
+    }
+
+    .tag {
+      font-size: 12px;
+      color: var(--color-muted);
+      background: var(--color-tag-bg);
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+
+    footer {
+      margin-top: 5rem;
+      padding-top: 2rem;
+      border-top: 0.5px solid var(--color-border);
+      font-family: var(--font-sans);
+      font-size: 13px;
+      color: var(--color-faint);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    footer a { color: var(--color-muted); text-decoration: none; }
+    footer a:hover { color: var(--color-text); }
+  </style>
+</head>
+<body>
+<script src="/nav.js"></script>
+<div class="container">
+
+  <div class="post-meta">November 2026 &nbsp;·&nbsp; 3 min read</div>
+
+  <h1>The Virtues the Last Machine Needed</h1>
+
+  <p class="lede">The usual story says schools once taught character and, around the First World War, switched to teaching information so people could run the industrial machine. The story is half right.</p>
+
+  <div class="section-label">The brief</div>
+
+  <p>Schools never stopped forming character. What changed was which virtues they formed: piety and honour gave way to compliance and reliability.</p>
+
+  <p>The distinction matters to anyone redesigning work around AI. The virtues the last machine needed are the ones the new machine supplies most cheaply.</p>
+
+  <hr class="divider">
+
+  <div class="section-label">The floor</div>
+
+  <p>Nineteenth-century education stated its moral aims openly. Thomas Arnold, headmaster of Rugby from 1828 to 1841, ranked religious and moral principle first, gentlemanly conduct second and intellectual ability third. In America, the McGuffey Readers sold well over 100 million copies and taught reading through stories of honesty, thrift and providence.</p>
+
+  <p>The virtues on offer were piety, honour, self-command and duty. They pointed towards God, family and civic standing. A boy was formed to govern himself and, in the elite case, to govern others.</p>
+
+  <p>The picture was never pure. Most children received a few years of rote recitation, and Dickens mocked fact-cramming in <em>Hard Times</em> in 1854. Horace Mann's <em>Fifth Annual Report</em> (1841) already argued that schooling made workers more productive. The economic motive was there from the start; it lacked a method.</p>
+
+  <hr class="divider">
+
+  <div class="section-label">The reframe</div>
+
+  <p>The method arrived between 1905 and 1920. Frederick Taylor published <em>The Principles of Scientific Management</em> in 1911, and school administrators borrowed his vocabulary within five years. Ellwood Cubberley's <em>Public School Administration</em> (1916) described schools as factories shaping raw material to specification, and Franklin Bobbitt's <em>The Curriculum</em> (1918) applied job analysis to deciding what children should learn.</p>
+
+  <p>The infrastructure followed. The Carnegie Unit (1906) turned learning into seat time. Intelligence testing, scaled through the Army Alpha in 1917, made sorting children a scientific task. Bells, timetables and age-graded classes trained bodies to the rhythm of the work shift.</p>
+
+  <p>It is sometimes described as a move from character to information, but really it is a move from one character to another. The NEA's <em>Cardinal Principles of Secondary Education</em> (1918), the charter of the efficiency era, still listed ethical character among its seven aims. Character survived; its content, or emphasis, changed.</p>
+
+  <hr class="divider">
+
+  <div class="section-label">The build</div>
+
+  <p>Sociologists later named what the classroom was teaching. Philip Jackson's <em>Life in Classrooms</em> (1968) coined the term "hidden curriculum": learning to wait, to tolerate interruption, to work under constant evaluation and to accept authority one did not choose.</p>
+
+  <p>Samuel Bowles and Herbert Gintis pressed the point furthest in <em>Schooling in Capitalist America</em> (1976). They argued that grades rewarded punctuality, perseverance, dependability and deference, the same traits supervisors rewarded in workers.</p>
+
+  <p>The mechanism is simple. The industrial economy's bottleneck was coordination at scale: thousands of people arriving on time, following procedure and repeating a task without variation. Information mattered less than disposition, and schools supplied the disposition.</p>
+
+  <p>The older virtues lost their footing for a separate reason. Their source was a shared Protestant consensus, which fractured across the century and was formally removed from American public schools by the prayer rulings of 1962 and 1963. Compliance and reliability needed no theology; employment justified them on its own.</p>
+
+  <hr class="divider">
+
+  <div class="section-label">The principle</div>
+
+  <blockquote>Institutions form the virtues their bottleneck requires, then call the result education.</blockquote>
+
+  <p>That principle has a consequence for technology leaders. Procedure-following is what automation targets first. When AI agents fail in production, they have usually followed the procedure correctly in a situation it no longer fitted.</p>
+
+  <p>The scarce virtues therefore move to judgement, candour and accountability: noticing when the procedure is wrong, saying so, and owning the outcome. That list sits closer to Arnold's than to Cubberley's. Self-command and honour, in working form, are the habits of someone trusted to act without supervision.</p>
+
+  <p>The claim is testable. If it holds, entry-level roles built on reliable execution will shrink fastest, and organisations will struggle to hire for judgement, because neither schools nor graduate schemes are currently built to form it. Watch whether training budgets shift from process certification towards supervised judgement: apprenticeship, review and real consequence.</p>
+
+  <div class="principle">
+    <p><strong>Every education forms character. The question each institution answers is which character, and for whose machine.</strong></p>
+  </div>
+
+  <div class="tags">
+    <span class="tag">AI strategy</span>
+    <span class="tag">Education</span>
+    <span class="tag">History</span>
+    <span class="tag">Future of work</span>
+  </div>
+
+  <footer>
+    <span>© Jakub Szczybura</span>
+    <a href="/blog">All posts →</a>
+  </footer>
+
+</div>
+</body>
+</html>
