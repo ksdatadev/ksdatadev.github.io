@@ -3,76 +3,43 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Jakub Szczybura</title>
+  <title>Jakub Szczybura · Technology in Context</title>
+  <meta name="description" content="Essays on data, AI and technology leadership, and on the gap between what systems tell you and what is actually happening." />
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --color-bg: #fafaf8; --color-text: #1a1a1a; --color-muted: #6b6b6b;
-      --color-faint: #9a9a9a; --color-border: rgba(0,0,0,0.1);
-      --color-tag-bg: #f0efe9;
-      --font-serif: 'Georgia','Times New Roman',serif;
-      --font-sans: -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-    }
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --color-bg: #141412; --color-text: #e8e8e4; --color-muted: #9a9a94;
-        --color-faint: #5a5a56; --color-border: rgba(255,255,255,0.1);
-        --color-tag-bg: #1e1e1a;
-      }
-    }
-    body { font-family: var(--font-sans); background: var(--color-bg); color: var(--color-text); min-height: 100vh; padding: 0 0 6rem; }
-    .container { max-width: 660px; margin: 0 auto; padding: 0 1.5rem; }
-    .hero { margin-bottom: 5rem; }
-    .hero-label { font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-faint); margin-bottom: 1.25rem; }
-    h1 { font-family: var(--font-serif); font-size: 40px; font-weight: normal; line-height: 1.2; letter-spacing: -0.01em; margin-bottom: 1.5rem; }
-    .hero p { font-size: 17px; line-height: 1.75; color: var(--color-muted); max-width: 540px; }
-    .section { margin-bottom: 4rem; }
-    .section-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 0.5px solid var(--color-border); }
-    .section-header h2 { font-family: var(--font-sans); font-size: 12px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-faint); }
-    .section-header a { font-size: 13px; color: var(--color-muted); text-decoration: none; }
-    .section-header a:hover { color: var(--color-text); }
-    .post-list { list-style: none; }
-    .post-item { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding: 1rem 0; border-bottom: 0.5px solid var(--color-border); text-decoration: none; color: inherit; }
-    .post-item:first-child { padding-top: 0; }
-    .post-item:last-child { border-bottom: none; }
-    .post-item:hover .post-title { color: var(--color-muted); }
-    .post-title { font-family: var(--font-serif); font-size: 17px; line-height: 1.4; transition: color 0.15s; }
-    .post-date { font-size: 12px; color: var(--color-faint); white-space: nowrap; flex-shrink: 0; }
-    .tool-item { display: block; padding: 1rem 0; border-bottom: 0.5px solid var(--color-border); text-decoration: none; color: inherit; }
-    .tool-item:first-child { padding-top: 0; }
-    .tool-item:last-child { border-bottom: none; }
-    .tool-item:hover .tool-title { color: var(--color-muted); }
-    .tool-title { font-family: var(--font-serif); font-size: 17px; margin-bottom: 4px; transition: color 0.15s; }
-    .tool-desc { font-size: 13px; color: var(--color-faint); line-height: 1.5; }
-    .about { margin-top: 5rem; padding-top: 2rem; border-top: 0.5px solid var(--color-border); display: flex; justify-content: space-between; align-items: center; gap: 2rem; flex-wrap: wrap; }
-    .about p { font-size: 14px; color: var(--color-muted); line-height: 1.6; max-width: 420px; }
-    .about-links { display: flex; gap: 1.25rem; flex-shrink: 0; }
-    .about-links a { font-size: 13px; color: var(--color-muted); text-decoration: none; }
-    .about-links a:hover { color: var(--color-text); }
-  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..600;1,6..96,400..500&family=Jost:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,300..500;1,6..72,300..400&display=swap" />
+  <link rel="stylesheet" href="/assets/site.css" />
 </head>
 <body>
 <script src="/nav.js"></script>
-<div class="container">
-  <div class="hero">
-    <div class="hero-label">CTO &amp; CDO Advisor · Data &amp; Technology Leader</div>
-    <h1>Technology only matters<br>in context.</h1>
-    <p>I write about the gap between what systems tell you and what's actually happening — and what it takes to close it. <br>And sometimes about things that matter more than any of it.</p>
+<header>
+  <div class="banner">
+    <img src="/images/hero.jpg" width="2056" height="765"
+         alt="A man in a suit sits on a rock beneath an acacia tree, watching a city of towers rise before a setting sun, with a network of lights arcing over the globe beside it." />
   </div>
+</header>
+
+<main class="container">
+  <div class="page-intro">
+    <div class="label">Jakub Szczybura · CTO &amp; CDO Advisor · Data &amp; AI Executive</div>
+    <h1>Technology only matters <em>in&nbsp;context.</em></h1>
+    <p>I write about the gap between what systems tell you and what's actually happening, and what it takes to close it. And sometimes about things that matter more than any of it.</p>
+  </div>
+
   <!-- Writing -->
   <div class="section">
     <div class="section-header">
       <h2>Writing</h2>
       <a href="/blog">All posts →</a>
     </div>
-    <ul class="post-list">
-      <li>
-        <a class="post-item" href="/blog/post-013-the-virtues-the-last-machine-needed.html">
-          <span class="post-title">The Virtues the Last Machine Needed</span>
-          <span class="post-date">November 2026</span>
-        </a>
-      </li>
+    <a class="featured" href="/blog/post-013-the-virtues-the-last-machine-needed.html">
+      <span class="label">Latest · November 2026</span>
+      <h3>The Virtues the Last Machine Needed</h3>
+      <p>Schools never stopped forming character. What changed was which virtues they formed: piety and honour gave way to compliance and reliability.</p>
+      <span class="read">Read the essay →</span>
+    </a>
+    <ul class="listing">
       <li>
         <a class="post-item" href="/blog/post-012-the-team-we-didnt-hire.html">
           <span class="post-title">The Team We Didn't Hire</span>
@@ -110,11 +77,11 @@
         </a>
       </li>
       <li>
-      <a class="post-item" href="/blog/post-005-the-benchmark-is-not-the-context.html">
-        <span class="post-title">The Benchmark Is Not the Context</span>
-        <span class="post-date">May 2026</span>
-      </a>
-    </li>
+        <a class="post-item" href="/blog/post-005-the-benchmark-is-not-the-context.html">
+          <span class="post-title">The Benchmark Is Not the Context</span>
+          <span class="post-date">May 2026</span>
+        </a>
+      </li>
       <li>
         <a class="post-item" href="/blog/post-004-dark-matter-of-ai-transformation.html">
           <span class="post-title">The Dark Matter of AI Transformation</span>
@@ -133,35 +100,34 @@
           <span class="post-date">April 2026</span>
         </a>
       </li>
- 
-
     </ul>
   </div>
- 
+
   <!-- Tools -->
   <div class="section">
     <div class="section-header">
       <h2>Tools</h2>
       <a href="/tools">All tools →</a>
     </div>
-    <a class="tool-item" href="/tools/probability-of-success.html">
+    <ul class="listing">
+    <li><a class="tool-item" href="/tools/probability-of-success.html">
       <div class="tool-title">Probability of Success Explorer</div>
       <div class="tool-desc">Independent vs Bayesian learning models for repeated trials. Interactive.</div>
-    </a>
-      <a class="tool-item" href="/tools/signed-affinity-explorer.html">
-          <div class="tool-title">Signed Affinity Recommendation Explorer</div>
-        <div class="tool-desc">Compare naive text-embedding cosine similarity against signed weighted-sum matching. Adjust user affinity profiles across eight dimensions and watch the two models diverge in real time.</div>
-      </a>
-    
+    </a></li>
+    <li><a class="tool-item" href="/tools/signed-affinity-explorer.html">
+      <div class="tool-title">Signed Affinity Recommendation Explorer</div>
+      <div class="tool-desc">Compare naive text-embedding cosine similarity against signed weighted-sum matching. Adjust user affinity profiles across eight dimensions and watch the two models diverge in real time.</div>
+    </a></li>
+    </ul>
   </div>
- 
+
   <!-- Faith -->
   <div class="section">
     <div class="section-header">
       <h2>Faith &amp; Reflection</h2>
       <a href="/faith">All sermons →</a>
     </div>
-    <ul class="post-list">
+    <ul class="listing">
       <li>
         <a class="post-item" href="/faith/sermon-007-if-the-dead-rise-not.html">
           <span class="post-title">If the Dead Rise Not</span>
@@ -206,16 +172,21 @@
       </li>
     </ul>
   </div>
-  
+
   <div class="about">
-    <p>Technology only matters in context. I help organisations find that context and make better decisions with data and AI, in production, at scale, and with outcomes the business can measure.<br><br>
-      I've spent fifteen years working across retail, pharma, healthcare and finance, with $145M+ in delivered impact. Most recently, I acted as the VP of Data &amp; AI at a consumer identity-data company. I advise Empty Spaces, an agentic AI platform for finance teams, and AMC Health. I'm available for senior leadership roles and fractional advisory engagements.</p>
+    <p>Technology only matters in context. I help organisations find that context and make better decisions with data and AI, in production, at scale, and with outcomes the business can measure.</p>
+    <p>I've spent fifteen years working across retail, pharma, healthcare and finance, with $145M+ in delivered impact. Most recently, I acted as the VP of Data &amp; AI at a consumer identity-data company. I advise Empty Spaces, an agentic AI platform for finance teams, and AMC Health. I'm available for senior leadership roles and fractional advisory engagements.</p>
     <p>Outside work, I lead youth clubs, preach at my local church and others, and help wherever else I'm needed.</p>
     <div class="about-links">
-      <a href="https://linkedin.com/in/jakub-szczybura" target="_blank">LinkedIn</a>
+      <a href="https://linkedin.com/in/jakub-szczybura" target="_blank" rel="noopener">LinkedIn</a>
       <a href="mailto:jakub@szczybura.com">Email</a>
     </div>
   </div>
-</div>
+
+  <footer class="site-footer">
+    <span>© Jakub Szczybura</span>
+    <span>technologyincontext.com</span>
+  </footer>
+</main>
 </body>
 </html>

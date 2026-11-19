@@ -1,3 +1,4 @@
+// Site navigation. Styles live in /assets/site.css (.site-nav).
 (function () {
   const links = [
     { href: '/blog', label: 'Writing' },
@@ -6,61 +7,24 @@
   ];
 
   const path = window.location.pathname;
+  const isActive = (href) => path.startsWith(href);
 
-  function isActive(href) {
-    if (href === '/') return path === '/';
-    return path.startsWith(href);
-  }
+  const mark = `
+    <svg viewBox="0 0 32 32" aria-hidden="true">
+      <circle cx="16" cy="16" r="15" fill="none" stroke="currentColor" stroke-width="1.2"/>
+      <path d="M3 22 L29 22" stroke="currentColor" stroke-width="1.2"/>
+      <circle cx="16" cy="15" r="5.5" fill="#b8792f"/>
+    </svg>`;
 
   const nav = document.createElement('nav');
+  nav.className = 'site-nav';
+  nav.setAttribute('aria-label', 'Primary');
   nav.innerHTML = `
-    <a href="/" class="nav-name">Jakub Szczybura</a>
-    <ul class="nav-links">
-      ${links.map(l => `
-        <li><a href="${l.href}" ${isActive(l.href) ? 'class="active"' : ''}>${l.label}</a></li>
-      `).join('')}
+    <a href="/" class="site-name">${mark}<span>Technology in Context</span></a>
+    <ul>
+      ${links.map(l => `<li><a href="${l.href}"${isActive(l.href) ? ' class="active" aria-current="page"' : ''}>${l.label}</a></li>`).join('')}
     </ul>
   `;
 
-  const style = document.createElement('style');
-  style.textContent = `
-    nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 5rem;
-      max-width: 660px;
-      margin-left: auto;
-      margin-right: auto;
-      padding: 4rem 1.5rem 0;
-    }
-    .nav-name {
-      font-family: 'Georgia', 'Times New Roman', serif;
-      font-size: 17px;
-      color: var(--color-text);
-      text-decoration: none;
-    }
-    .nav-links {
-      display: flex;
-      gap: 1.5rem;
-      list-style: none;
-    }
-    .nav-links a {
-      font-size: 14px;
-      color: var(--color-muted);
-      text-decoration: none;
-      transition: color 0.15s;
-    }
-    .nav-links a:hover { color: var(--color-text); }
-    .nav-links a.active { color: var(--color-text); }
-  `;
-
-  document.head.appendChild(style);
-
-  const container = document.querySelector('.container');
-  if (container) {
-    container.insertBefore(nav, container.firstChild);
-  } else {
-    document.body.insertBefore(nav, document.body.firstChild);
-  }
+  document.body.insertBefore(nav, document.body.firstChild);
 })();

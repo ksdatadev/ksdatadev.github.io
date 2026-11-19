@@ -1,0 +1,260 @@
+/* ==========================================================================
+   Technology in Context: shared stylesheet
+   Sepia palette and type taken from the LinkedIn illustration series.
+   Loaded by every page, before the page's own <style>.
+
+   1. Tokens (plus aliases for the variable names older pages use)
+   2. Base
+   3. Site nav, banner, page intro, footer
+   4. Listings (home and section index pages)
+   5. Article template (posts and sermons), scoped to .article
+   ========================================================================== */
+
+/* 1. Tokens ---------------------------------------------------------------- */
+:root {
+  --bg: #f3ead7;            /* parchment */
+  --surface: #eadcbf;       /* callouts, principle boxes */
+  --surface-2: #e1d0ae;
+  --text: #23180d;          /* near-black umber */
+  --muted: #6b5236;         /* burnt umber */
+  --faint: #9a7f5f;
+  --accent: #9a5a1c;        /* bronze */
+  --line: rgba(110, 70, 28, 0.2);
+  --line-strong: rgba(110, 70, 28, 0.42);
+
+  --font-display: 'Bodoni Moda', Didot, 'Bodoni 72', Georgia, serif;
+  --font-body: 'Newsreader', Georgia, 'Times New Roman', serif;
+  --font-ui: 'Jost', Futura, 'Century Gothic', 'Segoe UI', sans-serif;
+  --font-code: 'SF Mono', 'Fira Code', Consolas, monospace;
+
+  /* Aliases: older pages and the tools are written against these names. */
+  --color-bg: var(--bg);
+  --color-bg-secondary: var(--surface);
+  --color-bg-tertiary: var(--surface-2);
+  --color-text: var(--text);
+  --color-text-primary: var(--text);
+  --color-text-secondary: var(--muted);
+  --color-text-tertiary: var(--faint);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-border: var(--line);
+  --color-border-strong: var(--line-strong);
+  --color-tag-bg: var(--surface);
+  --color-accent-bg: var(--surface);
+  --color-accent-border: var(--accent);
+  --font-serif: var(--font-body);
+  --font-sans: var(--font-ui);
+  --font-mono: var(--font-code);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #16110b;
+    --surface: #211910;
+    --surface-2: #2b2116;
+    --text: #ecdfc4;
+    --muted: #b09a78;
+    --faint: #7d6849;
+    --accent: #d4a052;      /* ochre */
+    --line: rgba(212, 160, 82, 0.18);
+    --line-strong: rgba(212, 160, 82, 0.4);
+    color-scheme: dark;
+  }
+}
+
+/* 2. Base ------------------------------------------------------------------ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 18px;
+  line-height: 1.6;
+  padding-bottom: 5rem;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.container { max-width: 680px; margin: 0 auto; padding: 0 1.5rem; }
+.label {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+/* 3. Site chrome ----------------------------------------------------------- */
+.site-nav {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem 1.5rem;
+  flex-wrap: wrap;
+  font-family: var(--font-ui);
+}
+.site-nav .site-name {
+  display: flex; align-items: center; gap: 0.6rem;
+  font-size: 13px; font-weight: 600; letter-spacing: 0.24em; text-transform: uppercase;
+  text-decoration: none; color: var(--text);
+}
+.site-nav .site-name svg { width: 22px; height: 22px; flex: none; }
+.site-nav ul { display: flex; gap: 1.5rem; list-style: none; flex-wrap: wrap; }
+.site-nav ul a {
+  font-size: 12.5px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--muted); text-decoration: none;
+  padding-bottom: 3px; border-bottom: 1px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+}
+.site-nav ul a:hover { color: var(--accent); }
+.site-nav ul a.active { color: var(--text); border-bottom-color: var(--accent); }
+
+.banner { max-width: 1080px; margin: 0 auto; padding: 0 1.5rem; }
+.banner img {
+  display: block; width: 100%; height: auto;
+  aspect-ratio: 2056 / 765; object-fit: cover; object-position: 30% 50%;
+  background: var(--surface-2);
+}
+@media (max-width: 600px) {
+  .banner { padding: 0; }
+  .banner img { aspect-ratio: 16 / 10; }
+}
+
+.page-intro { padding: 3.25rem 0 3.5rem; }
+.page-intro .label { color: var(--accent); }
+.page-intro h1 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(32px, 6vw, 48px);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  margin: 0.9rem 0 1.1rem;
+  text-wrap: balance;
+}
+.page-intro h1 em { font-style: italic; font-weight: 400; color: var(--accent); }
+.page-intro p { font-size: 19px; line-height: 1.65; color: var(--muted); max-width: 34em; }
+
+.about { margin-top: 5rem; padding-top: 2rem; border-top: 1px solid var(--line-strong); }
+.about p { font-size: 16.5px; color: var(--muted); line-height: 1.65; margin-bottom: 1rem; }
+.about-links { display: flex; gap: 1.5rem; margin-top: 1.5rem; }
+.about-links a {
+  font-family: var(--font-ui); font-size: 12px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase;
+  text-decoration: none; padding-bottom: 2px; border-bottom: 1px solid var(--accent);
+}
+.about-links a:hover { color: var(--accent); }
+
+.site-footer {
+  margin-top: 5rem; padding-top: 1.75rem; border-top: 1px solid var(--line);
+  display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+  font-family: var(--font-ui); font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--faint);
+}
+.site-footer a { color: var(--muted); text-decoration: none; }
+.site-footer a:hover { color: var(--accent); }
+
+/* 4. Listings -------------------------------------------------------------- */
+.section { margin-bottom: 4rem; }
+.section-header {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 1rem;
+  padding-bottom: 0.75rem; margin-bottom: 0.25rem; border-bottom: 1px solid var(--line-strong);
+}
+.section-header h2 {
+  font-family: var(--font-ui); font-size: 12px; font-weight: 600;
+  letter-spacing: 0.22em; text-transform: uppercase; color: var(--text);
+}
+.section-header a {
+  font-family: var(--font-ui); font-size: 12px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--muted); text-decoration: none;
+}
+.section-header a:hover { color: var(--accent); }
+
+.featured { display: block; padding: 1.25rem 0 1.5rem; border-bottom: 1px solid var(--line); text-decoration: none; }
+.featured h3 {
+  font-family: var(--font-display); font-weight: 500; font-size: 28px; line-height: 1.2;
+  margin: 0.5rem 0 0.75rem; text-wrap: balance; transition: color 0.15s;
+}
+.featured p { color: var(--muted); font-size: 17.5px; }
+.featured .read {
+  display: inline-block; margin-top: 0.85rem;
+  font-family: var(--font-ui); font-size: 12px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--accent);
+}
+.featured:hover h3 { color: var(--accent); }
+
+.listing { list-style: none; }
+.listing .post-item, .listing .tool-item {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 1.5rem;
+  padding: 1.1rem 0; border-bottom: 1px solid var(--line); text-decoration: none;
+}
+.listing li:last-child > a { border-bottom: none; }
+.listing .post-main { flex: 1; min-width: 0; }
+.listing .post-title, .listing .tool-title {
+  font-family: var(--font-display); font-size: 19px; line-height: 1.3; transition: color 0.15s;
+}
+.listing a:hover .post-title, .listing a:hover .tool-title { color: var(--accent); }
+.listing .post-excerpt, .listing .tool-desc {
+  margin-top: 0.3rem; font-size: 16px; line-height: 1.5; color: var(--muted);
+}
+.listing .post-meta { flex-shrink: 0; text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 0.35rem; }
+.listing .post-date, .listing .post-tag, .listing .tool-tag {
+  font-family: var(--font-ui); font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase;
+  white-space: nowrap; color: var(--faint);
+}
+.listing .post-tag, .listing .tool-tag { color: var(--accent); }
+.listing .tool-item { display: block; }
+.listing .tool-header { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
+.year-label {
+  font-family: var(--font-ui); font-size: 12px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--text); padding-bottom: 0.75rem; border-bottom: 1px solid var(--line-strong);
+}
+@media (max-width: 560px) {
+  .listing .post-item { flex-direction: column; gap: 0.35rem; }
+  .listing .post-meta { flex-direction: row; gap: 1rem; text-align: left; }
+}
+
+/* 5. Article template ------------------------------------------------------ */
+/* Typography and colour only; each page keeps its own spacing and one-off components. */
+.container.article { padding-top: 2.5rem; }
+.article .post-meta {
+  font-family: var(--font-ui); font-size: 12px; font-weight: 500; letter-spacing: 0.2em;
+  color: var(--accent);
+}
+.article h1 {
+  font-family: var(--font-display); font-weight: 500;
+  font-size: clamp(32px, 5.5vw, 44px); line-height: 1.12; letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+.article .lede { font-family: var(--font-body); color: var(--muted); border-bottom-color: var(--line); }
+.article .section-label {
+  font-family: var(--font-ui); font-size: 12px; font-weight: 600; letter-spacing: 0.22em;
+  color: var(--accent);
+}
+.article h2 { font-family: var(--font-display); font-weight: 500; line-height: 1.25; text-wrap: balance; }
+.article h3 { font-family: var(--font-display); font-weight: 400; }
+.article blockquote {
+  border-left: 2px solid var(--accent);
+  font-family: var(--font-display); font-weight: 400;
+}
+.article .principle, .article .insight { border-radius: 0; background: var(--surface); border-top: 2px solid var(--accent); }
+.article .scripture { border-radius: 0; background: var(--surface); border-left: 2px solid var(--accent); }
+.article .scripture-ref, .article .novel-ref, .article .poem-ref {
+  font-family: var(--font-ui); letter-spacing: 0.18em; color: var(--accent);
+}
+.article hr.divider { border-top: 1px solid var(--line); }
+.article .tag {
+  font-family: var(--font-ui); font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase;
+  background: transparent; border: 1px solid var(--line-strong); border-radius: 0; color: var(--muted);
+}
+.article code { font-family: var(--font-code); }
+.article > footer {
+  font-family: var(--font-ui); font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase;
+  border-top: 1px solid var(--line);
+}
+.article > footer a:hover { color: var(--accent); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; }
+}
