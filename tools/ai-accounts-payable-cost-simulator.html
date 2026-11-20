@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI in Accounts Payable: Cost Simulator under Uncertainty | Technology in Context</title>
+<meta name="description" content="Monte Carlo simulator comparing the 36-month cost of a human-centric and an AI-agent-centric accounts payable workflow, using eight probability distributions.">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..600;1,6..96,400..500&family=Jost:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,300..500;1,6..72,300..400&display=swap" />
+<link rel="stylesheet" href="/assets/site.css" />
+<style>
+/* Colours come from /assets/site.css (--text, --muted, --line, --bg, --surface); only the series colours are local. */
+#tic-sim{--ink:var(--text);--panel:var(--surface);--human:#4f8a63;--ai:#4f72b8;--save:#b07a10;--bad:#b3261e;
+font-family:var(--font-ui);color:var(--ink);background:var(--bg);line-height:1.5;font-size:15px;max-width:1240px;margin:0 auto;padding:8px 20px 20px}
+#tic-sim *{box-sizing:border-box}
+#tic-sim h1{font-family:var(--font-display);font-weight:500;font-size:clamp(28px,4vw,40px);line-height:1.15;margin:0 0 10px;text-wrap:balance}
+#tic-sim h2{font-family:var(--font-display);font-weight:500;font-size:21px;margin:30px 0 10px}
+#tic-sim h3{font-size:15px;margin:0}
+#tic-sim p{margin:6px 0}
+#tic-sim .lede{font-family:var(--font-body);font-size:18px;line-height:1.6;color:var(--muted);max-width:820px}
+#tic-sim .grid{display:grid;grid-template-columns:380px 1fr;gap:22px;margin-top:22px}
+#tic-sim .grid>div{min-width:0}
+@media(max-width:900px){#tic-sim .grid{grid-template-columns:1fr}}
+@media(max-width:520px){#tic-sim{padding:8px 12px 12px}#tic-sim .kpis{grid-template-columns:1fr 1fr}#tic-sim .kpi .v{font-size:19px}#tic-sim .f{grid-template-columns:1fr 96px}}
+#tic-sim details{border:1px solid var(--line);border-radius:4px;background:var(--panel);margin-bottom:10px}
+#tic-sim summary{cursor:pointer;padding:10px 12px;font-weight:600;list-style:none}
+#tic-sim summary::-webkit-details-marker{display:none}
+#tic-sim summary:before{content:"▸ ";color:var(--muted)}
+#tic-sim details[open] summary:before{content:"▾ "}
+#tic-sim .fields{padding:2px 12px 12px}
+#tic-sim .f{display:grid;grid-template-columns:1fr 112px;gap:8px;align-items:center;margin:5px 0;font-size:13.5px}
+#tic-sim .f span small{color:var(--muted);display:block;font-size:11.5px}
+#tic-sim input[type=number],#tic-sim select{width:100%;padding:5px 7px;border:1px solid var(--line-strong);border-radius:3px;font:inherit;font-size:13.5px;background:var(--bg);color:var(--text);text-align:right}
+#tic-sim select{text-align:left}
+#tic-sim .chk{display:flex;gap:8px;align-items:flex-start;font-size:13.5px;margin:7px 0}
+#tic-sim .chk input{accent-color:var(--accent)}
+#tic-sim .chk small{color:var(--muted);display:block;font-size:11.5px}
+#tic-sim .dist{margin:10px 0 14px}
+#tic-sim .dist h4{font-size:13px;margin:0 0 4px;display:flex;justify-content:space-between}
+#tic-sim .dist h4 em{font-style:normal;font-weight:400;color:var(--muted)}
+#tic-sim .dist table{width:100%;border-collapse:collapse}
+#tic-sim .dist td{padding:1px 2px}
+#tic-sim .dist input{padding:3px 5px;font-size:12.5px}
+#tic-sim .dist .bad{color:var(--bad)}
+#tic-sim .btns{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 14px}
+#tic-sim button{font:inherit;font-size:13px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;padding:9px 14px;border-radius:3px;border:1px solid var(--ink);background:var(--ink);color:var(--bg);cursor:pointer}
+#tic-sim button.ghost{background:transparent;color:var(--ink)}
+#tic-sim button:hover{border-color:var(--accent)}
+#tic-sim button:disabled{opacity:.5;cursor:wait}
+#tic-sim .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+#tic-sim .kpi{border:1px solid var(--line);border-radius:4px;padding:11px 12px;background:var(--bg)}
+#tic-sim .kpi .l{font-size:12px;color:var(--muted)}
+#tic-sim .kpi .v{font-size:22px;font-weight:600;margin-top:2px;font-variant-numeric:tabular-nums}
+#tic-sim .kpi .s{font-size:12px;color:var(--muted);margin-top:2px}
+#tic-sim .kpi.h .v{color:var(--human)}#tic-sim .kpi.a .v{color:var(--ai)}#tic-sim .kpi.g .v{color:var(--save)}
+#tic-sim table.stats{width:100%;border-collapse:collapse;font-size:13.5px;font-variant-numeric:tabular-nums}
+#tic-sim table.stats th,#tic-sim table.stats td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:right}
+#tic-sim table.stats th:first-child,#tic-sim table.stats td:first-child,#tic-sim #breakTbl th:nth-child(3),#tic-sim #breakTbl td:nth-child(3){text-align:left}
+#tic-sim table.stats thead th{font-size:12px;color:var(--muted);font-weight:600}
+#tic-sim .chart{border:1px solid var(--line);border-radius:4px;padding:10px 12px;background:var(--bg);margin-top:10px}
+#tic-sim .chart svg{width:100%;height:auto;display:block}
+/* chart chrome follows the theme; series colours stay as drawn */
+#tic-sim svg text:not([fill="#b3261e"]){fill:var(--muted)}
+#tic-sim svg line[stroke="#eef0f3"]{stroke:var(--line)}
+#tic-sim svg line[stroke="#999"]{stroke:var(--line-strong)}
+#tic-sim .legend{display:flex;gap:16px;font-size:12.5px;color:var(--muted);margin-top:4px;flex-wrap:wrap}
+#tic-sim .legend i{display:inline-block;width:11px;height:11px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+#tic-sim .note{font-size:12.5px;color:var(--muted)}
+#tic-sim .callout{border-left:2px solid var(--save);background:var(--surface);padding:10px 12px;font-size:13.5px;margin-top:12px}
+#tic-sim .method{font-family:var(--font-body);font-size:16px;color:var(--text);padding-left:1.25rem}
+#tic-sim .method li{margin:6px 0}
+#tic-sim .scroll{overflow-x:auto}
+#tic-sim .status{font-size:12.5px;color:var(--muted);align-self:center}
+#tic-sim a{color:var(--accent)}
+</style>
+</head>
+<body>
+<script src="/nav.js"></script>
+<div id="tic-sim">
+  <h1>AI in Accounts Payable: what will it really cost?</h1>
+  <p class="lede">A Monte Carlo simulator comparing the total cost of running accounts payable with a human-centric workflow and with an AI-agent-centric workflow. Rather than one static business case, the model draws invoice volumes, exception rates, payment-error rates, token prices and project overruns from eight probability distributions, then runs thousands of scenarios to show the range of outcomes. Change any assumption and run it again.</p>
+
+  <div class="grid">
+    <div>
+      <div class="btns">
+        <button id="runBtn" type="button">Run simulation</button>
+        <button id="resetBtn" class="ghost" type="button">Reset to defaults</button>
+        <span class="status" id="status"></span>
+      </div>
+      <div id="inputs"></div>
+    </div>
+
+    <div>
+      <div class="kpis" id="kpis"></div>
+      <div class="callout" id="pitch"></div>
+
+      <h2>Distribution of total cost</h2>
+      <div class="chart"><div id="histCost"></div>
+        <div class="legend"><span><i style="background:var(--human)"></i>Human-centric</span><span><i style="background:var(--ai)"></i>AI-agent-centric</span></div>
+      </div>
+
+      <h2>Savings per scenario (human cost minus AI cost)</h2>
+      <div class="chart"><div id="histSave"></div>
+        <p class="note">Each scenario applies the same invoice-volume draws to both workflows, so the difference reflects the workflows rather than random noise in demand.</p>
+      </div>
+
+      <h2>Cumulative savings over time</h2>
+      <div class="chart"><div id="cumSave"></div>
+        <div class="legend"><span><i style="background:var(--save)"></i>Median</span><span><i style="background:rgba(176,122,16,.22)"></i>5th–95th percentile band</span></div>
+      </div>
+
+      <h2>Summary statistics</h2>
+      <div class="scroll"><table class="stats" id="statsTbl"></table></div>
+
+      <h2>Where the money goes (mean per scenario)</h2>
+      <div class="scroll"><table class="stats" id="breakTbl"></table></div>
+
+      <div class="btns" style="margin-top:14px"><button class="ghost" id="csvBtn" type="button">Download scenario results (CSV)</button></div>
+
+      <h2>How the model works</h2>
+      <ol class="method">
+        <li><b>Invoice volume.</b> Each month, volume = starting invoices × (1 + monthly growth)<sup>month</sup> × a draw from the monthly volume distribution.</li>
+        <li><b>Human-centric staffing.</b> Clerk headcount = volume ÷ staffing ratio, rounded. Invoices above clerk capacity (throughput × working days) are processed on overtime. Each increase in headcount incurs a hiring cost. Headcount reductions are free.</li>
+        <li><b>Exceptions.</b> A share of invoices needs supervisor investigation, drawn monthly. Investigations above supervisor capacity are worked as overtime.</li>
+        <li><b>Payment errors.</b> A share of invoices is paid wrongly, drawn monthly, each costing a fixed average loss.</li>
+        <li><b>AI-agent-centric.</b> Clerks are removed and supervisors handle exceptions. Costs added: implementation budgets (each scaled by an overrun draw), token cost per invoice (scaled by an annual token-price change draw), optional platform run cost and transition cost, and an optional low-probability outage that delays a share of a month's payments.</li>
+        <li><b>Salaries</b> inflate monthly at the annual inflation rate ÷ 12. Losses from payment errors are held at nominal value.</li>
+        <li><b>Persistence switches.</b> By default every distribution is drawn independently each month, as in the original model. In practice an agent that misbehaves in one month tends to misbehave in the next. Ticking a persistence switch draws that parameter once per scenario, which widens the range of outcomes considerably.</li>
+      </ol>
+      <p class="note">Methodology reverse-engineered from <i>Modeling AI investment returns under uncertainty</i> (FA CFO Summit, Chicago, November 2026). Defaults reproduce that model's structure. This is an illustrative planning tool, not financial advice. Calibrate every assumption to your own organisation.</p>
+      <p class="note">Published by <a href="https://technologyincontext.com">Technology in Context</a>.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+var root=document.getElementById('tic-sim');
+
+/* ---------- defaults ---------- */
+var FIELDS=[
+ {g:"Simulation",items:[
+  ["months","Time horizon","months",36,1],
+  ["runs","Number of scenarios","",10000,100,{options:[1000,5000,10000,20000]}],
+  ["seed","Random seed","same seed, same results",42,1],
+ ]},
+ {g:"Volume & economics",items:[
+  ["invoices","Starting invoices","per month",41666,1],
+  ["growth","Invoice growth","% per month",0.2,0.01],
+  ["inflation","Wage inflation","% per year",3.5,0.1],
+  ["avgInvoice","Average invoice value","$",800,1],
+  ["days","Working days","per month",20,1],
+  ["hours","Hours per working day","",8,0.5],
+ ]},
+ {g:"Human-centric workflow",items:[
+  ["mgrSal","AP manager salary","$ per month",8000,1],
+  ["hSupN","AP supervisors","headcount",3,1],
+  ["hSupSal","AP supervisor salary","$ per month",6000,1],
+  ["clerkSal","AP clerk salary","$ per month",3166,1],
+  ["clerkTp","Clerk throughput","invoices per day",90,1],
+  ["supTp","Supervisor investigations","per day",40,1],
+  ["ratio","Staffing ratio","invoices per clerk per month",2315,1],
+  ["clerkOT","Clerk overtime multiplier","× hourly rate",1.5,0.05],
+  ["hSupOT","Supervisor overtime multiplier","× hourly rate",1.0,0.05],
+  ["hireCost","Hiring cost","% of annual salary per hire",20,1],
+  ["hLoss","Loss per erroneous payment","$",63,1],
+ ]},
+ {g:"AI-agent-centric workflow",items:[
+  ["aSupN","Exception handlers (supervisors)","headcount",5,1],
+  ["aSupSal","Exception handler salary","$ per month",4000,1],
+  ["aSupTp","Investigations per handler","per day",40,1],
+  ["aSupOT","Handler overtime multiplier","× hourly rate",1.0,0.05],
+  ["aLoss","Loss per erroneous payment","$",63,1],
+  ["erp","ERP integration & configuration","$ one-off",150000,1000],
+  ["wf","Workflow design & deployment","$ one-off",50000,1000],
+  ["train","Training & change management","$ one-off",50000,1000],
+  ["transition","Transition cost (severance, parallel running)","$ one-off",0,1000],
+  ["platform","Platform, monitoring & support","$ per month",0,100],
+  ["catP","Outage probability","% per month",1,0.1],
+  ["catShare","Invoices delayed by an outage","% of month",5,0.5],
+  ["catDays","Delay per affected invoice","days",30,1],
+  ["catRate","Cost of capital / penalty rate","% per year",10.5,0.1],
+ ]},
+];
+var DISTS=[
+ {k:"vol",t:"Monthly invoice volume",u:"% of trend",p:[2,11,22,30,22,11,2],v:[92,96,98,100,102,104,108]},
+ {k:"invH",t:"Invoices needing investigation, human",u:"% of invoices",p:[5,70,15,4,3,2,1],v:[0,10,11,12,13,14,15]},
+ {k:"invA",t:"Invoices needing investigation, AI",u:"% of invoices",p:[75,10,5,4,3,2,1],v:[15,10,5,4,3,2,1]},
+ {k:"errH",t:"Payment error rate, human",u:"% of invoices",p:[85,5,4,3,2,1,0],v:[0,0.025,0.05,0.075,0.1,0.125,0.15]},
+ {k:"errA",t:"Payment error rate, AI",u:"% of invoices",p:[65,15,10,4,3,2,1],v:[0,1,2,2,3,4,5]},
+ {k:"tokP",t:"Token price change per 12 months",u:"% of prior year",p:[9,15,25,35,10,5,1],v:[80,85,90,95,100,105,110]},
+ {k:"ovr",t:"IT project budget overrun",u:"% of budget",p:[70,15,5,4,3,2,1],v:[100,103,105,110,115,120,150]},
+ {k:"tok",t:"Token cost per invoice at today's price",u:"$ per invoice",p:[50,20,10,10,5,3,2],v:[0.03,0.05,0.08,0.10,0.12,0.15,0.20]},
+];
+var TOGGLES=[
+ ["persErrA","Persistent AI error rate","Draw once per scenario instead of monthly",false],
+ ["persInvA","Persistent AI exception rate","Draw once per scenario instead of monthly",false],
+ ["persTok","Persistent token cost per invoice","Draw once per scenario instead of monthly",false],
+ ["catOn","Include outage risk (AI)","Low-probability event delaying a share of payments",true],
+ ["infOT","Inflate overtime rates","",true],
+];
+
+/* ---------- build inputs ---------- */
+var inputsEl=root.querySelector('#inputs');
+function h(tag,attrs,html){var e=document.createElement(tag);for(var a in attrs)e.setAttribute(a,attrs[a]);if(html!=null)e.innerHTML=html;return e;}
+function buildInputs(){
+  inputsEl.innerHTML='';
+  FIELDS.forEach(function(grp,gi){
+    var d=h('details',gi<2?{open:''}:{});d.appendChild(h('summary',{},grp.g));
+    var f=h('div',{class:'fields'});
+    grp.items.forEach(function(it){
+      var row=h('label',{class:'f'});
+      row.appendChild(h('span',{},it[1]+(it[2]?'<small>'+it[2]+'</small>':'')));
+      var inp;
+      if(it[5]&&it[5].options){inp=h('select',{id:'in_'+it[0]});it[5].options.forEach(function(o){var op=h('option',{value:o},o.toLocaleString('en-GB'));if(o===it[3])op.selected=true;inp.appendChild(op);});}
+      else inp=h('input',{type:'number',id:'in_'+it[0],value:it[3],step:it[4]});
+      row.appendChild(inp);f.appendChild(row);
+    });
+    d.appendChild(f);inputsEl.appendChild(d);
+  });
+  var dt=h('details',{});dt.appendChild(h('summary',{},'Model switches'));
+  var ft=h('div',{class:'fields'});
+  TOGGLES.forEach(function(t){var l=h('label',{class:'chk'});var c=h('input',{type:'checkbox',id:'tg_'+t[0]});c.checked=t[3];l.appendChild(c);l.appendChild(h('span',{},t[1]+'<small>'+t[2]+'</small>'));ft.appendChild(l);});
+  dt.appendChild(ft);inputsEl.appendChild(dt);
+
+  var dd=h('details',{});dd.appendChild(h('summary',{},'The eight probability distributions'));
+  var fd=h('div',{class:'fields'});
+  fd.appendChild(h('p',{class:'note'},'Each row is one possible outcome and its probability. Probabilities in each table must total 100%.'));
+  DISTS.forEach(function(D){
+    var w=h('div',{class:'dist'});
+    w.appendChild(h('h4',{},D.t+' <em id="sum_'+D.k+'"></em>'));
+    var tb=h('table',{});tb.appendChild(h('tr',{},'<td class="note">Probability %</td><td class="note">Outcome ('+D.u+')</td>'));
+    for(var i=0;i<D.p.length;i++){
+      var tr=h('tr',{});
+      var a=h('td',{});a.appendChild(h('input',{type:'number',id:'dp_'+D.k+'_'+i,value:D.p[i],step:1}));
+      var b=h('td',{});b.appendChild(h('input',{type:'number',id:'dv_'+D.k+'_'+i,value:D.v[i],step:'any'}));
+      tr.appendChild(a);tr.appendChild(b);tb.appendChild(tr);
+    }
+    w.appendChild(tb);fd.appendChild(w);
+  });
+  dd.appendChild(fd);inputsEl.appendChild(dd);
+  inputsEl.addEventListener('input',checkSums);
+  checkSums();
+}
+function checkSums(){
+  var ok=true;
+  DISTS.forEach(function(D){var s=0;for(var i=0;i<D.p.length;i++)s+=+root.querySelector('#dp_'+D.k+'_'+i).value||0;
+    var el=root.querySelector('#sum_'+D.k);var good=Math.abs(s-100)<0.01;el.textContent='total '+(+s.toFixed(2))+'%';el.className=good?'':'bad';if(!good)ok=false;});
+  return ok;
+}
+function readParams(){
+  var P={};
+  FIELDS.forEach(function(g){g.items.forEach(function(it){P[it[0]]=+root.querySelector('#in_'+it[0]).value;});});
+  TOGGLES.forEach(function(t){P[t[0]]=root.querySelector('#tg_'+t[0]).checked;});
+  P.d={};
+  DISTS.forEach(function(D){var p=[],v=[];for(var i=0;i<D.p.length;i++){p.push(+root.querySelector('#dp_'+D.k+'_'+i).value||0);v.push(+root.querySelector('#dv_'+D.k+'_'+i).value||0);}P.d[D.k]={p:p,v:v};});
+  return P;
+}
+
+/* ---------- engine (pure; exported for testing) ---------- */
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function sampler(D,scale){var tot=0,i,c=[];for(i=0;i<D.p.length;i++){tot+=D.p[i];c.push(tot);}
+  var v=D.v.map(function(x){return x*scale;});
+  return function(r){var u=r()*tot;for(var j=0;j<c.length;j++)if(u<c[j])return v[j];return v[v.length-1];};}
+function simulate(P){
+  var M=Math.max(1,Math.round(P.months)),N=Math.max(1,Math.round(P.runs)),r=mulberry32(Math.round(P.seed)||1);
+  var S={vol:sampler(P.d.vol,.01),invH:sampler(P.d.invH,.01),invA:sampler(P.d.invA,.01),errH:sampler(P.d.errH,.01),errA:sampler(P.d.errA,.01),tokP:sampler(P.d.tokP,.01),ovr:sampler(P.d.ovr,.01),tok:sampler(P.d.tok,1)};
+  var infl=[],trend=[],mi=P.inflation/100/12,gr=P.growth/100;
+  for(var t=0;t<M;t++){infl.push(Math.pow(1+mi,t));trend.push(P.invoices*Math.pow(1+gr,t));}
+  var hrs=P.days*P.hours;
+  var clerkCap=P.clerkTp*P.days, hSupCap=P.hSupN*P.supTp*P.days, aSupCap=P.aSupN*P.aSupTp*P.days;
+  var clerkOTper=(P.clerkSal/hrs)*P.clerkOT/(P.clerkTp/P.hours);
+  var hSupOTper=(P.hSupSal/hrs)*P.hSupOT/(P.supTp/P.hours);
+  var aSupOTper=(P.aSupSal/hrs)*P.aSupOT/(P.aSupTp/P.hours);
+  var clerks0=Math.round(P.invoices/P.ratio);
+  var catPer=P.avgInvoice*(P.catRate/100)*(P.catDays/365);
+  var H=new Float64Array(N),A=new Float64Array(N),cumSave=new Float64Array(N*M);
+  var hk=['Manager','Supervisors','Clerks','Clerk overtime','Supervisor overtime','Hiring','Payment errors'];
+  var ak=['Manager','Exception handlers','Handler overtime','Payment errors','Implementation (incl. overrun)','Transition','Tokens','Platform','Outage cost'];
+  var hb=new Float64Array(hk.length),ab=new Float64Array(ak.length);
+  for(var n=0;n<N;n++){
+    var eA=P.persErrA?S.errA(r):null,iA=P.persInvA?S.invA(r):null,tk=P.persTok?S.tok(r):null;
+    var impl=P.erp*S.ovr(r)+P.wf*S.ovr(r)+P.train*S.ovr(r);
+    var priceMult=1,prev=clerks0,h=0,a=impl+P.transition,cs=-(impl+P.transition);
+    ab[4]+=impl;ab[5]+=P.transition;
+    for(t=0;t<M;t++){
+      if(t>0&&t%12===0)priceMult*=S.tokP(r);
+      var inv=trend[t]*S.vol(r),f=infl[t];
+      /* human */
+      var c=Math.round(inv/P.ratio);
+      var mg=P.mgrSal*f,sp=P.hSupN*P.hSupSal*f,cl=c*P.clerkSal*f;
+      var fo=P.infOT?f:1;
+      var cot=Math.max(inv-c*clerkCap,0)*clerkOTper*fo;
+      var q=inv*S.invH(r),sot=Math.max(q-hSupCap,0)*hSupOTper*fo;
+      var hire=Math.max(c-prev,0)*P.clerkSal*f*12*P.hireCost/100;prev=c;
+      var er=inv*S.errH(r)*P.hLoss;
+      var hm=mg+sp+cl+cot+sot+hire+er;h+=hm;
+      hb[0]+=mg;hb[1]+=sp;hb[2]+=cl;hb[3]+=cot;hb[4]+=sot;hb[5]+=hire;hb[6]+=er;
+      /* AI */
+      var as=P.aSupN*P.aSupSal*f;
+      var qa=inv*(iA!==null?iA:S.invA(r)),aot=Math.max(qa-aSupCap,0)*aSupOTper*fo;
+      var ea=inv*(eA!==null?eA:S.errA(r))*P.aLoss;
+      var tc=inv*(tk!==null?tk:S.tok(r))*priceMult;
+      var pl=P.platform*f;
+      var cat=(P.catOn&&r()<P.catP/100)?inv*P.catShare/100*catPer:0;
+      var am=mg+as+aot+ea+tc+pl+cat;a+=am;
+      ab[0]+=mg;ab[1]+=as;ab[2]+=aot;ab[3]+=ea;ab[6]+=tc;ab[7]+=pl;ab[8]+=cat;
+      cs+=hm-am;cumSave[n*M+t]=cs;
+    }
+    H[n]=h;A[n]=a;
+  }
+  for(var i=0;i<hb.length;i++)hb[i]/=N;for(i=0;i<ab.length;i++)ab[i]/=N;
+  return {M:M,N:N,H:H,A:A,cumSave:cumSave,hk:hk,hb:hb,ak:ak,ab:ab,impl:P.erp+P.wf+P.train};
+}
+root.__engine={simulate:simulate};
+
+/* ---------- stats & formatting ---------- */
+function sorted(a){return Float64Array.from(a).sort();}
+function pct(s,p){var i=(s.length-1)*p,lo=Math.floor(i),hi=Math.ceil(i);return s[lo]+(s[hi]-s[lo])*(i-lo);}
+function mean(a){var s=0;for(var i=0;i<a.length;i++)s+=a[i];return s/a.length;}
+function fm(x){var s=x<0?'−':'';x=Math.abs(x);if(x>=1e6)return s+'$'+(x/1e6).toFixed(2)+'M';if(x>=1e3)return s+'$'+(x/1e3).toFixed(0)+'k';return s+'$'+x.toFixed(0);}
+function fd(x){return (x<0?'−$':'$')+Math.round(Math.abs(x)).toLocaleString('en-GB');}
+
+/* ---------- charts (SVG) ---------- */
+var W=760,HH=260,PL=58,PR=30,PT=12,PB=40;
+function axisX(min,max,n){var out='',step=(max-min)/n;for(var i=0;i<=n;i++){var v=min+step*i,x=PL+(W-PL-PR)*i/n;out+='<line x1="'+x+'" x2="'+x+'" y1="'+(HH-PB)+'" y2="'+(HH-PB+4)+'" stroke="#999"/><text x="'+x+'" y="'+(HH-PB+17)+'" font-size="11" text-anchor="middle" fill="#5d6670">'+fm(v)+'</text>';}return out;}
+function histSVG(series,label){
+  var lo=Infinity,hi=-Infinity;series.forEach(function(s){for(var i=0;i<s.d.length;i++){if(s.d[i]<lo)lo=s.d[i];if(s.d[i]>hi)hi=s.d[i];}});
+  if(hi===lo)hi=lo+1;var pad=(hi-lo)*0.02;lo-=pad;hi+=pad;var B=60,bw=(hi-lo)/B,maxc=0;
+  series.forEach(function(s){s.c=new Array(B).fill(0);for(var i=0;i<s.d.length;i++){var b=Math.min(B-1,Math.floor((s.d[i]-lo)/bw));s.c[b]++;}s.c.forEach(function(c){if(c>maxc)maxc=c;});});
+  var pw=W-PL-PR,ph=HH-PT-PB,o='<svg viewBox="0 0 '+W+' '+HH+'" role="img" aria-label="'+label+'">';
+  for(var g=0;g<=4;g++){var y=PT+ph*(1-g/4);o+='<line x1="'+PL+'" x2="'+(W-PR)+'" y1="'+y+'" y2="'+y+'" stroke="#eef0f3"/><text x="'+(PL-6)+'" y="'+(y+4)+'" font-size="11" text-anchor="end" fill="#5d6670">'+(maxc*g/4/series[0].d.length*100).toFixed(1)+'%</text>';}
+  series.forEach(function(s){for(var b=0;b<B;b++){if(!s.c[b])continue;var x=PL+pw*b/B,hgt=ph*s.c[b]/maxc;o+='<rect x="'+x.toFixed(1)+'" y="'+(PT+ph-hgt).toFixed(1)+'" width="'+Math.max(1,pw/B-1).toFixed(1)+'" height="'+hgt.toFixed(1)+'" fill="'+s.col+'" fill-opacity="'+(s.op||0.85)+'"><title>'+fm(lo+b*bw)+' to '+fm(lo+(b+1)*bw)+': '+s.c[b].toLocaleString('en-GB')+' scenarios</title></rect>';}});
+  if(lo<0&&hi>0){var zx=PL+pw*(-lo)/(hi-lo);o+='<line x1="'+zx+'" x2="'+zx+'" y1="'+PT+'" y2="'+(HH-PB)+'" stroke="#b3261e" stroke-dasharray="4 3"/><text x="'+(zx+4)+'" y="'+(PT+11)+'" font-size="11" fill="#b3261e">break-even</text>';}
+  o+='<line x1="'+PL+'" x2="'+(W-PR)+'" y1="'+(HH-PB)+'" y2="'+(HH-PB)+'" stroke="#999"/>'+axisX(lo,hi,6)+'<text x="'+(PL-46)+'" y="'+(PT+ph/2)+'" font-size="11" fill="#5d6670" transform="rotate(-90 '+(PL-46)+' '+(PT+ph/2)+')" text-anchor="middle">share of scenarios</text></svg>';
+  return o;
+}
+function cumSVG(R){
+  var M=R.M,N=R.N,p5=[],p50=[],p95=[],col=new Float64Array(N);
+  for(var t=0;t<M;t++){for(var n=0;n<N;n++)col[n]=R.cumSave[n*M+t];col.sort();p5.push(pct(col,.05));p50.push(pct(col,.5));p95.push(pct(col,.95));}
+  var lo=Math.min(0,Math.min.apply(null,p5)),hi=Math.max(0,Math.max.apply(null,p95));if(hi===lo)hi=lo+1;
+  var pw=W-PL-PR,ph=HH-PT-PB;function X(t){return PL+pw*(t+1)/M;}function Y(v){return PT+ph*(1-(v-lo)/(hi-lo));}
+  var o='<svg viewBox="0 0 '+W+' '+HH+'" role="img" aria-label="Cumulative savings by month">';
+  for(var g=0;g<=4;g++){var v=lo+(hi-lo)*g/4,y=Y(v);o+='<line x1="'+PL+'" x2="'+(W-PR)+'" y1="'+y+'" y2="'+y+'" stroke="#eef0f3"/><text x="'+(PL-6)+'" y="'+(y+4)+'" font-size="11" text-anchor="end" fill="#5d6670">'+fm(v)+'</text>';}
+  o+='<line x1="'+PL+'" x2="'+(W-PR)+'" y1="'+Y(0)+'" y2="'+Y(0)+'" stroke="#b3261e" stroke-dasharray="4 3"/>';
+  var band='';for(t=0;t<M;t++)band+=(t?'L':'M')+X(t).toFixed(1)+' '+Y(p95[t]).toFixed(1);for(t=M-1;t>=0;t--)band+='L'+X(t).toFixed(1)+' '+Y(p5[t]).toFixed(1);
+  o+='<path d="'+band+'Z" fill="rgba(176,122,16,.22)"/>';
+  var line='';for(t=0;t<M;t++)line+=(t?'L':'M')+X(t).toFixed(1)+' '+Y(p50[t]).toFixed(1);o+='<path d="'+line+'" fill="none" stroke="#b07a10" stroke-width="2.2"/>';
+  var step=M>24?6:(M>12?3:1);for(t=0;t<M;t++){if((t+1)%step===0||t===0){o+='<text x="'+X(t)+'" y="'+(HH-PB+17)+'" font-size="11" text-anchor="middle" fill="#5d6670">M'+(t+1)+'</text>';}}
+  o+='<line x1="'+PL+'" x2="'+(W-PR)+'" y1="'+(HH-PB)+'" y2="'+(HH-PB)+'" stroke="#999"/></svg>';
+  var be=-1;for(t=0;t<M;t++)if(p50[t]>=0){be=t+1;break;}
+  var be5=-1;for(t=0;t<M;t++)if(p5[t]>=0){be5=t+1;break;}
+  return {svg:o,be:be,be5:be5};
+}
+
+/* ---------- render ---------- */
+var last=null;
+function render(R){
+  var sH=sorted(R.H),sA=sorted(R.A),sv=new Float64Array(R.N);for(var i=0;i<R.N;i++)sv[i]=R.H[i]-R.A[i];
+  var sS=sorted(sv),pos=0;for(i=0;i<R.N;i++)if(sv[i]>0)pos++;
+  var cum=cumSVG(R);
+  var medSave=pct(sS,.5),roi=medSave/R.impl;
+  root.querySelector('#kpis').innerHTML=
+    kpi('h','Human-centric, median',fm(pct(sH,.5)),'90% range '+fm(pct(sH,.05))+' – '+fm(pct(sH,.95)))+
+    kpi('a','AI-agent-centric, median',fm(pct(sA,.5)),'90% range '+fm(pct(sA,.05))+' – '+fm(pct(sA,.95)))+
+    kpi('g','Median savings',fm(medSave),'1-in-20 downside: '+fm(pct(sS,.05)))+
+    kpi('g','Scenarios with savings',(pos/R.N*100).toFixed(1)+'%',R.N.toLocaleString('en-GB')+' scenarios, '+R.M+' months')+
+    kpi('','Break-even (median)',cum.be>0?'Month '+cum.be:'Not reached','1-in-20 downside: '+(cum.be5>0?'month '+cum.be5:'not reached'))+
+    kpi('','Median savings ÷ budgeted implementation',(roi).toFixed(1)+'×','Budget '+fm(R.impl)+' before overrun');
+  var vendor=sH[R.N-1]-sA[0],cons=pct(sH,.95)-pct(sA,.95);
+  root.querySelector('#pitch').innerHTML='<b>Why the range matters.</b> Comparing the worst human-centric outcome with the best AI outcome (the typical vendor pitch) gives savings of '+fm(vendor)+'. Comparing the two 95th percentiles, a prudent budgeting basis, gives '+fm(cons)+'. The vendor framing overstates savings by '+(cons>0?((vendor/cons-1)*100).toFixed(0)+'%':'an undefined amount, because the prudent comparison shows no savings')+'.';
+  root.querySelector('#histCost').innerHTML=histSVG([{d:R.H,col:'#4f8a63',op:.8},{d:R.A,col:'#4f72b8',op:.75}],'Histogram of total cost');
+  root.querySelector('#histSave').innerHTML=histSVG([{d:sv,col:'#b07a10'}],'Histogram of savings');
+  root.querySelector('#cumSave').innerHTML=cum.svg;
+  var rows=[['Minimum',0],['5th percentile',.05],['25th percentile',.25],['Median',.5],['75th percentile',.75],['95th percentile',.95],['Maximum',1]];
+  var t='<thead><tr><th></th><th>Human-centric</th><th>AI-agent-centric</th><th>Savings</th></tr></thead><tbody>';
+  rows.forEach(function(r){t+='<tr><td>'+r[0]+'</td><td>'+fd(pct(sH,r[1]))+'</td><td>'+fd(pct(sA,r[1]))+'</td><td>'+fd(pct(sS,r[1]))+'</td></tr>';});
+  t+='<tr><td>Mean</td><td>'+fd(mean(R.H))+'</td><td>'+fd(mean(R.A))+'</td><td>'+fd(mean(sv))+'</td></tr>';
+  t+='<tr><td>Spread (max ÷ min − 1)</td><td>'+((sH[R.N-1]/sH[0]-1)*100).toFixed(1)+'%</td><td>'+((sA[R.N-1]/sA[0]-1)*100).toFixed(1)+'%</td><td></td></tr></tbody>';
+  root.querySelector('#statsTbl').innerHTML=t;
+  var L=Math.max(R.hk.length,R.ak.length),b='<thead><tr><th>Human-centric</th><th>Mean</th><th>AI-agent-centric</th><th>Mean</th></tr></thead><tbody>';
+  for(i=0;i<L;i++)b+='<tr><td>'+(R.hk[i]||'')+'</td><td>'+(R.hk[i]?fd(R.hb[i]):'')+'</td><td>'+(R.ak[i]||'')+'</td><td>'+(R.ak[i]?fd(R.ab[i]):'')+'</td></tr>';
+  b+='<tr><td><b>Total</b></td><td><b>'+fd(mean(R.H))+'</b></td><td><b>AI total</b></td><td><b>'+fd(mean(R.A))+'</b></td></tr></tbody>';
+  root.querySelector('#breakTbl').innerHTML=b;
+}
+function kpi(c,l,v,s){return '<div class="kpi '+c+'"><div class="l">'+l+'</div><div class="v">'+v+'</div><div class="s">'+s+'</div></div>';}
+
+function run(){
+  var st=root.querySelector('#status'),btn=root.querySelector('#runBtn');
+  if(!checkSums()){st.textContent='Fix the distributions: each must total 100%.';return;}
+  btn.disabled=true;st.textContent='Running…';
+  setTimeout(function(){var t0=performance.now();last=simulate(readParams());render(last);btn.disabled=false;st.textContent='Done in '+Math.round(performance.now()-t0)+' ms';},20);
+}
+function csv(){
+  if(!last)return;var s='scenario,human_cost,ai_cost,savings\n';
+  for(var i=0;i<last.N;i++)s+=(i+1)+','+last.H[i].toFixed(2)+','+last.A[i].toFixed(2)+','+(last.H[i]-last.A[i]).toFixed(2)+'\n';
+  var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([s],{type:'text/csv'}));a.download='ap-ai-simulation.csv';document.body.appendChild(a);a.click();a.remove();
+}
+root.querySelector('#runBtn').addEventListener('click',run);
+root.querySelector('#resetBtn').addEventListener('click',function(){buildInputs();run();});
+root.querySelector('#csvBtn').addEventListener('click',csv);
+buildInputs();run();
+})();
+</script>
+</body>
+</html>
