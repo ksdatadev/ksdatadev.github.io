@@ -1,12 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
   <style>
-    .bg { fill: #f5f0e8; }
-    .fg { fill: #1a1a1a; }
+    .bg { fill: #f3ead7; }
+    .fg { stroke: #23180d; }
+    .sun { fill: #9a5a1c; }
     @media (prefers-color-scheme: dark) {
-      .bg { fill: #1e1a12; }
-      .fg { fill: #e8e8e4; }
+      .bg { fill: #16110b; }
+      .fg { stroke: #ecdfc4; }
+      .sun { fill: #d4a052; }
     }
   </style>
-  <rect width="32" height="32" rx="6" class="bg" />
-  <text x="16" y="21.5" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="14" font-weight="bold" class="fg">TiC</text>
+  <rect width="32" height="32" rx="7" class="bg" />
+  <circle cx="16" cy="16" r="12" fill="none" class="fg" stroke-width="2.2" />
+  <path d="M5 20.5 L27 20.5" class="fg" stroke-width="2.2" stroke-linecap="round" />
+  <circle cx="16" cy="14.5" r="5" class="sun" />
 </svg>
