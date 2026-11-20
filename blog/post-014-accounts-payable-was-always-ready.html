@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Accounts payable was always ready. The invoice wasn't. — Jakub Szczybura</title>
+  <meta name="description" content="AI solved the part of accounts payable the buyer could solve alone. The remaining cost sits in exceptions, and those belong to whoever holds the ledger." />
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..600;1,6..96,400..500&family=Jost:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,300..500;1,6..72,300..400&display=swap" />
+  <link rel="stylesheet" href="/assets/site.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-serif);
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.8;
+      font-size: 18px;
+      padding: 0 0 6rem;
+    }
+
+    .container { max-width: 660px; margin: 0 auto; padding: 0 1.5rem; }
+
+    .post-meta {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      color: var(--color-faint);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+    }
+
+    h1 {
+      font-family: var(--font-serif);
+      font-size: 36px;
+      font-weight: normal;
+      line-height: 1.25;
+      margin-bottom: 1rem;
+      letter-spacing: -0.01em;
+    }
+
+    .lede {
+      font-size: 20px;
+      color: var(--color-muted);
+      line-height: 1.6;
+      margin-bottom: 3rem;
+      font-style: italic;
+      border-bottom: 0.5px solid var(--color-border);
+      padding-bottom: 2rem;
+    }
+
+    .section-label {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-faint);
+      margin-bottom: 0.75rem;
+      margin-top: 3rem;
+    }
+
+    h2 {
+      font-family: var(--font-serif);
+      font-size: 22px;
+      font-weight: normal;
+      margin-bottom: 1.25rem;
+      color: var(--color-text);
+    }
+
+    p { margin-bottom: 1.4rem; }
+    p:last-child { margin-bottom: 0; }
+    em { font-style: italic; }
+    strong { font-weight: 600; }
+
+    blockquote {
+      border-left: 2px solid var(--color-text);
+      margin: 2.5rem 0;
+      padding: 0.25rem 0 0.25rem 1.5rem;
+      font-size: 20px;
+      font-style: italic;
+      color: var(--color-text);
+      line-height: 1.5;
+    }
+
+    .insight {
+      background: var(--color-tag-bg);
+      border-radius: 8px;
+      padding: 1.5rem 1.75rem;
+      margin: 2.5rem 0;
+      font-size: 17px;
+      line-height: 1.75;
+      color: var(--color-text);
+    }
+
+    ul.plain { margin: 0 0 1.4rem 1.25rem; }
+    ul.plain li { margin-bottom: 0.75rem; }
+
+    hr.divider {
+      border: none;
+      border-top: 0.5px solid var(--color-border);
+      margin: 3rem 0;
+    }
+
+    .principle {
+      background: var(--color-tag-bg);
+      border-radius: 8px;
+      padding: 1.75rem 2rem;
+      margin-top: 3rem;
+    }
+    .principle .section-label { margin-top: 0; }
+    .principle p {
+      font-size: 17px;
+      line-height: 1.7;
+      margin-bottom: 1rem;
+      color: var(--color-text);
+    }
+    .principle p:last-child { margin-bottom: 0; }
+    .principle strong { font-style: italic; font-weight: normal; }
+
+    .tags {
+      margin-top: 2rem;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-family: var(--font-sans);
+    }
+
+    .tag {
+      font-size: 12px;
+      color: var(--color-muted);
+      background: var(--color-tag-bg);
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+
+    footer {
+      margin-top: 5rem;
+      padding-top: 2rem;
+      border-top: 0.5px solid var(--color-border);
+      font-family: var(--font-sans);
+      font-size: 13px;
+      color: var(--color-faint);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    footer a { color: var(--color-muted); text-decoration: none; }
+    footer a:hover { color: var(--color-text); }
+    .step-list { list-style: none; counter-reset: steps; margin: 1.25rem 0 1.75rem; }
+    .step-list li {
+      counter-increment: steps;
+      padding: 0.75rem 0 0.75rem 2.5rem;
+      position: relative;
+      font-size: 17px;
+      line-height: 1.7;
+      color: var(--color-muted);
+      border-bottom: 1px solid var(--color-border);
+    }
+    .step-list li:last-child { border-bottom: none; }
+    .step-list li strong { color: var(--color-text); font-weight: 600; }
+    .step-list li::before {
+      content: counter(steps);
+      position: absolute;
+      left: 0;
+      top: 0.8rem;
+      font-family: var(--font-display);
+      font-size: 20px;
+      line-height: 1.4;
+      color: var(--color-accent-border);
+    }
+
+    .figure { margin: 2rem 0 2.25rem; }
+    .figure img { display: block; width: 100%; height: auto; border: 1px solid var(--color-border); }
+    .figure figcaption {
+      margin-top: 0.6rem;
+      font-family: var(--font-sans);
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--color-faint);
+    }
+
+    .article a { color: var(--color-accent-border); text-underline-offset: 3px; }
+
+    .sources { margin-top: 3rem; }
+    .sources ul { margin: 0.5rem 0 0 1.1rem; }
+    .sources li { font-size: 14.5px; line-height: 1.6; color: var(--color-muted); margin-bottom: 0.35rem; }
+
+  </style>
+</head>
+<body>
+<script src="/nav.js"></script>
+<div class="container article">
+
+  <div class="post-meta">November 2026 &nbsp;·&nbsp; 6 min read</div>
+
+  <h1>Accounts payable was always ready. The invoice wasn't.</h1>
+
+  <div class="section-label">The brief</div>
+
+  <p>At the FA CFO Summit in Chicago this week, a slide built on Gartner's <em>Current State of AI in Finance, 2025</em> told the room that accounts payable automation "emerges as a leading AI opportunity in Finance". I discussed it, and the <a href="/tools/ai-accounts-payable-cost-simulator.html">AP cost simulator</a> I built from the same session, with a friend who spent his whole career as a CFO. His reply was faster than any AI model: AP has been ready to be computerised for years.</p>
+
+  <figure class="figure">
+    <img src="/images/post-014-fa-cfo-summit-slide.jpg" width="1600" height="1200" loading="lazy"
+         alt="Conference slide titled 'Accounts Payable automation emerges as a leading AI opportunity in Finance', with two bar charts. AI adoption: knowledge management 49%, accounts payable process automation 37%, error and anomaly detection 34%. High business impact: code generation 37%, accounts payable process automation 29%, accounts receivable 24%." />
+    <figcaption>The slide at the FA CFO Summit, Chicago. Source shown: Gartner, <em>Current State of AI in Finance</em> (2025).</figcaption>
+  </figure>
+
+  <p>He is right, and the chart, read carefully, agrees with him. Presented as an AI adoption story, it is actually about supplier input and about who owns the ledger. AI has moved one of those two constraints.</p>
+
+  <hr class="divider">
+
+  <div class="section-label">The floor</div>
+
+  <p>Accounts payable leads neither column on the slide. Knowledge management leads adoption at 49% and code generation leads impact at 37%. AP comes second on both, and it is the only use case that sits in the top two of each list. Plot one column against the other and the headline becomes defensible for a different reason than the one printed.</p>
+
+  <p>Three things the slide does not say, and a finance audience should ask.</p>
+
+  <ul class="plain">
+    <li><strong>The base is AI users, not finance teams.</strong> The percentages describe organisations already using AI in finance. Gartner put that group at 59% of 183 respondents, so AP automation runs in roughly 22% of finance functions (0.59 × 37%), not 37%.</li>
+    <li><strong>The data is eighteen months old.</strong> The survey ran in May and June 2025. Gartner's follow-up of 160 finance leaders (January to April 2026) groups AP with data extraction and report creation as the use cases that return value within nine to ten months.</li>
+    <li><strong>The two columns probably use different denominators.</strong> Adoption counts everyone using AI; "high business impact" most likely counts only those who deployed that use case. The slide does not say which, so let's be careful with our conclusions.</li>
+  </ul>
+
+  <p>The gap still tells a story. Knowledge management is the most adopted use case and ninth for impact (17%). Forecasting is fifth for adoption and last for impact (12%). AP and accounts receivable sit above the pack because their output is a posted, paid or rejected invoice: a result someone can count.</p>
+
+  <hr class="divider">
+
+  <div class="section-label">The reframe</div>
+
+  <p>My CFO friend put the whole problem in two messages. First:</p>
+
+  <blockquote>The process is better (speedier and more accurate) done by machines. The challenge has always been in moving the supplier base to a uniform machine-readable input mechanism.</blockquote>
+
+  <p>Second: the AP tool has to interface with the established accounting packages, and those packages may be designed to shut out a plug-in AP system in favour of their own.</p>
+
+  <p>Both constraints are real. AI has changed the first and reversed the direction of the second.</p>
+
+  <p><strong>Supplier input.</strong> For twenty years the answer was to make suppliers send structured data: EDI, portals, e-invoicing networks. Europe is now doing this by law. Belgium made Peppol e-invoicing mandatory for B2B from January 2026, Germany has required businesses to accept e-invoices since January 2025, and the EU's ViDA package requires structured invoices for intra-EU B2B trade from 1 July 2030. The US has no federal mandate. The DBNAlliance network exists, and joining it is a business decision, so most American suppliers still email a PDF.</p>
+
+  <p>Large language models remove the need for the supplier to change. Oracle states that its Payables Agent reads, classifies and extracts invoice data without suppliers adopting templates or changing formats. For the first time the buyer can solve the input problem alone. That is the genuine novelty in AP AI, and it matters more in Chicago than in Brussels.</p>
+
+  <p><strong>The accounting package.</strong> My friend expected the ERP vendors to block third-party AP tools. In 2026 they are doing something more consequential: shipping their own. Oracle's Fusion release 26B made a Payables Agent generally available alongside Ledger, Expenses and Payments agents. SAP sells an Invoicing Orchestration Agent. NetSuite and Intuit have shipped finance agents. The threat to a standalone AP product is substitution by the system of record.</p>
+
+  <hr class="divider">
+
+  <div class="section-label">The build</div>
+
+  <p>Reading the invoice was never where most of the AP cost sat. Ardent Partners' 2026 benchmarks put the average cost per invoice at $9.90 against $2.67 for the best performers, and the average exception rate at 19.9% against 11.8%. One invoice in five stops for a person. Those stops are mostly matching and data problems, and they survive perfect extraction.</p>
+
+  <p>Trace one invoice through the process and the constraint shows itself.</p>
+
+  <ol class="step-list">
+    <li><strong>Capture.</strong> The model reads a PDF the supplier emailed. This step is now close to solved, whatever the format.</li>
+    <li><strong>Match.</strong> The invoice is checked against the purchase order and the goods receipt. If the warehouse has not posted the receipt, the invoice is an exception however accurately it was read.</li>
+    <li><strong>Vendor master.</strong> The bank details on the invoice are checked against the supplier record. A model reads a fraudulent account number as faithfully as a genuine one. Email-delivered PDFs are the channel business email compromise uses to swap bank details; a structured network that authenticates the sender closes that channel, and extraction does not.</li>
+    <li><strong>Approve and pay.</strong> Approval routes come from the ERP's organisation data. Payment is its own mess: the Cleveland Fed reported in 2026 that nearly 90% of US businesses still pay at least some suppliers by cheque.</li>
+  </ol>
+
+  <p>Steps two to four need the purchase order, the receipt, the supplier record and the approval hierarchy. All four live in the ERP. That is why the vendors' native agents carry a structural advantage, and why my friend's second point outweighs his first. An AP tool sitting outside the ledger can read everything and still be unable to resolve the exception it has found.</p>
+
+  <p>The practical consequence for a CFO evaluating AP AI: measure the exception rate and the cost of each exception, not the extraction accuracy. Vendors quote extraction accuracy because it is high. The <a href="/tools/ai-accounts-payable-cost-simulator.html">cost simulator</a> lets you see how little the total moves when you improve capture alone, and how much it moves when exceptions fall.</p>
+
+  <hr class="divider">
+
+  <div class="section-label">The principle</div>
+
+  <p>AI solved the part of accounts payable that the buyer could solve alone. The remaining cost belongs to whoever holds the purchase order, the receipt and the supplier record, and in most companies that is the ERP.</p>
+
+  <p>This gives a testable claim. Over the next two years, AP AI delivered inside the ERP, or with write access to its matching data, will post lower exception rates than standalone tools that only read invoices. Standalone vendors that survive will do so by owning the supplier network or the exception workflow. If bolt-on tools hold their ground on exception rates against native agents at the same customers, I am wrong, and I will say so.</p>
+
+  <div class="principle">
+    <p><strong>Before buying AP AI, find the share of AP cost that sits in exceptions, then buy from whichever system can resolve them.</strong></p>
+  </div>
+
+  <div class="sources">
+    <div class="section-label">Sources</div>
+    <ul>
+      <li><a href="https://www.gartner.com/en/newsroom/press-releases/2025-11-18-gartner-survey-shows-finance-ai-adoption-remains-steady-in-2025">Gartner press release: Finance AI adoption remains steady in 2025</a> (183 leaders, May–June 2025; 59% adoption)</li>
+      <li><a href="https://www.gartner.com/en/documents/7002998">Gartner: Current State of AI in Finance, 2025 (abstract)</a></li>
+      <li><a href="https://www.cfodive.com/news/cfos-need-realistic-ai-time-value-expectations-gartner/831315/">CFO Dive: Gartner on AI time-to-value in finance</a> (160 leaders, Jan–Apr 2026)</li>
+      <li><a href="https://www.medius.com/resources/guides-reports/ardent-partners-accounts-payable-metrics-that-matter/">Medius: Ardent Partners, AP Metrics that Matter in 2026</a> (exception rates, AI use)</li>
+      <li><a href="https://tailride.so/blog/invoice-management-statistics-2026">Tailride: Invoice management statistics 2026</a> (Ardent 2026 cost per invoice, as summarised)</li>
+      <li><a href="https://blogs.oracle.com/fusioninsider/agentic-ai-in-erp-four-agents-you-can-use-today">Oracle: Agentic AI in ERP, four agents in Release 26B</a></li>
+      <li><a href="https://blogs.oracle.com/fusioninsider/this-agent-takes-the-hassle-out-of-electronic-invoicing">Oracle: Payables Agent and electronic invoicing</a></li>
+      <li><a href="https://www.sap.com/romania/products/spend-management/invoicing-orchestration-agent.html">SAP: Invoicing Orchestration Agent</a></li>
+      <li><a href="https://technologyadvice.com/blog/accounting/ai-in-erp/">TechnologyAdvice: AI in ERP</a></li>
+      <li><a href="https://www.spscommerce.com/community/articles/e-invoicing-mandates-in-europe-the-2026-business-guide">SPS Commerce: E-invoicing mandates in Europe, 2026</a></li>
+      <li><a href="https://tradeshift.com/?p=72026">Tradeshift: The DBNAlliance</a></li>
+      <li><a href="https://www.clevelandfed.org/publications/payments-research-brief/2026/prb-20260925-b2b-payments-part-two">Cleveland Fed: B2B payments and straight-through processing (2026)</a></li>
+    </ul>
+
+  </div>
+
+  <div class="tags">
+    <span class="tag">AI strategy</span>
+    <span class="tag">Finance</span>
+    <span class="tag">Accounts payable</span>
+    <span class="tag">ERP</span>
+  </div>
+
+  <footer>
+    <span>© Jakub Szczybura</span>
+    <a href="/blog">All posts →</a>
+  </footer>
+
+</div>
+</body>
+</html>
